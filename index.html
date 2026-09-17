@@ -2,1480 +2,1132 @@
 <html lang="hi">
 <head>
 <meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 <meta name="theme-color" content="#0d6efd">
+<meta name="mobile-web-app-capable" content="yes">
 
 <title>DEO Office - Marks Folio</title>
 
-<link rel="icon"
-href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22%200%22%20100%22><text y=%22.9em%22 font-size=%2290%22>📋</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📋</text></svg>">
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <style>
 
-/* ==========================================================
-   BASIC
-========================================================== */
-
 @page {
-  size: A4 portrait;
-  margin: 0;
+    size: A4 portrait;
+    margin: 0;
 }
 
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 html,
 body {
-  margin: 0;
-  padding: 0;
-  background: #eef1f5;
-  font-family:
-    "Nirmala UI",
-    "Mangal",
-    "Arial Unicode MS",
-    Arial,
-    sans-serif;
-  color: #111;
+    margin: 0;
+    padding: 0;
+    background: #eef1f5;
+    font-family: "Nirmala UI", "Mangal", "Arial Unicode MS", Arial, sans-serif;
+    color: #111;
 }
 
 body {
-  padding: 8px;
+    padding: 8px;
 }
 
 .app {
-  max-width: 1100px;
-  margin: auto;
+    max-width: 1100px;
+    margin: auto;
 }
 
-
-/* ==========================================================
-   TOOLBAR
-========================================================== */
+/* ================= TOOLBAR ================= */
 
 .toolbar {
-  background: #fff;
-  border-radius: 8px;
-  padding: 8px;
-
-  display: flex;
-  gap: 6px;
-  align-items: center;
-  flex-wrap: wrap;
-
-  box-shadow: 0 2px 8px #0002;
-
-  margin-bottom: 8px;
-
-  position: sticky;
-  top: 0;
-  z-index: 100;
+    background: #fff;
+    border-radius: 8px;
+    padding: 8px;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    flex-wrap: wrap;
+    box-shadow: 0 2px 8px #0002;
+    margin-bottom: 8px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
 button {
-  border: 0;
-  border-radius: 6px;
-  padding: 7px 11px;
-
-  font-weight: 700;
-  cursor: pointer;
-  font-size: 13px;
-
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
+    border: 0;
+    border-radius: 6px;
+    padding: 7px 11px;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 13px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
 }
 
 .primary {
-  background: #0d6efd;
-  color: #fff;
+    background: #0d6efd;
+    color: #fff;
 }
 
 .green {
-  background: #198754;
-  color: #fff;
+    background: #198754;
+    color: #fff;
 }
 
 .gray {
-  background: #6c757d;
-  color: #fff;
+    background: #6c757d;
+    color: #fff;
 }
 
 .danger {
-  background: #dc3545;
-  color: #fff;
+    background: #dc3545;
+    color: #fff;
 }
 
 .warning {
-  background: #fd7e14;
-  color: #fff;
+    background: #fd7e14;
+    color: #fff;
 }
 
 .share-btn {
-  background: #6f42c1;
-  color: #fff;
+    background: #6f42c1;
+    color: #fff;
 }
 
 .view-badge {
-  background: #e9ecef;
-  color: #333;
-
-  padding: 6px 10px;
-  border-radius: 6px;
-
-  font-size: 12.5px;
-  font-weight: 700;
-
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-
-  margin-left: auto;
+    background: #e9ecef;
+    color: #333;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 12.5px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: auto;
 }
 
-
-/* ==========================================================
-   ENTRY PANEL
-========================================================== */
+/* ================= ENTRY PANEL ================= */
 
 .entry-panel {
-  background: #fff;
-  border-radius: 8px;
-
-  padding: 10px;
-  margin-bottom: 12px;
-
-  box-shadow: 0 2px 8px #0002;
+    background: #fff;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 8px #0002;
 }
 
 .entry-title {
-  font-size: 15.5px;
-  font-weight: 800;
-
-  margin-bottom: 8px;
-
-  color: #0d6efd;
-
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  flex-wrap: wrap;
-  gap: 6px;
+    font-size: 15.5px;
+    font-weight: 800;
+    margin-bottom: 8px;
+    color: #0d6efd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
 }
 
 .entry-grid {
-  display: grid;
-  grid-template-columns:
-    repeat(auto-fit, minmax(130px, 1fr));
-
-  gap: 6px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 6px;
 }
 
 .entry-grid label {
-  font-size: 12px;
-  font-weight: 700;
-
-  margin-bottom: 2px;
-
-  display: block;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 2px;
+    display: block;
 }
 
 .entry-grid input,
 .entry-grid select {
-  width: 100%;
-
-  padding: 6px 8px;
-
-  border: 1px solid #ccc;
-  border-radius: 5px;
-
-  font-family: inherit;
-  font-size: 13.5px;
-
-  background: #fff;
+    width: 100%;
+    padding: 6px 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-family: inherit;
+    font-size: 13.5px;
+    background: #fff;
 }
 
 .subject-grid {
-  display: grid;
-
-  grid-template-columns:
-    repeat(auto-fit, minmax(85px, 1fr));
-
-  gap: 5px;
-
-  margin-top: 8px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(85px, 1fr));
+    gap: 5px;
+    margin-top: 8px;
 }
 
 .subject-box {
-  border: 1px solid #ddd;
-  border-radius: 5px;
-
-  padding: 4px;
-
-  background: #fafafa;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 4px;
+    background: #fafafa;
 }
 
 .subject-box input.sub-name {
-  border: 0;
-
-  border-bottom:
-    1px dashed #888;
-
-  border-radius: 0;
-
-  background: transparent;
-
-  font-weight: 700;
-  font-size: 11.5px;
-
-  text-align: center;
-
-  padding: 2px 0;
-
-  margin-bottom: 3px;
-
-  width: 100%;
+    border: 0;
+    border-bottom: 1px dashed #888;
+    border-radius: 0;
+    background: transparent;
+    font-weight: 700;
+    font-size: 11.5px;
+    text-align: center;
+    padding: 2px 0;
+    margin-bottom: 3px;
+    width: 100%;
 }
 
 .subject-box input.sub-marks {
-  width: 100%;
-
-  padding: 5px;
-
-  border: 1px solid #bbb;
-  border-radius: 4px;
-
-  font-size: 13.5px;
-
-  text-align: center;
-
-  background: #fff;
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #bbb;
+    border-radius: 4px;
+    font-size: 13.5px;
+    text-align: center;
+    background: #fff;
 }
 
 .status {
-  font-size: 11.5px;
-
-  color: #198754;
-
-  font-weight: 700;
-
-  margin-top: 6px;
+    font-size: 11.5px;
+    color: #198754;
+    font-weight: 700;
+    margin-top: 6px;
 }
 
 .form-actions {
-  display: flex;
-
-  gap: 6px;
-
-  margin-top: 8px;
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
 }
 
 .form-actions button {
-  flex: 1;
-
-  padding: 8px;
+    flex: 1;
+    padding: 8px;
 }
 
-
-/* ==========================================================
-   PAPER CONTAINER
-========================================================== */
+/* =====================================================
+   MOBILE PREVIEW
+   ===================================================== */
 
 .paper-container {
-  width: 100%;
 
-  overflow-x: hidden;
+    width: 100%;
 
-  -webkit-overflow-scrolling: touch;
+    /* Important for mobile horizontal scrolling */
+    overflow-x: auto;
+    overflow-y: hidden;
 
-  padding-bottom: 15px;
+    -webkit-overflow-scrolling: touch;
+
+    touch-action: pan-x pan-y;
+
+    overscroll-behavior-x: contain;
+
+    padding: 0 0 20px 0;
+
+    scrollbar-width: thin;
+
 }
+
+/* Scrollbar */
+
+.paper-container::-webkit-scrollbar {
+    height: 8px;
+}
+
+.paper-container::-webkit-scrollbar-track {
+    background: #ddd;
+    border-radius: 10px;
+}
+
+.paper-container::-webkit-scrollbar-thumb {
+    background: #777;
+    border-radius: 10px;
+}
+
+/*
+   This wrapper keeps the A4 page at its actual width.
+   Mobile users can swipe left/right.
+*/
 
 .pages-wrap {
-  display: flex;
 
-  flex-direction: column;
+    display: flex;
 
-  gap: 15px;
+    flex-direction: column;
 
-  align-items: center;
+    gap: 15px;
 
-  width: 100%;
+    align-items: center;
+
+    width: max-content;
+
+    min-width: 100%;
+
+    padding: 0 5px;
+
 }
 
-
-/* ==========================================================
-   EXACT A4 PAPER
-========================================================== */
+/* ================= A4 PAGE ================= */
 
 .paper {
-  width: 210mm;
 
-  height: 297mm;
+    width: 210mm;
 
-  max-height: 297mm;
+    min-width: 210mm;
 
-  background: #fff;
+    height: 297mm;
 
-  padding:
-    3mm
-    7.5mm
-    2.5mm;
+    max-height: 297mm;
 
-  box-shadow:
-    0 2px 10px #0002;
+    background: #fff;
 
-  display: flex;
+    padding: 3mm 7.5mm 2.5mm;
 
-  flex-direction: column;
+    box-shadow: 0 2px 10px #0002;
 
-  box-sizing: border-box;
+    display: flex;
 
-  overflow: hidden;
+    flex-direction: column;
 
-  position: relative;
+    box-sizing: border-box;
 
-  page-break-after: always;
+    overflow: hidden;
 
-  page-break-inside: avoid;
+    position: relative;
 
-  break-after: page;
+    page-break-after: always;
 
-  break-inside: avoid;
+    page-break-inside: avoid;
+
+    break-after: page;
+
+    break-inside: avoid;
+
 }
 
-
-/* ==========================================================
-   HEADER
-========================================================== */
+/* ================= HEADER ================= */
 
 .header {
-  flex-shrink: 0;
-
-  text-align: center;
-
-  margin-bottom: 0.8mm;
+    flex-shrink: 0;
+    text-align: center;
+    margin-bottom: 0.8mm;
 }
 
 .h1 {
-  font-size: 15.5px;
-
-  font-weight: 700;
-
-  text-decoration: underline;
-
-  margin: 0;
-
-  line-height: 1.2;
+    font-size: 15.5px;
+    font-weight: 700;
+    text-decoration: underline;
+    margin: 0;
+    line-height: 1.2;
 }
 
 .h2 {
-  font-size: 14px;
-
-  font-weight: 700;
-
-  text-decoration: underline;
-
-  margin-top: 1px;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: underline;
+    margin-top: 1px;
 }
 
-
-/* ==========================================================
-   INFORMATION
-========================================================== */
+/* ================= INFO ================= */
 
 .info {
-  flex-shrink: 0;
-
-  font-size: 11.5px;
-
-  line-height: 1.4;
-
-  margin-bottom: 1mm;
+    flex-shrink: 0;
+    font-size: 11.5px;
+    line-height: 1.4;
+    margin-bottom: 1mm;
 }
 
 .info-row {
-  display: grid;
-
-  grid-template-columns:
-    29mm
-    1fr
-    19mm
-    1fr;
-
-  gap: 2mm;
-
-  align-items: end;
+    display: grid;
+    grid-template-columns: 29mm 1fr 19mm 1fr;
+    gap: 2mm;
+    align-items: end;
 }
 
 .info-row.wide {
-  grid-template-columns:
-    29mm
-    1fr;
+    grid-template-columns: 29mm 1fr;
 }
 
 .info label {
-  font-weight: 700;
-
-  white-space: nowrap;
+    font-weight: 700;
+    white-space: nowrap;
 }
 
 .info input {
-  width: 100%;
-
-  border: 0;
-
-  border-bottom:
-    1px dotted #555;
-
-  outline: 0;
-
-  font-family: inherit;
-
-  font-size: 11.5px;
-
-  height: 4.8mm;
-
-  padding: 0 1mm;
-
-  background: transparent;
+    width: 100%;
+    border: 0;
+    border-bottom: 1px dotted #555;
+    outline: 0;
+    font-family: inherit;
+    font-size: 11.5px;
+    height: 4.8mm;
+    padding: 0 1mm;
+    background: transparent;
 }
 
 .info .marks {
-  font-weight: 700;
+    font-weight: 700;
 }
 
-
-/* ==========================================================
-   TABLE
-========================================================== */
+/* ================= TABLE ================= */
 
 .table-wrap {
-  flex-shrink: 0;
-
-  display: block;
+    flex-shrink: 0;
+    display: block;
 }
 
 table {
-  width: 100%;
-
-  border-collapse: collapse;
-
-  table-layout: fixed;
-
-  font-size: 11px;
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    font-size: 11px;
 }
 
 th,
 td {
-  border:
-    0.3mm solid #222;
-
-  text-align: center;
-
-  padding: 0;
+    border: 0.3mm solid #222;
+    text-align: center;
+    padding: 0;
 }
 
 thead th {
-  height: 8mm;
-
-  font-weight: 700;
-
-  vertical-align: middle;
-
-  line-height: 1.1;
-
-  font-size: 11px;
+    height: 8mm;
+    font-weight: 700;
+    vertical-align: middle;
+    line-height: 1.1;
+    font-size: 11px;
 }
 
 tbody tr {
-  height: 7.2mm;
-
-  max-height: 7.2mm;
+    height: 7.2mm;
+    max-height: 7.2mm;
 }
-
-
-/* Column widths */
 
 th.col-sr,
 td.col-sr {
-  width: 9mm;
+    width: 9mm;
 }
 
 th.col-roll,
 td.col-roll {
-  width: 11.5mm;
+    width: 11.5mm;
 }
 
 th.col-name,
 td.col-name {
-  width: auto;
+    width: auto;
 }
 
 th.col-sub,
 td.col-sub {
-  width: 13mm;
+    width: 13mm;
 }
 
 th.col-total,
 td.col-total {
-  width: 12mm;
+    width: 12mm;
 }
 
-
 td input {
-  width: 100%;
-
-  height: 100%;
-
-  border: 0;
-
-  outline: 0;
-
-  background: transparent;
-
-  text-align: center;
-
-  font-family: inherit;
-
-  font-size: 11.5px;
-
-  padding: 0;
-
-  font-weight: 500;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    text-align: center;
+    font-family: inherit;
+    font-size: 11.5px;
+    padding: 0;
+    font-weight: 500;
 }
 
 td.name input {
-  text-align: left;
-
-  padding-left: 1.5mm;
-
-  font-size: 11.5px;
+    text-align: left;
+    padding-left: 1.5mm;
+    font-size: 11.5px;
 }
 
 td.total {
-  font-weight: 700;
-
-  font-size: 11.5px;
+    font-weight: 700;
+    font-size: 11.5px;
 }
 
-
-/* ==========================================================
-   NOTE
-========================================================== */
+/* ================= NOTE ================= */
 
 tfoot td.note-cell {
-  border: 0 !important;
 
-  text-align: left;
+    border: 0 !important;
 
-  font-size: 10px;
+    text-align: left;
 
-  font-weight: 600;
+    font-size: 10px;
 
-  padding-top: 1mm;
+    font-weight: 600;
 
-  padding-bottom: 0.5mm;
+    padding-top: 1mm;
 
-  line-height: 1.15;
+    padding-bottom: 0.5mm;
+
+    line-height: 1.15;
+
 }
 
-
-/* ==========================================================
-   SIGNATURES
-========================================================== */
+/* ================= SIGNATURE ================= */
 
 .signatures {
-  margin-top: auto;
 
-  display: grid;
+    margin-top: auto;
 
-  grid-template-columns:
-    1fr
-    1fr
-    1fr;
+    display: grid;
 
-  gap: 5mm;
+    grid-template-columns: 1fr 1fr 1fr;
 
-  margin-bottom: 1.5mm;
+    gap: 5mm;
 
-  font-size: 10.5px;
+    margin-bottom: 1.5mm;
 
-  font-weight: 700;
+    font-size: 10.5px;
 
-  text-align: center;
+    font-weight: 700;
 
-  page-break-inside: avoid;
+    text-align: center;
 
-  break-inside: avoid;
+    page-break-inside: avoid;
+
+    break-inside: avoid;
+
 }
 
 .sig {
-  border-top:
-    1px dashed #666;
 
-  padding-top: 9mm;
+    border-top: 1px dashed #666;
 
-  line-height: 1.25;
+    padding-top: 9mm;
+
+    line-height: 1.25;
+
 }
 
-
-/* ==========================================================
-   SUBJECT MODAL
-========================================================== */
+/* ================= MODAL ================= */
 
 .dialog-bg {
-  position: fixed;
 
-  inset: 0;
+    position: fixed;
 
-  background:
-    rgba(0,0,0,0.5);
+    inset: 0;
 
-  display: none;
+    background: rgba(0,0,0,0.5);
 
-  align-items: center;
+    display: none;
 
-  justify-content: center;
-
-  z-index: 200;
-}
-
-.dialog-box {
-  background: #fff;
-
-  border-radius: 8px;
-
-  padding: 16px;
-
-  width: 90%;
-
-  max-width: 320px;
-
-  box-shadow:
-    0 4px 15px
-    rgba(0,0,0,0.3);
-}
-
-
-/* ==========================================================
-   WHATSAPP POPUP
-========================================================== */
-
-.popup-bg {
-  position: fixed;
-
-  inset: 0;
-
-  background:
-    rgba(0,0,0,0.85);
-
-  backdrop-filter:
-    blur(4px);
-
-  display: none;
-
-  align-items: center;
-
-  justify-content: center;
-
-  z-index: 9999;
-
-  padding: 15px;
-}
-
-.popup {
-  width: 100%;
-
-  max-width: 350px;
-
-  background: white;
-
-  border-radius: 14px;
-
-  padding:
-    24px
-    20px;
-
-  text-align: center;
-
-  box-shadow:
-    0 15px 40px
-    rgba(0,0,0,0.5);
-}
-
-.popup h3 {
-  margin:
-    0
-    0
-    10px;
-
-  font-size: 19px;
-
-  color: #111;
-}
-
-.popup p {
-  margin:
-    0
-    0
-    18px;
-
-  line-height: 1.5;
-
-  font-size: 13.5px;
-
-  color: #444;
-}
-
-.follow-btn {
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  gap: 8px;
-
-  background: #25D366;
-
-  color: white;
-
-  border: 0;
-
-  border-radius: 8px;
-
-  padding: 12px;
-
-  font-weight: 800;
-
-  font-size: 15px;
-
-  width: 100%;
-
-  cursor: pointer;
-
-  box-shadow:
-    0 4px 10px
-    rgba(37,211,102,0.3);
-}
-
-.small {
-  font-size: 11px;
-
-  color: #888;
-
-  margin-top: 12px;
-}
-
-
-/* ==========================================================
-   NORMAL MOBILE UI
-========================================================== */
-
-@media (max-width: 600px) {
-
-  body {
-    padding: 4px;
-  }
-
-  .toolbar button {
-    flex:
-      1 1
-      calc(33.33% - 5px);
-
-    padding:
-      8px
-      4px;
-
-    font-size: 12px;
-  }
-
-  .view-badge {
-    width: 100%;
+    align-items: center;
 
     justify-content: center;
 
-    margin-left: 0;
+    z-index: 200;
 
-    order: -1;
-
-    margin-bottom: 4px;
-  }
 }
 
+.dialog-box {
 
-/* ==========================================================
-   MOBILE A4 PREVIEW
-   केवल SCREEN पर लागू
-   PDF/PRINT पर नहीं
-========================================================== */
+    background: #fff;
 
-@media screen and (max-width: 600px) {
+    border-radius: 8px;
 
-  .paper-container {
-    width: 100%;
+    padding: 16px;
 
-    overflow: hidden;
+    width: 90%;
 
-    padding:
-      5px
-      0
-      20px;
-  }
+    max-width: 320px;
 
-  .pages-wrap {
-    width: 100%;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
 
-    gap: 12px;
+}
+
+/* ================= FOLLOW POPUP ================= */
+
+.popup-bg {
+
+    position: fixed;
+
+    inset: 0;
+
+    background: rgba(0, 0, 0, 0.85);
+
+    backdrop-filter: blur(4px);
+
+    display: none;
 
     align-items: center;
-  }
 
-  .paper {
+    justify-content: center;
 
-    /*
-      Mobile screen width के अनुसार
-      A4 ratio maintain होगा
-    */
+    z-index: 9999;
 
-    width: 100vw;
-
-    height:
-      calc(
-        100vw * 1.4142857
-      );
-
-    max-height: none;
-
-    padding:
-      2.5vw
-      3.5vw
-      2vw;
-
-    box-shadow:
-      0 2px 8px #0003;
-
-    overflow: hidden;
-  }
-
-
-  /* Header */
-
-  .header {
-    margin-bottom: 1vw;
-  }
-
-  .h1 {
-    font-size: 2.25vw;
-
-    line-height: 1.2;
-  }
-
-  .h2 {
-    font-size: 2.1vw;
-
-    margin-top: 0.3vw;
-  }
-
-
-  /* Information */
-
-  .info {
-    font-size: 1.65vw;
-
-    line-height: 1.3;
-
-    margin-bottom: 0.8vw;
-  }
-
-  .info-row {
-
-    grid-template-columns:
-      24vw
-      1fr
-      13vw
-      1fr;
-
-    gap: 1vw;
-  }
-
-  .info-row.wide {
-
-    grid-template-columns:
-      24vw
-      1fr;
-  }
-
-  .info input {
-
-    font-size: 1.65vw;
-
-    height: 3.8vw;
-
-    padding:
-      0
-      0.5vw;
-  }
-
-
-  /* Table */
-
-  table {
-    font-size: 1.55vw;
-  }
-
-  thead th {
-
-    height: 5.8vw;
-
-    font-size: 1.5vw;
-
-    line-height: 1.05;
-  }
-
-  tbody tr {
-
-    height: 5.1vw;
-
-    max-height: 5.1vw;
-  }
-
-  th,
-  td {
-
-    border-width:
-      0.15vw;
-  }
-
-
-  /* Columns */
-
-  th.col-sr,
-  td.col-sr {
-
-    width: 6vw;
-  }
-
-  th.col-roll,
-  td.col-roll {
-
-    width: 7.5vw;
-  }
-
-  th.col-sub,
-  td.col-sub {
-
-    width: 8.3vw;
-  }
-
-  th.col-total,
-  td.col-total {
-
-    width: 8vw;
-  }
-
-
-  td input {
-
-    font-size: 1.55vw;
-  }
-
-  td.name input {
-
-    font-size: 1.55vw;
-
-    padding-left:
-      0.8vw;
-  }
-
-  td.total {
-
-    font-size: 1.55vw;
-  }
-
-
-  /* Note */
-
-  tfoot td.note-cell {
-
-    font-size: 1.35vw;
-
-    padding-top:
-      0.8vw;
-  }
-
-
-  /* Signatures */
-
-  .signatures {
-
-    gap: 2vw;
-
-    margin-bottom: 1vw;
-
-    font-size: 1.4vw;
-  }
-
-  .sig {
-
-    padding-top: 5vw;
-  }
+    padding: 15px;
 
 }
 
+.popup {
 
-/* ==========================================================
-   PRINT
-   EXACT A4
-========================================================== */
+    width: 100%;
+
+    max-width: 350px;
+
+    background: white;
+
+    border-radius: 14px;
+
+    padding: 24px 20px;
+
+    text-align: center;
+
+    box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+
+}
+
+.popup h3 {
+
+    margin: 0 0 10px;
+
+    font-size: 19px;
+
+    color: #111;
+
+}
+
+.popup p {
+
+    margin: 0 0 18px;
+
+    line-height: 1.5;
+
+    font-size: 13.5px;
+
+    color: #444;
+
+}
+
+.follow-btn {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    background: #25D366;
+
+    color: white;
+
+    border: 0;
+
+    border-radius: 8px;
+
+    padding: 12px;
+
+    font-weight: 800;
+
+    font-size: 15px;
+
+    width: 100%;
+
+    cursor: pointer;
+
+    box-shadow: 0 4px 10px rgba(37,211,102,0.3);
+
+}
+
+.small {
+
+    font-size: 11px;
+
+    color: #888;
+
+    margin-top: 12px;
+
+}
+
+/* =====================================================
+   MOBILE
+   ===================================================== */
+
+@media (max-width: 600px) {
+
+    body {
+        padding: 4px;
+    }
+
+    .toolbar button {
+        flex: 1 1 calc(33% - 5px);
+        padding: 8px 4px;
+        font-size: 12px;
+    }
+
+    .view-badge {
+        width: 100%;
+        justify-content: center;
+        margin-left: 0;
+        order: -1;
+        margin-bottom: 4px;
+    }
+
+    .paper-container {
+        width: 100vw;
+
+        margin-left: -4px;
+
+        padding-left: 4px;
+        padding-right: 4px;
+
+        overflow-x: auto;
+
+        /*
+          Prevent browser from interpreting swipe
+          as page navigation.
+        */
+        touch-action: pan-x;
+
+    }
+
+    .pages-wrap {
+        align-items: flex-start;
+
+        /*
+          Ensures page doesn't shrink.
+        */
+        width: max-content;
+
+        min-width: 0;
+
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .paper {
+
+        /*
+          Keep exact A4 size.
+          Do NOT use width:100% here.
+        */
+
+        width: 210mm;
+
+        min-width: 210mm;
+
+        flex-shrink: 0;
+
+    }
+
+}
+
+/* ================= PRINT ================= */
 
 @media print {
 
-  html,
-  body {
+    html,
+    body {
 
-    background: #fff !important;
+        background: #fff !important;
 
-    padding: 0 !important;
+        padding: 0 !important;
 
-    margin: 0 !important;
-  }
+        margin: 0 !important;
 
-  .toolbar,
-  .entry-panel,
-  .dialog-bg,
-  .popup-bg {
+    }
 
-    display: none !important;
-  }
+    .toolbar,
+    .entry-panel,
+    .dialog-bg,
+    .popup-bg {
 
-  .paper-container {
+        display: none !important;
 
-    overflow: visible !important;
+    }
 
-    padding: 0 !important;
-  }
+    .paper-container {
 
-  .pages-wrap {
+        overflow: visible !important;
 
-    gap: 0 !important;
-  }
+        padding: 0 !important;
 
-  .paper {
+        width: auto !important;
 
-    margin: 0 !important;
+    }
 
-    width: 210mm !important;
+    .pages-wrap {
 
-    height: 297mm !important;
+        gap: 0 !important;
 
-    max-height: 297mm !important;
+        width: auto !important;
 
-    box-shadow: none !important;
+        min-width: 0 !important;
 
-    padding:
-      3mm
-      7.5mm
-      2.5mm !important;
+        padding: 0 !important;
 
-    page-break-after:
-      always !important;
+    }
 
-    page-break-inside:
-      avoid !important;
+    .paper {
 
-    break-after:
-      page !important;
+        margin: 0 !important;
 
-    break-inside:
-      avoid !important;
-  }
+        width: 210mm !important;
 
-  input {
-    color: #000 !important;
-  }
+        min-width: 210mm !important;
+
+        height: 297mm !important;
+
+        max-height: 297mm !important;
+
+        box-shadow: none !important;
+
+        padding: 3mm 7.5mm 2.5mm !important;
+
+        page-break-after: always !important;
+
+        page-break-inside: avoid !important;
+
+        break-after: page !important;
+
+        break-inside: avoid !important;
+
+    }
+
+    input {
+        color: #000 !important;
+    }
 
 }
 
 </style>
 </head>
 
-
 <body>
 
 <div class="app">
 
-
-<!-- ========================================================
-     TOOLBAR
-========================================================= -->
+<!-- ================= TOOLBAR ================= -->
 
 <div class="toolbar">
 
-  <button
-    class="primary"
-    onclick="addStudent()">
-    ＋ विद्यार्थी
-  </button>
+    <button class="primary" onclick="addStudent()">
+        ＋ विद्यार्थी
+    </button>
 
-  <button
-    class="danger"
-    onclick="removeStudent()">
-    — अंतिम विद्यार्थी
-  </button>
+    <button class="danger" onclick="removeStudent()">
+        — अंतिम विद्यार्थी
+    </button>
 
-  <button
-    class="warning"
-    onclick="downloadPDF()">
-    📥 Download PDF
-  </button>
+    <button class="warning" onclick="downloadPDF()">
+        📥 Download PDF
+    </button>
 
-  <button
-    class="gray"
-    onclick="window.print()">
-    🖨 Print
-  </button>
+    <button class="gray" onclick="window.print()">
+        🖨 Print
+    </button>
 
-  <button
-    class="share-btn"
-    onclick="shareApp()">
-    🔗 Share
-  </button>
+    <button class="share-btn" onclick="shareApp()">
+        🔗 Share
+    </button>
 
-  <button
-    class="green"
-    onclick="saveData()">
-    💾 Save
-  </button>
+    <button class="green" onclick="saveData()">
+        💾 Save
+    </button>
 
-  <button
-    class="gray"
-    onclick="loadData()">
-    ↻ Reload
-  </button>
+    <button class="gray" onclick="loadData()">
+        ↻ Reload
+    </button>
 
-  <button
-    class="danger"
-    onclick="clearData()">
-    Clear
-  </button>
+    <button class="danger" onclick="clearData()">
+        Clear
+    </button>
 
-  <div
-    class="view-badge"
-    title="कुल पृष्ठ दृश्य">
-
-    👁️ Views:
-
-    <span id="viewCount">
-      ...
-    </span>
-
-  </div>
+    <div class="view-badge">
+        👁️ Views:
+        <span id="viewCount">...</span>
+    </div>
 
 </div>
 
 
-<!-- ========================================================
-     ENTRY PANEL
-========================================================= -->
+<!-- ================= ENTRY PANEL ================= -->
 
 <div class="entry-panel">
 
-  <div class="entry-title">
+    <div class="entry-title">
 
-    <span>
-      📝 Marks Folio Entry Panel
-    </span>
+        <span>
+            📝 Marks Folio Entry Panel
+        </span>
+
+        <div style="display:flex;gap:4px">
+
+            <button
+                class="primary"
+                style="padding:3px 7px;font-size:11.5px"
+                onclick="addSubject()">
+
+                ＋ विषय जोड़ें
+
+            </button>
+
+            <button
+                class="danger"
+                style="padding:3px 7px;font-size:11.5px"
+                onclick="openSubjectModal()">
+
+                — विषय हटाएं
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div class="entry-grid">
+
+        <div>
+
+            <label>
+                विद्यार्थी चुनें
+            </label>
+
+            <select
+                id="studentSelect"
+                onchange="selectStudent()">
+            </select>
+
+        </div>
+
+
+        <div>
+
+            <label>
+                वर्ग क्रमांक
+            </label>
+
+            <input
+                id="formRoll"
+                inputmode="numeric"
+                oninput="formChanged()">
+
+        </div>
+
+
+        <div style="grid-column:1/-1">
+
+            <label>
+                विद्यार्थी का नाम
+            </label>
+
+            <input
+                id="formName"
+                oninput="formChanged()">
+
+        </div>
+
+    </div>
+
 
     <div
-      style="
-        display:flex;
-        gap:4px
-      ">
-
-      <button
-        class="primary"
-        style="
-          padding:3px 7px;
-          font-size:11.5px
-        "
-        onclick="addSubject()">
-
-        ＋ विषय जोड़ें
-
-      </button>
-
-      <button
-        class="danger"
-        style="
-          padding:3px 7px;
-          font-size:11.5px
-        "
-        onclick="openSubjectModal()">
-
-        — विषय हटाएं
-
-      </button>
-
-    </div>
-
-  </div>
-
-
-  <div class="entry-grid">
-
-
-    <div>
-
-      <label>
-        विद्यार्थी चुनें
-      </label>
-
-      <select
-        id="studentSelect"
-        onchange="selectStudent()">
-      </select>
-
+        class="subject-grid"
+        id="subjectGrid">
     </div>
 
 
-    <div>
+    <div class="form-actions">
 
-      <label>
-        वर्ग क्रमांक
-      </label>
+        <button
+            class="primary"
+            onclick="nextStudent()">
 
-      <input
-        id="formRoll"
-        inputmode="numeric"
-        oninput="formChanged()">
+            Next Student →
+
+        </button>
+
+        <button
+            class="green"
+            onclick="saveData()">
+
+            💾 Save
+
+        </button>
 
     </div>
 
 
     <div
-      style="
-        grid-column:1 / -1;
-      ">
+        class="status"
+        id="saveStatus">
 
-      <label>
-        विद्यार्थी का नाम
-      </label>
-
-      <input
-        id="formName"
-        oninput="formChanged()">
+        ✓ Auto-save चालू है
 
     </div>
-
-  </div>
-
-
-  <div
-    class="subject-grid"
-    id="subjectGrid">
-  </div>
-
-
-  <div class="form-actions">
-
-    <button
-      class="primary"
-      onclick="nextStudent()">
-
-      Next Student →
-
-    </button>
-
-    <button
-      class="green"
-      onclick="saveData()">
-
-      💾 Save
-
-    </button>
-
-  </div>
-
-
-  <div
-    class="status"
-    id="saveStatus">
-
-    ✓ Auto-save चालू है
-
-  </div>
 
 </div>
 
 
-<!-- ========================================================
-     PAPER
-========================================================= -->
+<!-- ================= PAPERS ================= -->
 
 <div class="paper-container">
 
-  <div
-    class="pages-wrap"
-    id="pagesWrap">
-  </div>
-
-</div>
-
-</div>
-
-
-<!-- ========================================================
-     SUBJECT REMOVE MODAL
-========================================================= -->
-
-<div
-  class="dialog-bg"
-  id="subModal">
-
-  <div class="dialog-box">
-
-    <h4
-      style="
-        margin:0 0 10px 0;
-        font-size:15px
-      ">
-
-      कौन सा विषय हटाना चाहते हैं?
-
-    </h4>
-
-
-    <select
-      id="delSubSelect"
-      style="
-        width:100%;
-        padding:8px;
-        border:1px solid #ccc;
-        border-radius:5px;
-        font-size:13px;
-        margin-bottom:12px
-      ">
-    </select>
-
-
     <div
-      style="
-        display:flex;
-        gap:6px;
-        justify-content:flex-end
-      ">
-
-      <button
-        class="gray"
-        onclick="closeSubjectModal()">
-
-        रद्द करें
-
-      </button>
-
-      <button
-        class="danger"
-        onclick="confirmRemoveSubject()">
-
-        हटाएं
-
-      </button>
-
+        class="pages-wrap"
+        id="pagesWrap">
     </div>
 
-  </div>
+</div>
 
 </div>
 
 
-<!-- ========================================================
-     WHATSAPP FOLLOW POPUP
-========================================================= -->
+<!-- ================= SUBJECT MODAL ================= -->
 
 <div
-  class="popup-bg"
-  id="followPopup">
+    class="dialog-bg"
+    id="subModal">
 
-  <div class="popup">
+    <div class="dialog-box">
 
-    <h3>
-      📢 DEO Office से जुड़ें
-    </h3>
+        <h4
+            style="margin:0 0 10px 0;font-size:15px">
 
+            कौन सा विषय हटाना चाहते हैं?
 
-    <p>
+        </h4>
 
-      बिहार शिक्षा विभाग से जुड़े सभी जरूरी प्रपत्र,
-      अंक पत्रक और ताजा अपडेट पाने के लिए हमारे
-      WhatsApp चैनल को Follow करें।
+        <select
+            id="delSubSelect"
+            style="
+            width:100%;
+            padding:8px;
+            border:1px solid #ccc;
+            border-radius:5px;
+            font-size:13px;
+            margin-bottom:12px">
 
-    </p>
-
-
-    <button
-      class="follow-btn"
-      onclick="handleMandatoryFollow()">
-
-      <svg
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="currentColor">
-
-        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
-
-      </svg>
-
-      Follow DEO Office
-
-    </button>
+        </select>
 
 
-    <div class="small">
+        <div
+            style="
+            display:flex;
+            gap:6px;
+            justify-content:flex-end">
 
-      आगे बढ़ने के लिए Follow करना अनिवार्य है।
+            <button
+                class="gray"
+                onclick="closeSubjectModal()">
+
+                रद्द करें
+
+            </button>
+
+            <button
+                class="danger"
+                onclick="confirmRemoveSubject()">
+
+                हटाएं
+
+            </button>
+
+        </div>
 
     </div>
 
-  </div>
+</div>
+
+
+<!-- ================= WHATSAPP POPUP ================= -->
+
+<div
+    class="popup-bg"
+    id="followPopup">
+
+    <div class="popup">
+
+        <h3>
+            📢 DEO Office से जुड़ें
+        </h3>
+
+        <p>
+
+            बिहार शिक्षा विभाग से जुड़े सभी जरूरी प्रपत्र,
+            अंक पत्रक और ताजा अपडेट पाने के लिए हमारे
+            WhatsApp चैनल को Follow करें।
+
+        </p>
+
+
+        <button
+            class="follow-btn"
+            onclick="handleMandatoryFollow()">
+
+            <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="currentColor">
+
+                <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+
+            </svg>
+
+            Follow DEO Office
+
+        </button>
+
+
+        <div class="small">
+
+            आगे बढ़ने के लिए Follow करना अनिवार्य है।
+
+        </div>
+
+    </div>
 
 </div>
 
 
 <script>
 
-
-/* ==========================================================
-   WHATSAPP CHANNEL LINK
-========================================================== */
+/* =====================================================
+   WHATSAPP CHANNEL
+   ===================================================== */
 
 const CHANNEL_LINK =
 "https://whatsapp.com/channel/0029VaIhMoY35fM4YK5xrz3P";
 
 
-/* ==========================================================
+/* =====================================================
    SETTINGS
-========================================================== */
+   ===================================================== */
 
 const ROWS_PER_PAGE = 30;
 
 
 let subjects = [
-  "हिंदी",
-  "गणित",
-  "अंग्रेजी",
-  "संस्कृत",
-  "सा० विज्ञान",
-  "विज्ञान"
+    "हिंदी",
+    "गणित",
+    "अंग्रेजी",
+    "संस्कृत",
+    "सा० विज्ञान",
+    "विज्ञान"
 ];
 
 
@@ -1484,19 +1136,13 @@ let students = [];
 
 let details = {
 
-  center: "",
-
-  district: "",
-
-  school: "",
-
-  udise: "",
-
-  block: "",
-
-  className: "",
-
-  maxMarks: "50"
+    center: "",
+    district: "",
+    school: "",
+    udise: "",
+    block: "",
+    className: "",
+    maxMarks: "50"
 
 };
 
@@ -1504,1355 +1150,1195 @@ let details = {
 let selectedStudent = 0;
 
 
-/* ==========================================================
+/* =====================================================
    ESCAPE HTML
-========================================================== */
+   ===================================================== */
 
-function esc(s) {
+function esc(s){
 
-  return String(s || "")
-
-    .replace(/&/g,"&amp;")
-
-    .replace(/"/g,"&quot;")
-
-    .replace(/</g,"&lt;")
-
-    .replace(/>/g,"&gt;");
+    return String(s || "")
+        .replace(/&/g,"&amp;")
+        .replace(/"/g,"&quot;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;");
 
 }
 
 
-/* ==========================================================
+/* =====================================================
    VIEW COUNTER
-========================================================== */
+   ===================================================== */
 
-function updateViews() {
+function updateViews(){
 
-  fetch(
-    "https://api.counterapi.dev/v1/deo_marks_folio_bihar/views/up"
-  )
+    fetch(
+        'https://api.counterapi.dev/v1/deo_marks_folio_bihar/views/up'
+    )
 
-  .then(
-    res => res.json()
-  )
+    .then(res => res.json())
 
-  .then(
-    data => {
+    .then(data => {
 
-      if(data && data.count) {
+        if(data && data.count){
 
-        document
-          .getElementById("viewCount")
-          .textContent =
-          Number(
-            data.count
-          ).toLocaleString(
-            "hi-IN"
-          );
+            document.getElementById(
+                "viewCount"
+            ).textContent =
+                Number(data.count).toLocaleString('hi-IN');
 
-      }
+        }
+
+    })
+
+    .catch(() => {
+
+        let localViews =
+            Number(
+                localStorage.getItem(
+                    "deo_local_views"
+                ) || 1054
+            ) + 1;
+
+        localStorage.setItem(
+            "deo_local_views",
+            localViews
+        );
+
+        document.getElementById(
+            "viewCount"
+        ).textContent =
+            localViews.toLocaleString('hi-IN');
+
+    });
+
+}
+
+
+/* =====================================================
+   SHARE
+   ===================================================== */
+
+function shareApp(){
+
+    const shareData = {
+
+        title:
+        'DEO Office - Marks Folio Maker',
+
+        text:
+        'बिहार विद्यालय अंक पत्रक (Marks Folio) ऑनलाइन भरें और A4 PDF डाउनलोड करें:',
+
+        url:
+        window.location.href
+
+    };
+
+
+    if(navigator.share){
+
+        navigator.share(
+            shareData
+        ).catch(() => {});
 
     }
-  )
 
-  .catch(() => {
+    else {
 
-    let localViews =
-      Number(
+        navigator.clipboard
+        .writeText(
+            window.location.href
+        )
+
+        .then(() => {
+
+            alert(
+                "📋 लिंक क्लिपबोर्ड पर कॉपी हो गया है!"
+            );
+
+        })
+
+        .catch(() => {
+
+            window.open(
+                `https://api.whatsapp.com/send?text=${
+                    encodeURIComponent(
+                        shareData.text +
+                        " " +
+                        shareData.url
+                    )
+                }`,
+                '_blank'
+            );
+
+        });
+
+    }
+
+}
+
+
+/* =====================================================
+   FOLLOW POPUP
+   ===================================================== */
+
+function checkMandatoryPopup(){
+
+    if(
         localStorage.getItem(
-          "deo_local_views"
-        ) || 1054
-      ) + 1;
+            "deoFollowCompleted_v3"
+        ) !== "1"
+    ){
 
+        document.getElementById(
+            "followPopup"
+        ).style.display = "flex";
+
+    }
+
+}
+
+
+function handleMandatoryFollow(){
+
+    window.open(
+        CHANNEL_LINK,
+        "_blank"
+    );
 
     localStorage.setItem(
-      "deo_local_views",
-      localViews
+        "deoFollowCompleted_v3",
+        "1"
     );
 
-
-    document
-      .getElementById("viewCount")
-      .textContent =
-      localViews.toLocaleString(
-        "hi-IN"
-      );
-
-  });
-
-}
-
-
-/* ==========================================================
-   SHARE
-========================================================== */
-
-function shareApp() {
-
-  const shareData = {
-
-    title:
-      "DEO Office - Marks Folio Maker",
-
-    text:
-      "बिहार विद्यालय अंक पत्रक (Marks Folio) ऑनलाइन भरें और A4 PDF डाउनलोड करें:",
-
-    url:
-      window.location.href
-
-  };
-
-
-  if(navigator.share) {
-
-    navigator
-      .share(shareData)
-      .catch(() => {});
-
-  }
-
-  else {
-
-    navigator
-      .clipboard
-      .writeText(
-        window.location.href
-      )
-
-      .then(() => {
-
-        alert(
-          "📋 लिंक क्लिपबोर्ड पर कॉपी हो गया है! अब इसे WhatsApp पर शेयर कर सकते हैं।"
-        );
-
-      })
-
-      .catch(() => {
-
-        window.open(
-
-          "https://api.whatsapp.com/send?text=" +
-
-          encodeURIComponent(
-            shareData.text +
-            " " +
-            shareData.url
-          ),
-
-          "_blank"
-
-        );
-
-      });
-
-  }
-
-}
-
-
-/* ==========================================================
-   FOLLOW POPUP
-========================================================== */
-
-function checkMandatoryPopup() {
-
-  if(
-    localStorage.getItem(
-      "deoFollowCompleted_v3"
-    ) !== "1"
-  ) {
-
-    document
-      .getElementById(
-        "followPopup"
-      )
-      .style.display =
-      "flex";
-
-  }
-
-}
-
-
-/* ==========================================================
-   FOLLOW CHANNEL
-========================================================== */
-
-function handleMandatoryFollow() {
-
-  window.open(
-    CHANNEL_LINK,
-    "_blank"
-  );
-
-
-  localStorage.setItem(
-    "deoFollowCompleted_v3",
-    "1"
-  );
-
-
-  document
-    .getElementById(
-      "followPopup"
-    )
-    .style.display =
-    "none";
-
-}
-
-
-/* ==========================================================
-   SUBJECT CONTROLS
-========================================================== */
-
-function renderSubjectControls() {
-
-  const grid =
     document.getElementById(
-      "subjectGrid"
-    );
+        "followPopup"
+    ).style.display = "none";
+
+}
 
 
-  grid.innerHTML =
+/* =====================================================
+   SUBJECT CONTROLS
+   ===================================================== */
 
-    subjects
-      .map(
+function renderSubjectControls(){
+
+    const grid =
+        document.getElementById(
+            "subjectGrid"
+        );
+
+
+    grid.innerHTML = subjects.map(
         (sub, i) => `
 
         <div class="subject-box">
 
-          <input
-            class="sub-name"
-            value="${esc(sub)}"
-            title="नाम एडिट करें"
-            oninput="
-              updateSubjectName(
-                ${i},
-                this.value
-              )
-            ">
+            <input
+                class="sub-name"
+                value="${esc(sub)}"
+                title="नाम एडिट करें"
+                oninput="
+                    updateSubjectName(
+                        ${i},
+                        this.value
+                    )
+                "
+            >
 
-          <input
-            class="sub-marks"
-            id="m${i}"
-            inputmode="numeric"
-            placeholder="0"
-            oninput="formChanged()">
+            <input
+                class="sub-marks"
+                id="m${i}"
+                inputmode="numeric"
+                placeholder="0"
+                oninput="formChanged()"
+            >
 
         </div>
 
         `
-      )
-      .join("");
+    ).join("");
 
 }
 
 
-/* ==========================================================
-   UPDATE SUBJECT NAME
-========================================================== */
+/* =====================================================
+   UPDATE SUBJECT
+   ===================================================== */
 
-function updateSubjectName(
-  idx,
-  val
-) {
+function updateSubjectName(idx, val){
 
-  subjects[idx] =
-    val ||
-    `विषय ${idx + 1}`;
-
-
-  renderPages();
-
-  autoSave();
-
-}
-
-
-/* ==========================================================
-   ADD SUBJECT
-========================================================== */
-
-function addSubject() {
-
-  const name =
-    prompt(
-      "नए विषय का नाम दर्ज करें:",
-      `विषय ${subjects.length + 1}`
-    );
-
-
-  if(
-    name &&
-    name.trim()
-  ) {
-
-    subjects.push(
-      name.trim()
-    );
-
-
-    students.forEach(
-      s => {
-
-        while(
-          s.marks.length <
-          subjects.length
-        ) {
-
-          s.marks.push("");
-
-        }
-
-      }
-    );
-
-
-    renderSubjectControls();
+    subjects[idx] =
+        val ||
+        `विषय ${idx + 1}`;
 
     renderPages();
 
-    selectStudent();
-
     autoSave();
 
-  }
-
 }
 
 
-/* ==========================================================
-   SUBJECT MODAL
-========================================================== */
+/* =====================================================
+   ADD SUBJECT
+   ===================================================== */
 
-function openSubjectModal() {
+function addSubject(){
 
-  if(subjects.length <= 1) {
-
-    alert(
-      "कम से कम एक विषय होना अनिवार्य है!"
-    );
-
-    return;
-
-  }
-
-
-  const sel =
-    document.getElementById(
-      "delSubSelect"
-    );
-
-
-  sel.innerHTML =
-
-    subjects
-      .map(
-        (s, i) =>
-        `<option value="${i}">
-          ${i + 1}. ${esc(s)}
-        </option>`
-      )
-      .join("");
-
-
-  document
-    .getElementById(
-      "subModal"
-    )
-    .style.display =
-    "flex";
-
-}
-
-
-function closeSubjectModal() {
-
-  document
-    .getElementById(
-      "subModal"
-    )
-    .style.display =
-    "none";
-
-}
-
-
-/* ==========================================================
-   REMOVE SUBJECT
-========================================================== */
-
-function confirmRemoveSubject() {
-
-  const sel =
-    document.getElementById(
-      "delSubSelect"
-    );
-
-
-  const idx =
-    Number(
-      sel.value
-    );
-
-
-  if(
-    !isNaN(idx) &&
-    idx >= 0 &&
-    idx < subjects.length
-  ) {
-
-    subjects.splice(
-      idx,
-      1
-    );
-
-
-    students.forEach(
-      s => {
-
-        s.marks.splice(
-          idx,
-          1
+    const name =
+        prompt(
+            "नए विषय का नाम दर्ज करें:",
+            `विषय ${subjects.length + 1}`
         );
 
-      }
-    );
+
+    if(name && name.trim()){
+
+        subjects.push(
+            name.trim()
+        );
 
 
-    closeSubjectModal();
+        students.forEach(s => {
 
-    renderSubjectControls();
+            while(
+                s.marks.length <
+                subjects.length
+            ){
 
-    renderPages();
-
-    selectStudent();
-
-    autoSave();
-
-  }
-
-}
-
-
-/* ==========================================================
-   HEADER INPUT
-========================================================== */
-
-function syncHeaderInputs(
-  key,
-  value
-) {
-
-  details[key] =
-    value;
-
-
-  document
-    .querySelectorAll(
-      `.info-input-${key}`
-    )
-    .forEach(
-      el => {
-
-        if(
-          el.value !== value
-        ) {
-
-          el.value =
-            value;
-
-        }
-
-      }
-    );
-
-
-  autoSave();
-
-}
-
-
-/* ==========================================================
-   RENDER PAGES
-========================================================== */
-
-function renderPages() {
-
-  const wrap =
-    document.getElementById(
-      "pagesWrap"
-    );
-
-
-  wrap.innerHTML = "";
-
-
-  const totalPages =
-    Math.max(
-      1,
-      Math.ceil(
-        students.length /
-        ROWS_PER_PAGE
-      )
-    );
-
-
-  const totalCols =
-    4 + subjects.length;
-
-
-  for(
-    let p = 0;
-    p < totalPages;
-    p++
-  ) {
-
-    const pageDiv =
-      document.createElement(
-        "section"
-      );
-
-
-    pageDiv.className =
-      "paper";
-
-
-    const startIdx =
-      p *
-      ROWS_PER_PAGE;
-
-
-    let rowsHtml =
-      "";
-
-
-    for(
-      let r = 0;
-      r < ROWS_PER_PAGE;
-      r++
-    ) {
-
-      const i =
-        startIdx + r;
-
-
-      if(
-        i < students.length
-      ) {
-
-        const st =
-          students[i];
-
-
-        let subCells =
-          "";
-
-
-        let total =
-          0;
-
-
-        let hasAnyEntry =
-          false;
-
-
-        for(
-          let s = 0;
-          s < subjects.length;
-          s++
-        ) {
-
-          const m =
-            (
-              st.marks[s] ||
-              ""
-            ).trim();
-
-
-          if(
-            m !== ""
-          ) {
-
-            hasAnyEntry =
-              true;
-
-
-            const isAbsent =
-              (
-                m.toUpperCase()
-                === "ABSENT"
-              ) ||
-              (
-                m.toUpperCase()
-                === "AB"
-              );
-
-
-            if(
-              !isAbsent &&
-              !isNaN(
-                Number(m)
-              )
-            ) {
-
-              total +=
-                Number(m);
+                s.marks.push("");
 
             }
 
-          }
+        });
 
 
-          subCells += `
+        renderSubjectControls();
 
-            <td class="col-sub">
+        renderPages();
 
-              <input
-                value="${esc(m)}"
-                oninput="
-                  cellChanged(
-                    ${i},
-                    ${s},
-                    this.value
-                  )
-                ">
+        selectStudent();
 
-            </td>
+        autoSave();
 
-          `;
+    }
+
+}
+
+
+/* =====================================================
+   REMOVE SUBJECT
+   ===================================================== */
+
+function openSubjectModal(){
+
+    if(subjects.length <= 1){
+
+        alert(
+            "कम से कम एक विषय होना अनिवार्य है!"
+        );
+
+        return;
+
+    }
+
+
+    const sel =
+        document.getElementById(
+            "delSubSelect"
+        );
+
+
+    sel.innerHTML =
+        subjects.map(
+            (s, i) =>
+            `<option value="${i}">
+                ${i + 1}. ${esc(s)}
+            </option>`
+        ).join("");
+
+
+    document.getElementById(
+        "subModal"
+    ).style.display = "flex";
+
+}
+
+
+function closeSubjectModal(){
+
+    document.getElementById(
+        "subModal"
+    ).style.display = "none";
+
+}
+
+
+function confirmRemoveSubject(){
+
+    const sel =
+        document.getElementById(
+            "delSubSelect"
+        );
+
+
+    const idx =
+        Number(sel.value);
+
+
+    if(
+        !isNaN(idx) &&
+        idx >= 0 &&
+        idx < subjects.length
+    ){
+
+        subjects.splice(
+            idx,
+            1
+        );
+
+
+        students.forEach(s => {
+
+            s.marks.splice(
+                idx,
+                1
+            );
+
+        });
+
+
+        closeSubjectModal();
+
+        renderSubjectControls();
+
+        renderPages();
+
+        selectStudent();
+
+        autoSave();
+
+    }
+
+}
+
+
+/* =====================================================
+   HEADER INPUTS
+   ===================================================== */
+
+function syncHeaderInputs(
+    key,
+    value
+){
+
+    details[key] =
+        value;
+
+
+    document
+        .querySelectorAll(
+            `.info-input-${key}`
+        )
+        .forEach(el => {
+
+            if(
+                el.value !== value
+            ){
+
+                el.value =
+                    value;
+
+            }
+
+        });
+
+
+    autoSave();
+
+}
+
+
+/* =====================================================
+   RENDER PAGES
+   ===================================================== */
+
+function renderPages(){
+
+    const wrap =
+        document.getElementById(
+            "pagesWrap"
+        );
+
+
+    wrap.innerHTML = "";
+
+
+    const totalPages =
+        Math.max(
+            1,
+            Math.ceil(
+                students.length /
+                ROWS_PER_PAGE
+            )
+        );
+
+
+    const totalCols =
+        4 + subjects.length;
+
+
+    for(
+        let p = 0;
+        p < totalPages;
+        p++
+    ){
+
+        const pageDiv =
+            document.createElement(
+                "section"
+            );
+
+
+        pageDiv.className =
+            "paper";
+
+
+        const startIdx =
+            p * ROWS_PER_PAGE;
+
+
+        let rowsHtml = "";
+
+
+        for(
+            let r = 0;
+            r < ROWS_PER_PAGE;
+            r++
+        ){
+
+            const i =
+                startIdx + r;
+
+
+            if(
+                i < students.length
+            ){
+
+                const st =
+                    students[i];
+
+
+                let subCells = "";
+
+                let total = 0;
+
+                let hasAnyEntry =
+                    false;
+
+
+                for(
+                    let s = 0;
+                    s < subjects.length;
+                    s++
+                ){
+
+                    const m =
+                        (
+                            st.marks[s] ||
+                            ""
+                        ).trim();
+
+
+                    if(m !== ""){
+
+                        hasAnyEntry =
+                            true;
+
+
+                        const isAbsent =
+                            (
+                                m.toUpperCase()
+                                === "ABSENT"
+                                ||
+                                m.toUpperCase()
+                                === "AB"
+                            );
+
+
+                        if(
+                            !isAbsent &&
+                            !isNaN(
+                                Number(m)
+                            )
+                        ){
+
+                            total +=
+                                Number(m);
+
+                        }
+
+                    }
+
+
+                    subCells += `
+
+                        <td class="col-sub">
+
+                            <input
+                                value="${esc(m)}"
+                                oninput="
+                                    cellChanged(
+                                        ${i},
+                                        ${s},
+                                        this.value
+                                    )
+                                "
+                            >
+
+                        </td>
+
+                    `;
+
+                }
+
+
+                rowsHtml += `
+
+                <tr>
+
+                    <td class="col-sr">
+                        ${i + 1}
+                    </td>
+
+                    <td class="col-roll">
+
+                        <input
+                            value="${esc(st.roll)}"
+                            oninput="
+                                cellInfoChanged(
+                                    ${i},
+                                    'roll',
+                                    this.value
+                                )
+                            "
+                        >
+
+                    </td>
+
+                    <td class="col-name name">
+
+                        <input
+                            value="${esc(st.name)}"
+                            oninput="
+                                cellInfoChanged(
+                                    ${i},
+                                    'name',
+                                    this.value
+                                )
+                            "
+                        >
+
+                    </td>
+
+                    ${subCells}
+
+                    <td class="col-total total">
+
+                        ${
+                            hasAnyEntry
+                            ? total
+                            : "0"
+                        }
+
+                    </td>
+
+                </tr>
+
+                `;
+
+            }
+
+            else {
+
+                const blankSub =
+                    subjects.map(
+                        () =>
+                        `<td class="col-sub"></td>`
+                    ).join("");
+
+
+                rowsHtml += `
+
+                <tr>
+
+                    <td class="col-sr">
+                        ${i + 1}
+                    </td>
+
+                    <td class="col-roll"></td>
+
+                    <td class="col-name name"></td>
+
+                    ${blankSub}
+
+                    <td class="col-total total"></td>
+
+                </tr>
+
+                `;
+
+            }
 
         }
 
 
-        rowsHtml += `
+        pageDiv.innerHTML = `
 
-          <tr>
+        <div class="header">
 
-            <td class="col-sr">
-              ${i + 1}
-            </td>
+            <div class="h1">
 
+                राज्य शिक्षा शोध एवं प्रशिक्षण परिषद,
+                बिहार, पटना
 
-            <td class="col-roll">
+            </div>
 
-              <input
-                value="${esc(st.roll)}"
-                oninput="
-                  cellInfoChanged(
-                    ${i},
-                    'roll',
-                    this.value
-                  )
-                ">
+            <div class="h2">
 
-            </td>
+                अंक पत्रक (Marks Folio)
 
+                ${
+                    totalPages > 1
+                    ? `[पृष्ठ ${p + 1}/${totalPages}]`
+                    : ""
+                }
 
-            <td
-              class="col-name name">
+            </div>
 
-              <input
-                value="${esc(st.name)}"
-                oninput="
-                  cellInfoChanged(
-                    ${i},
-                    'name',
-                    this.value
-                  )
-                ">
-
-            </td>
+        </div>
 
 
-            ${subCells}
+        <div class="info">
+
+            <div class="info-row">
+
+                <label>
+                    मूल्यांकन केंद्र का नाम :-
+                </label>
+
+                <input
+                    class="info-input-center"
+                    value="${esc(details.center)}"
+                    oninput="
+                        syncHeaderInputs(
+                            'center',
+                            this.value
+                        )
+                    "
+                >
 
 
-            <td
-              class="col-total total">
+                <label>
+                    जिला :-
+                </label>
 
-              ${
-                hasAnyEntry
-                ? total
-                : "0"
-              }
+                <input
+                    class="info-input-district"
+                    value="${esc(details.district)}"
+                    oninput="
+                        syncHeaderInputs(
+                            'district',
+                            this.value
+                        )
+                    "
+                >
 
-            </td>
+            </div>
 
-          </tr>
+
+            <div class="info-row wide">
+
+                <label>
+                    विद्यालय का नाम :-
+                </label>
+
+                <input
+                    class="info-input-school"
+                    value="${esc(details.school)}"
+                    oninput="
+                        syncHeaderInputs(
+                            'school',
+                            this.value
+                        )
+                    "
+                >
+
+            </div>
+
+
+            <div class="info-row">
+
+                <label>
+                    यू-डायस :-
+                </label>
+
+                <input
+                    class="info-input-udise"
+                    value="${esc(details.udise)}"
+                    oninput="
+                        syncHeaderInputs(
+                            'udise',
+                            this.value
+                        )
+                    "
+                >
+
+
+                <label>
+                    प्रखंड का नाम :-
+                </label>
+
+                <input
+                    class="info-input-block"
+                    value="${esc(details.block)}"
+                    oninput="
+                        syncHeaderInputs(
+                            'block',
+                            this.value
+                        )
+                    "
+                >
+
+            </div>
+
+
+            <div class="info-row">
+
+                <label>
+                    वर्ग/उप वर्ग :-
+                </label>
+
+                <input
+                    class="info-input-className"
+                    value="${esc(details.className)}"
+                    oninput="
+                        syncHeaderInputs(
+                            'className',
+                            this.value
+                        )
+                    "
+                >
+
+
+                <label>
+                    पूर्णांक :-
+                </label>
+
+                <input
+                    class="info-input-maxMarks marks"
+                    value="${esc(details.maxMarks)}"
+                    oninput="
+                        syncHeaderInputs(
+                            'maxMarks',
+                            this.value
+                        )
+                    "
+                >
+
+            </div>
+
+        </div>
+
+
+        <div class="table-wrap">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th class="col-sr">
+                            क्र०सं०
+                        </th>
+
+                        <th class="col-roll">
+                            वर्ग<br>क्रमांक
+                        </th>
+
+                        <th class="col-name">
+                            विद्यार्थियों का नाम
+                        </th>
+
+                        ${
+                            subjects.map(
+                                s =>
+                                `<th class="col-sub">
+                                    ${esc(s)}
+                                </th>`
+                            ).join("")
+                        }
+
+                        <th class="col-total">
+                            कुल
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    ${rowsHtml}
+
+                </tbody>
+
+
+                <tfoot>
+
+                    <tr>
+
+                        <td
+                            colspan="${totalCols}"
+                            class="note-cell">
+
+                            ※ अनुपस्थित परीक्षार्थी के कॉलम में
+                            लाल कलम से प्राप्तांक कॉलम में
+                            अनुपस्थित (ABSENT) दर्ज करें।
+
+                        </td>
+
+                    </tr>
+
+                </tfoot>
+
+            </table>
+
+        </div>
+
+
+        <div class="signatures">
+
+            <div class="sig">
+
+                परीक्षक का नाम एवं हस्ताक्षर<br>
+                तिथि सहित
+
+            </div>
+
+
+            <div class="sig">
+
+                प्रधान परीक्षक का नाम एवं<br>
+                हस्ताक्षर तिथि सहित
+
+            </div>
+
+
+            <div class="sig">
+
+                मूल्यांकन निदेशक का<br>
+                हस्ताक्षर एवं मुहर
+
+            </div>
+
+        </div>
 
         `;
 
-      }
 
-      else {
-
-        const blankSub =
-          subjects
-            .map(
-              () =>
-              `<td class="col-sub"></td>`
-            )
-            .join("");
-
-
-        rowsHtml += `
-
-          <tr>
-
-            <td class="col-sr">
-              ${i + 1}
-            </td>
-
-            <td class="col-roll"></td>
-
-            <td class="col-name name"></td>
-
-            ${blankSub}
-
-            <td class="col-total total"></td>
-
-          </tr>
-
-        `;
-
-      }
+        wrap.appendChild(
+            pageDiv
+        );
 
     }
-
-
-    pageDiv.innerHTML = `
-
-      <div class="header">
-
-        <div class="h1">
-
-          राज्य शिक्षा शोध एवं प्रशिक्षण परिषद, बिहार, पटना
-
-        </div>
-
-
-        <div class="h2">
-
-          अंक पत्रक (Marks Folio)
-
-          ${
-            totalPages > 1
-            ? `[पृष्ठ ${p + 1}/${totalPages}]`
-            : ""
-          }
-
-        </div>
-
-      </div>
-
-
-      <div class="info">
-
-
-        <div class="info-row">
-
-          <label>
-            मूल्यांकन केंद्र का नाम :-
-          </label>
-
-
-          <input
-            class="info-input-center"
-            value="${esc(details.center)}"
-            oninput="
-              syncHeaderInputs(
-                'center',
-                this.value
-              )
-            ">
-
-
-          <label>
-            जिला :-
-          </label>
-
-
-          <input
-            class="info-input-district"
-            value="${esc(details.district)}"
-            oninput="
-              syncHeaderInputs(
-                'district',
-                this.value
-              )
-            ">
-
-        </div>
-
-
-        <div class="info-row wide">
-
-          <label>
-            विद्यालय का नाम :-
-          </label>
-
-
-          <input
-            class="info-input-school"
-            value="${esc(details.school)}"
-            oninput="
-              syncHeaderInputs(
-                'school',
-                this.value
-              )
-            ">
-
-        </div>
-
-
-        <div class="info-row">
-
-          <label>
-            यू-डायस :-
-          </label>
-
-
-          <input
-            class="info-input-udise"
-            value="${esc(details.udise)}"
-            oninput="
-              syncHeaderInputs(
-                'udise',
-                this.value
-              )
-            ">
-
-
-          <label>
-            प्रखंड का नाम :-
-          </label>
-
-
-          <input
-            class="info-input-block"
-            value="${esc(details.block)}"
-            oninput="
-              syncHeaderInputs(
-                'block',
-                this.value
-              )
-            ">
-
-        </div>
-
-
-        <div class="info-row">
-
-          <label>
-            वर्ग/उप वर्ग :-
-          </label>
-
-
-          <input
-            class="info-input-className"
-            value="${esc(details.className)}"
-            oninput="
-              syncHeaderInputs(
-                'className',
-                this.value
-              )
-            ">
-
-
-          <label>
-            पूर्णांक :-
-          </label>
-
-
-          <input
-            class="info-input-maxMarks marks"
-            value="${esc(details.maxMarks)}"
-            oninput="
-              syncHeaderInputs(
-                'maxMarks',
-                this.value
-              )
-            ">
-
-        </div>
-
-
-      </div>
-
-
-      <div class="table-wrap">
-
-
-        <table>
-
-
-          <thead>
-
-            <tr>
-
-              <th class="col-sr">
-                क्र०सं०
-              </th>
-
-
-              <th class="col-roll">
-                वर्ग<br>क्रमांक
-              </th>
-
-
-              <th class="col-name">
-                विद्यार्थियों का नाम
-              </th>
-
-
-              ${
-                subjects
-                  .map(
-                    s =>
-                    `<th class="col-sub">
-                      ${esc(s)}
-                    </th>`
-                  )
-                  .join("")
-              }
-
-
-              <th class="col-total">
-                कुल
-              </th>
-
-            </tr>
-
-          </thead>
-
-
-          <tbody>
-
-            ${rowsHtml}
-
-          </tbody>
-
-
-          <tfoot>
-
-            <tr>
-
-              <td
-                colspan="${totalCols}"
-                class="note-cell">
-
-                ※ अनुपस्थित परीक्षार्थी के कॉलम में लाल कलम से प्राप्तांक कॉलम में अनुपस्थित (ABSENT) दर्ज करें।
-
-              </td>
-
-            </tr>
-
-          </tfoot>
-
-
-        </table>
-
-
-      </div>
-
-
-      <div class="signatures">
-
-
-        <div class="sig">
-
-          परीक्षक का नाम एवं हस्ताक्षर<br>
-          तिथि सहित
-
-        </div>
-
-
-        <div class="sig">
-
-          प्रधान परीक्षक का नाम एवं<br>
-          हस्ताक्षर तिथि सहित
-
-        </div>
-
-
-        <div class="sig">
-
-          मूल्यांकन निदेशक का<br>
-          हस्ताक्षर एवं मुहर
-
-        </div>
-
-
-      </div>
-
-    `;
-
-
-    wrap.appendChild(
-      pageDiv
-    );
-
-  }
 
 }
 
 
-/* ==========================================================
-   CELL MARK CHANGE
-========================================================== */
+/* =====================================================
+   CELL CHANGE
+   ===================================================== */
 
 function cellChanged(
-  stIdx,
-  subIdx,
-  val
-) {
+    stIdx,
+    subIdx,
+    val
+){
 
-  students[stIdx]
-    .marks[subIdx] =
-    val;
-
-
-  if(
-    stIdx ===
-    selectedStudent
-  ) {
-
-    const formInput =
-      document.getElementById(
-        "m" + subIdx
-      );
-
-
-    if(formInput) {
-
-      formInput.value =
+    students[stIdx]
+        .marks[subIdx] =
         val;
+
+
+    if(
+        stIdx === selectedStudent
+    ){
+
+        const formInput =
+            document.getElementById(
+                "m" + subIdx
+            );
+
+
+        if(formInput){
+
+            formInput.value =
+                val;
+
+        }
 
     }
 
-  }
 
+    renderPages();
 
-  renderPages();
-
-  autoSave();
+    autoSave();
 
 }
 
 
-/* ==========================================================
+/* =====================================================
    CELL INFO CHANGE
-========================================================== */
+   ===================================================== */
 
 function cellInfoChanged(
-  stIdx,
-  key,
-  val
-) {
+    stIdx,
+    key,
+    val
+){
 
-  students[stIdx][key] =
-    val;
+    students[stIdx][key] =
+        val;
 
-
-  if(
-    stIdx ===
-    selectedStudent
-  ) {
 
     if(
-      key === "name"
-    ) {
+        stIdx === selectedStudent
+    ){
 
-      document
-        .getElementById(
-          "formName"
-        )
-        .value =
-        val;
+        if(key === "name"){
+
+            document.getElementById(
+                "formName"
+            ).value = val;
+
+        }
+
+
+        if(key === "roll"){
+
+            document.getElementById(
+                "formRoll"
+            ).value = val;
+
+        }
 
     }
 
 
-    if(
-      key === "roll"
-    ) {
+    syncFormOptions();
 
-      document
-        .getElementById(
-          "formRoll"
-        )
-        .value =
-        val;
-
-    }
-
-  }
-
-
-  syncFormOptions();
-
-  autoSave();
+    autoSave();
 
 }
 
 
-/* ==========================================================
-   STUDENT OPTIONS
-========================================================== */
+/* =====================================================
+   STUDENT SELECT
+   ===================================================== */
 
-function syncFormOptions() {
+function syncFormOptions(){
 
-  const previous =
-    selectedStudent;
+    const previous =
+        selectedStudent;
 
 
-  const studentSelect =
+    const studentSelect =
+        document.getElementById(
+            "studentSelect"
+        );
+
+
+    studentSelect.innerHTML =
+        "";
+
+
+    students.forEach(
+        (r, i) => {
+
+            const opt =
+                document.createElement(
+                    "option"
+                );
+
+
+            opt.value = i;
+
+
+            opt.textContent =
+                `${i + 1}. ${
+                    r.name ||
+                    "नया विद्यार्थी"
+                }`;
+
+
+            studentSelect.appendChild(
+                opt
+            );
+
+        }
+    );
+
+
+    selectedStudent =
+        Math.min(
+            previous,
+            Math.max(
+                0,
+                students.length - 1
+            )
+        );
+
+
+    studentSelect.value =
+        selectedStudent;
+
+}
+
+
+function selectStudent(){
+
+    selectedStudent =
+        Number(
+            document.getElementById(
+                "studentSelect"
+            ).value
+        ) || 0;
+
+
+    const st =
+        students[selectedStudent];
+
+
+    if(!st) return;
+
+
     document.getElementById(
-      "studentSelect"
-    );
-
-
-  studentSelect.innerHTML =
-    "";
-
-
-  students.forEach(
-    (r, i) => {
-
-      const opt =
-        document.createElement(
-          "option"
-        );
-
-
-      opt.value =
-        i;
-
-
-      opt.textContent =
-        `${i + 1}. ${
-          r.name ||
-          "नया विद्यार्थी"
-        }`;
-
-
-      studentSelect
-        .appendChild(
-          opt
-        );
-
-    }
-  );
-
-
-  selectedStudent =
-    Math.min(
-      previous,
-      Math.max(
-        0,
-        students.length - 1
-      )
-    );
-
-
-  studentSelect.value =
-    selectedStudent;
-
-}
-
-
-/* ==========================================================
-   SELECT STUDENT
-========================================================== */
-
-function selectStudent() {
-
-  selectedStudent =
-    Number(
-      document
-        .getElementById(
-          "studentSelect"
-        )
-        .value
-    ) || 0;
-
-
-  const st =
-    students[
-      selectedStudent
-    ];
-
-
-  if(!st) return;
-
-
-  document
-    .getElementById(
-      "formRoll"
-    )
-    .value =
-    st.roll || "";
-
-
-  document
-    .getElementById(
-      "formName"
-    )
-    .value =
-    st.name || "";
-
-
-  for(
-    let i = 0;
-    i < subjects.length;
-    i++
-  ) {
-
-    const input =
-      document.getElementById(
-        "m" + i
-      );
-
-
-    if(input) {
-
-      input.value =
-        st.marks[i] || "";
-
-    }
-
-  }
-
-}
-
-
-/* ==========================================================
-   FORM CHANGE
-========================================================== */
-
-function formChanged() {
-
-  const st =
-    students[
-      selectedStudent
-    ];
-
-
-  if(!st) return;
-
-
-  st.roll =
-    document
-      .getElementById(
         "formRoll"
-      )
-      .value;
+    ).value =
+        st.roll || "";
 
 
-  st.name =
-    document
-      .getElementById(
+    document.getElementById(
         "formName"
-      )
-      .value;
+    ).value =
+        st.name || "";
 
 
-  for(
-    let i = 0;
-    i < subjects.length;
-    i++
-  ) {
+    for(
+        let i = 0;
+        i < subjects.length;
+        i++
+    ){
 
-    const val =
-      document
-        .getElementById(
-          "m" + i
-        )
-        ?.value || "";
+        const input =
+            document.getElementById(
+                "m" + i
+            );
 
 
-    st.marks[i] =
-      val;
+        if(input){
 
-  }
+            input.value =
+                st.marks[i] || "";
 
+        }
 
-  renderPages();
-
-  syncFormOptions();
-
-
-  document
-    .getElementById(
-      "studentSelect"
-    )
-    .value =
-    selectedStudent;
-
-
-  autoSave();
+    }
 
 }
 
 
-/* ==========================================================
+/* =====================================================
+   FORM CHANGE
+   ===================================================== */
+
+function formChanged(){
+
+    const st =
+        students[selectedStudent];
+
+
+    if(!st) return;
+
+
+    st.roll =
+        document.getElementById(
+            "formRoll"
+        ).value;
+
+
+    st.name =
+        document.getElementById(
+            "formName"
+        ).value;
+
+
+    for(
+        let i = 0;
+        i < subjects.length;
+        i++
+    ){
+
+        const val =
+            document.getElementById(
+                "m" + i
+            )?.value || "";
+
+
+        st.marks[i] =
+            val;
+
+    }
+
+
+    renderPages();
+
+    syncFormOptions();
+
+
+    document.getElementById(
+        "studentSelect"
+    ).value =
+        selectedStudent;
+
+
+    autoSave();
+
+}
+
+
+/* =====================================================
    ADD STUDENT
-========================================================== */
+   ===================================================== */
 
-function addStudent() {
+function addStudent(){
 
-  students.push({
+    students.push({
 
-    roll: "",
+        roll: "",
 
-    name: "",
+        name: "",
 
-    marks:
-      new Array(
-        subjects.length
-      ).fill("")
+        marks:
+            new Array(
+                subjects.length
+            ).fill("")
 
-  });
+    });
 
-
-  renderPages();
-
-  syncFormOptions();
-
-
-  selectedStudent =
-    students.length - 1;
-
-
-  document
-    .getElementById(
-      "studentSelect"
-    )
-    .value =
-    selectedStudent;
-
-
-  selectStudent();
-
-  autoSave();
-
-}
-
-
-/* ==========================================================
-   REMOVE STUDENT
-========================================================== */
-
-function removeStudent() {
-
-  if(
-    students.length > 1
-  ) {
-
-    students.pop();
 
     renderPages();
 
@@ -2860,326 +2346,364 @@ function removeStudent() {
 
 
     selectedStudent =
-      Math.min(
-        selectedStudent,
-        students.length - 1
-      );
+        students.length - 1;
+
+
+    document.getElementById(
+        "studentSelect"
+    ).value =
+        selectedStudent;
 
 
     selectStudent();
 
     autoSave();
 
-  }
+}
+
+
+/* =====================================================
+   REMOVE STUDENT
+   ===================================================== */
+
+function removeStudent(){
+
+    if(
+        students.length > 1
+    ){
+
+        students.pop();
+
+        renderPages();
+
+        syncFormOptions();
+
+
+        selectedStudent =
+            Math.min(
+                selectedStudent,
+                students.length - 1
+            );
+
+
+        selectStudent();
+
+        autoSave();
+
+    }
 
 }
 
 
-/* ==========================================================
+/* =====================================================
    NEXT STUDENT
-========================================================== */
+   ===================================================== */
 
-function nextStudent() {
+function nextStudent(){
 
-  if(
-    selectedStudent <
-    students.length - 1
-  ) {
+    if(
+        selectedStudent <
+        students.length - 1
+    ){
 
-    selectedStudent++;
+        selectedStudent++;
+
+        document.getElementById(
+            "studentSelect"
+        ).value =
+            selectedStudent;
+
+        selectStudent();
+
+    }
+
+    else {
+
+        addStudent();
+
+    }
 
 
-    document
-      .getElementById(
-        "studentSelect"
-      )
-      .value =
-      selectedStudent;
+    window.scrollTo({
 
+        top: 0,
+
+        behavior: "smooth"
+
+    });
+
+}
+
+
+/* =====================================================
+   SAVE
+   ===================================================== */
+
+function autoSave(){
+
+    localStorage.setItem(
+
+        "deoMarksFolio_Final_v6",
+
+        JSON.stringify({
+
+            subjects,
+
+            details,
+
+            students
+
+        })
+
+    );
+
+
+    document.getElementById(
+        "saveStatus"
+    ).textContent =
+        "✓ Auto-saved • " +
+        new Date()
+        .toLocaleTimeString(
+            "hi-IN"
+        );
+
+}
+
+
+function saveData(){
+
+    autoSave();
+
+    alert(
+        "डेटा सुरक्षित कर दिया गया है।"
+    );
+
+}
+
+
+/* =====================================================
+   LOAD
+   ===================================================== */
+
+function loadData(){
+
+    const raw =
+        localStorage.getItem(
+            "deoMarksFolio_Final_v6"
+        );
+
+
+    if(raw){
+
+        try {
+
+            const d =
+                JSON.parse(raw);
+
+
+            if(
+                d.subjects &&
+                Array.isArray(d.subjects)
+            ){
+
+                subjects =
+                    d.subjects;
+
+            }
+
+
+            if(d.details){
+
+                details =
+                    Object.assign(
+                        details,
+                        d.details
+                    );
+
+            }
+
+
+            if(
+                d.students &&
+                Array.isArray(d.students)
+            ){
+
+                students =
+                    d.students;
+
+            }
+
+        }
+
+        catch(e){}
+
+    }
+
+
+    renderSubjectControls();
+
+
+    if(
+        students.length === 0
+    ){
+
+        for(
+            let i = 0;
+            i < 30;
+            i++
+        ){
+
+            students.push({
+
+                roll: "",
+
+                name: "",
+
+                marks:
+                    new Array(
+                        subjects.length
+                    ).fill("")
+
+            });
+
+        }
+
+    }
+
+
+    /* Ensure old data gets new subject columns */
+
+    students.forEach(s => {
+
+        if(!Array.isArray(s.marks)){
+
+            s.marks = [];
+
+        }
+
+
+        while(
+            s.marks.length <
+            subjects.length
+        ){
+
+            s.marks.push("");
+
+        }
+
+    });
+
+
+    renderPages();
+
+    syncFormOptions();
+
+    selectedStudent = 0;
 
     selectStudent();
 
-  }
-
-  else {
-
-    addStudent();
-
-  }
-
-
-  window.scrollTo({
-
-    top: 0,
-
-    behavior: "smooth"
-
-  });
-
 }
 
 
-/* ==========================================================
-   AUTO SAVE
-========================================================== */
+/* =====================================================
+   CLEAR
+   ===================================================== */
 
-function autoSave() {
+function clearData(){
 
-  localStorage.setItem(
-
-    "deoMarksFolio_Final_v6",
-
-    JSON.stringify({
-
-      subjects,
-
-      details,
-
-      students
-
-    })
-
-  );
-
-
-  document
-    .getElementById(
-      "saveStatus"
-    )
-    .textContent =
-
-    "✓ Auto-saved • " +
-
-    new Date()
-      .toLocaleTimeString(
-        "hi-IN"
-      );
-
-}
-
-
-/* ==========================================================
-   SAVE
-========================================================== */
-
-function saveData() {
-
-  autoSave();
-
-  alert(
-    "डेटा सुरक्षित कर दिया गया है।"
-  );
-
-}
-
-
-/* ==========================================================
-   LOAD
-========================================================== */
-
-function loadData() {
-
-  const raw =
-    localStorage.getItem(
-      "deoMarksFolio_Final_v6"
-    );
-
-
-  if(raw) {
-
-    try {
-
-      const d =
-        JSON.parse(raw);
-
-
-      if(
-        d.subjects &&
-        Array.isArray(
-          d.subjects
+    if(
+        confirm(
+            "क्या आप पूरा डेटा रीसेट करना चाहते हैं?"
         )
-      ) {
+    ){
 
-        subjects =
-          d.subjects;
+        localStorage.removeItem(
+            "deoMarksFolio_Final_v6"
+        );
 
-      }
-
-
-      if(d.details) {
-
-        details =
-          Object.assign(
-            details,
-            d.details
-          );
-
-      }
-
-
-      if(
-        d.students &&
-        Array.isArray(
-          d.students
-        )
-      ) {
-
-        students =
-          d.students;
-
-      }
+        location.reload();
 
     }
-
-    catch(e) {}
-
-  }
-
-
-  renderSubjectControls();
-
-
-  if(
-    students.length === 0
-  ) {
-
-    for(
-      let i = 0;
-      i < 30;
-      i++
-    ) {
-
-      students.push({
-
-        roll: "",
-
-        name: "",
-
-        marks:
-          new Array(
-            subjects.length
-          ).fill("")
-
-      });
-
-    }
-
-  }
-
-
-  renderPages();
-
-  syncFormOptions();
-
-
-  selectedStudent =
-    0;
-
-
-  selectStudent();
 
 }
 
 
-/* ==========================================================
-   CLEAR DATA
-========================================================== */
+/* =====================================================
+   PDF
+   ===================================================== */
 
-function clearData() {
+function downloadPDF(){
 
-  if(
-    confirm(
-      "क्या आप पूरा डेटा रीसेट करना चाहते हैं?"
-    )
-  ) {
-
-    localStorage.removeItem(
-      "deoMarksFolio_Final_v6"
-    );
-
-    location.reload();
-
-  }
-
-}
+    const element =
+        document.getElementById(
+            "pagesWrap"
+        );
 
 
-/* ==========================================================
-   DOWNLOAD PDF
-========================================================== */
+    const opt = {
 
-function downloadPDF() {
+        margin: 0,
 
-  const element =
-    document.getElementById(
-      "pagesWrap"
-    );
+        filename:
+            `Marks_Folio_${
+                details.className ||
+                'Report'
+            }.pdf`,
 
+        image: {
 
-  const opt = {
+            type: 'jpeg',
 
-    margin: 0,
+            quality: 0.98
 
-    filename:
-      `Marks_Folio_${
-        details.className ||
-        "Report"
-      }.pdf`,
+        },
 
-    image: {
+        html2canvas: {
 
-      type: "jpeg",
+            scale: 2,
 
-      quality: 0.98
+            useCORS: true,
 
-    },
+            scrollY: 0
 
-    html2canvas: {
+        },
 
-      scale: 2,
+        jsPDF: {
 
-      useCORS: true,
+            unit: 'mm',
 
-      scrollY: 0
+            format: 'a4',
 
-    },
+            orientation: 'portrait'
 
-    jsPDF: {
+        },
 
-      unit: "mm",
+        pagebreak: {
 
-      format: "a4",
+            mode: [
+                'css',
+                'legacy'
+            ]
 
-      orientation: "portrait"
+        }
 
-    },
-
-    pagebreak: {
-
-      mode: [
-        "css",
-        "legacy"
-      ]
-
-    }
-
-  };
+    };
 
 
-  html2pdf()
+    html2pdf()
 
-    .set(opt)
+        .set(opt)
 
-    .from(element)
+        .from(element)
 
-    .save();
+        .save();
 
 }
 
 
-/* ==========================================================
+/* =====================================================
    START
-========================================================== */
+   ===================================================== */
 
 loadData();
 
