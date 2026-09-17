@@ -3,16 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
 <meta name="theme-color" content="#0d6efd">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
 
 <title>DEO Office - Marks Folio</title>
 
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📋</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22%200%22%20100%22><text y=%22.9em%22 font-size=%2290%22>📋</text></svg>">
 
+<!-- PDF -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<!-- Excel Import -->
+<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 
 <style>
 @page {
@@ -28,30 +29,25 @@ html {
   scroll-behavior: smooth;
 }
 
-body {
+html, body {
   margin: 0;
-  padding: 8px;
+  padding: 0;
   background: #eef1f5;
+  font-family: "Nirmala UI", "Mangal", "Arial Unicode MS", Arial, sans-serif;
   color: #111;
-  font-family:
-    "Nirmala UI",
-    "Mangal",
-    "Arial Unicode MS",
-    Arial,
-    sans-serif;
+}
+
+body {
+  padding: 8px;
   overflow-x: hidden;
-  -webkit-text-size-adjust: 100%;
 }
 
 .app {
-  width: 100%;
   max-width: 1100px;
   margin: auto;
 }
 
-/* =========================================================
-   TOOLBAR
-========================================================= */
+/* ================= TOOLBAR ================= */
 
 .toolbar {
   background: #fff;
@@ -63,7 +59,6 @@ body {
   flex-wrap: wrap;
   box-shadow: 0 2px 8px #0002;
   margin-bottom: 8px;
-
   position: sticky;
   top: 0;
   z-index: 100;
@@ -80,12 +75,7 @@ button {
   align-items: center;
   justify-content: center;
   gap: 4px;
-  font-family: inherit;
   touch-action: manipulation;
-}
-
-button:active {
-  transform: scale(.97);
 }
 
 .primary {
@@ -118,8 +108,18 @@ button:active {
   color: #fff;
 }
 
+.excel-btn {
+  background: #198754;
+  color: #fff;
+}
+
+.sort-btn {
+  background: #0dcaf0;
+  color: #000;
+}
+
 .tutorial-btn {
-  background: #20c997;
+  background: #212529;
   color: #fff;
 }
 
@@ -136,9 +136,7 @@ button:active {
   margin-left: auto;
 }
 
-/* =========================================================
-   ENTRY PANEL
-========================================================= */
+/* ================= ENTRY PANEL ================= */
 
 .entry-panel {
   background: #fff;
@@ -153,7 +151,6 @@ button:active {
   font-weight: 800;
   margin-bottom: 8px;
   color: #0d6efd;
-
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -185,13 +182,9 @@ button:active {
   background: #fff;
 }
 
-/* =========================================================
-   SUBJECT ENTRY
-========================================================= */
-
 .subject-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(105px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(85px, 1fr));
   gap: 5px;
   margin-top: 8px;
 }
@@ -208,11 +201,9 @@ button:active {
   border-bottom: 1px dashed #888;
   border-radius: 0;
   background: transparent;
-
   font-weight: 700;
   font-size: 11.5px;
   text-align: center;
-
   padding: 2px 0;
   margin-bottom: 3px;
   width: 100%;
@@ -226,13 +217,6 @@ button:active {
   font-size: 13.5px;
   text-align: center;
   background: #fff;
-}
-
-.subject-full {
-  text-align: center;
-  font-size: 9px;
-  color: #777;
-  margin-bottom: 2px;
 }
 
 .status {
@@ -253,39 +237,33 @@ button:active {
   padding: 8px;
 }
 
-/* =========================================================
-   MOBILE SCROLL CONTAINER
-========================================================= */
+/* ================= MOBILE SCROLL ================= */
 
 .paper-container {
   width: 100%;
   max-width: 100%;
   overflow-x: auto;
   overflow-y: visible;
-
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-x: contain;
   overscroll-behavior-y: auto;
-
+  touch-action: pan-x pan-y;
+  padding: 5px 3px 20px;
   scroll-behavior: smooth;
-
-  padding: 4px 4px 25px;
-
-  scrollbar-width: auto;
 }
 
 .paper-container::-webkit-scrollbar {
-  height: 12px;
+  height: 9px;
 }
 
 .paper-container::-webkit-scrollbar-track {
   background: #ddd;
-  border-radius: 20px;
+  border-radius: 10px;
 }
 
 .paper-container::-webkit-scrollbar-thumb {
   background: #777;
-  border-radius: 20px;
+  border-radius: 10px;
 }
 
 .pages-wrap {
@@ -293,20 +271,16 @@ button:active {
   flex-direction: column;
   gap: 15px;
   align-items: center;
-
   min-width: max-content;
 }
 
-/* =========================================================
-   A4 PAPER
-========================================================= */
+/* ================= A4 PAPER ================= */
 
 .paper {
   width: 210mm;
-  min-width: 210mm;
-
   height: 297mm;
   max-height: 297mm;
+  min-width: 210mm;
 
   background: #fff;
 
@@ -320,6 +294,7 @@ button:active {
   box-sizing: border-box;
 
   overflow: hidden;
+
   position: relative;
 
   page-break-after: always;
@@ -329,9 +304,7 @@ button:active {
   break-inside: avoid;
 }
 
-/* =========================================================
-   HEADER
-========================================================= */
+/* ================= HEADER ================= */
 
 .header {
   flex-shrink: 0;
@@ -354,9 +327,7 @@ button:active {
   margin-top: 1px;
 }
 
-/* =========================================================
-   INFO
-========================================================= */
+/* ================= INFO ================= */
 
 .info {
   flex-shrink: 0;
@@ -386,13 +357,10 @@ button:active {
   border: 0;
   border-bottom: 1px dotted #555;
   outline: 0;
-
   font-family: inherit;
   font-size: 11.5px;
-
   height: 4.8mm;
   padding: 0 1mm;
-
   background: transparent;
 }
 
@@ -400,9 +368,7 @@ button:active {
   font-weight: 700;
 }
 
-/* =========================================================
-   TABLE
-========================================================= */
+/* ================= TABLE ================= */
 
 .table-wrap {
   flex-shrink: 0;
@@ -413,8 +379,7 @@ table {
   width: 100%;
   border-collapse: collapse;
   table-layout: fixed;
-
-  font-size: 10.5px;
+  font-size: 11px;
 }
 
 th,
@@ -428,8 +393,8 @@ thead th {
   height: 8mm;
   font-weight: 700;
   vertical-align: middle;
-  line-height: 1.05;
-  font-size: 10.5px;
+  line-height: 1.1;
+  font-size: 11px;
 }
 
 tbody tr {
@@ -444,7 +409,7 @@ td.col-sr {
 
 th.col-roll,
 td.col-roll {
-  width: 12mm;
+  width: 11.5mm;
 }
 
 th.col-name,
@@ -454,33 +419,23 @@ td.col-name {
 
 th.col-sub,
 td.col-sub {
-  width: 15mm;
+  width: 13mm;
 }
 
 th.col-total,
 td.col-total {
-  width: 13mm;
-}
-
-th.col-grade,
-td.col-grade {
-  width: 13mm;
+  width: 12mm;
 }
 
 td input {
   width: 100%;
   height: 100%;
-
   border: 0;
   outline: 0;
-
   background: transparent;
-
   text-align: center;
-
   font-family: inherit;
-  font-size: 11px;
-
+  font-size: 11.5px;
   padding: 0;
   font-weight: 500;
 }
@@ -488,55 +443,37 @@ td input {
 td.name input {
   text-align: left;
   padding-left: 1.5mm;
-  font-size: 11px;
+  font-size: 11.5px;
 }
 
 td.total {
   font-weight: 700;
-  font-size: 11px;
+  font-size: 11.5px;
 }
 
-td.grade {
-  font-weight: 800;
-  font-size: 11px;
-}
-
-/* =========================================================
-   NOTE
-========================================================= */
+/* ================= NOTE ================= */
 
 tfoot td.note-cell {
   border: 0 !important;
   text-align: left;
-
-  font-size: 9.5px;
+  font-size: 10px;
   font-weight: 600;
-
   padding-top: 1mm;
   padding-bottom: 0.5mm;
-
   line-height: 1.15;
 }
 
-/* =========================================================
-   SIGNATURE
-========================================================= */
+/* ================= SIGNATURE ================= */
 
 .signatures {
   margin-top: auto;
-
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-
   gap: 5mm;
-
   margin-bottom: 1.5mm;
-
   font-size: 10.5px;
   font-weight: 700;
-
   text-align: center;
-
   page-break-inside: avoid;
   break-inside: avoid;
 }
@@ -547,69 +484,48 @@ tfoot td.note-cell {
   line-height: 1.25;
 }
 
-/* =========================================================
-   MODAL
-========================================================= */
+/* ================= MODAL ================= */
 
 .dialog-bg {
   position: fixed;
   inset: 0;
-
   background: rgba(0,0,0,0.5);
-
   display: none;
-
   align-items: center;
   justify-content: center;
-
   z-index: 200;
 }
 
 .dialog-box {
   background: #fff;
   border-radius: 8px;
-
   padding: 16px;
-
   width: 90%;
-  max-width: 340px;
-
+  max-width: 320px;
   box-shadow: 0 4px 15px rgba(0,0,0,0.3);
 }
 
-/* =========================================================
-   FOLLOW POPUP
-========================================================= */
+/* ================= FOLLOW POPUP ================= */
 
 .popup-bg {
   position: fixed;
   inset: 0;
-
-  background: rgba(0, 0, 0, 0.85);
+  background: rgba(0,0,0,0.85);
   backdrop-filter: blur(4px);
-
   display: none;
-
   align-items: center;
   justify-content: center;
-
   z-index: 9999;
-
   padding: 15px;
 }
 
 .popup {
   width: 100%;
   max-width: 350px;
-
   background: white;
-
   border-radius: 14px;
-
   padding: 24px 20px;
-
   text-align: center;
-
   box-shadow: 0 15px 40px rgba(0,0,0,0.5);
 }
 
@@ -621,36 +537,25 @@ tfoot td.note-cell {
 
 .popup p {
   margin: 0 0 18px;
-
   line-height: 1.5;
-
   font-size: 13.5px;
   color: #444;
 }
 
 .follow-btn {
   display: flex;
-
   align-items: center;
   justify-content: center;
-
   gap: 8px;
-
   background: #25D366;
   color: white;
-
   border: 0;
   border-radius: 8px;
-
   padding: 12px;
-
   font-weight: 800;
   font-size: 15px;
-
   width: 100%;
-
   cursor: pointer;
-
   box-shadow: 0 4px 10px rgba(37,211,102,0.3);
 }
 
@@ -660,9 +565,7 @@ tfoot td.note-cell {
   margin-top: 12px;
 }
 
-/* =========================================================
-   MOBILE
-========================================================= */
+/* ================= MOBILE ================= */
 
 @media (max-width: 600px) {
 
@@ -673,30 +576,22 @@ tfoot td.note-cell {
   .toolbar {
     position: sticky;
     top: 0;
-
     padding: 6px;
-
     gap: 5px;
   }
 
   .toolbar button {
     flex: 1 1 calc(33.33% - 5px);
-
-    padding: 8px 4px;
-
-    font-size: 11.5px;
-
     min-height: 38px;
+    padding: 8px 4px;
+    font-size: 11.5px;
   }
 
   .view-badge {
     width: 100%;
     justify-content: center;
-
     margin-left: 0;
-
     order: -1;
-
     margin-bottom: 4px;
   }
 
@@ -708,48 +603,14 @@ tfoot td.note-cell {
     font-size: 14px;
   }
 
-  .entry-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .entry-grid > div:last-child {
-    grid-column: 1 / -1;
-  }
-
-  .subject-grid {
-    grid-template-columns: repeat(2, minmax(100px, 1fr));
-  }
-
-  /*
-    Mobile Chrome:
-    Paper is deliberately kept at real A4 width.
-    User can swipe left/right smoothly.
-  */
-
   .paper-container {
-    touch-action: pan-x pan-y;
-    overscroll-behavior: contain;
-
-    width: 100vw;
-    margin-left: calc(50% - 50vw);
-    padding-left: 6px;
-    padding-right: 6px;
-  }
-
-  .pages-wrap {
-    align-items: flex-start;
-    padding-left: 0;
-  }
-
-  .paper {
-    width: 210mm;
-    min-width: 210mm;
+    margin-left: -2px;
+    margin-right: -2px;
+    width: calc(100% + 4px);
   }
 }
 
-/* =========================================================
-   PRINT
-========================================================= */
+/* ================= PRINT ================= */
 
 @media print {
 
@@ -758,8 +619,6 @@ tfoot td.note-cell {
     background: #fff !important;
     padding: 0 !important;
     margin: 0 !important;
-
-    overflow: visible !important;
   }
 
   .toolbar,
@@ -771,34 +630,24 @@ tfoot td.note-cell {
 
   .paper-container {
     overflow: visible !important;
-
     padding: 0 !important;
-
     width: auto !important;
-    margin: 0 !important;
   }
 
   .pages-wrap {
     gap: 0 !important;
-    padding: 0 !important;
   }
 
   .paper {
     margin: 0 !important;
-
     width: 210mm !important;
     min-width: 210mm !important;
-
     height: 297mm !important;
     max-height: 297mm !important;
-
     box-shadow: none !important;
-
     padding: 3mm 7.5mm 2.5mm !important;
-
     page-break-after: always !important;
     page-break-inside: avoid !important;
-
     break-after: page !important;
     break-inside: avoid !important;
   }
@@ -814,9 +663,7 @@ tfoot td.note-cell {
 
 <div class="app">
 
-<!-- =====================================================
-     TOOLBAR
-===================================================== -->
+<!-- ================= TOOLBAR ================= -->
 
 <div class="toolbar">
 
@@ -828,16 +675,30 @@ tfoot td.note-cell {
     — अंतिम विद्यार्थी
   </button>
 
+  <!-- EXCEL IMPORT -->
+  <button class="excel-btn" onclick="document.getElementById('excelFile').click()">
+    📊 Excel Import
+  </button>
+
+  <input
+    type="file"
+    id="excelFile"
+    accept=".xlsx,.xls,.csv"
+    style="display:none"
+    onchange="importExcel(event)"
+  >
+
+  <!-- SORT ROLL -->
+  <button class="sort-btn" onclick="sortStudentsByRoll()">
+    ↕ Roll क्रम
+  </button>
+
   <button class="warning" onclick="downloadPDF()">
     📥 Download PDF
   </button>
 
   <button class="gray" onclick="window.print()">
     🖨 Print
-  </button>
-
-  <button class="tutorial-btn" onclick="openTutorial()">
-    📖 Tutorial
   </button>
 
   <button class="share-btn" onclick="shareApp()">
@@ -856,7 +717,11 @@ tfoot td.note-cell {
     Clear
   </button>
 
-  <div class="view-badge">
+  <button class="tutorial-btn" onclick="openTutorial()">
+    🎥 Tutorial
+  </button>
+
+  <div class="view-badge" title="कुल पृष्ठ दृश्य">
     👁️ Views:
     <span id="viewCount">...</span>
   </div>
@@ -864,9 +729,7 @@ tfoot td.note-cell {
 </div>
 
 
-<!-- =====================================================
-     ENTRY PANEL
-===================================================== -->
+<!-- ================= ENTRY PANEL ================= -->
 
 <div class="entry-panel">
 
@@ -881,22 +744,17 @@ tfoot td.note-cell {
       <button
         class="primary"
         style="padding:3px 7px;font-size:11.5px"
-        onclick="addSubject()">
+        onclick="addSubject()"
+      >
         ＋ विषय जोड़ें
       </button>
 
       <button
         class="danger"
         style="padding:3px 7px;font-size:11.5px"
-        onclick="openSubjectModal()">
+        onclick="openSubjectModal()"
+      >
         — विषय हटाएं
-      </button>
-
-      <button
-        class="gray"
-        style="padding:3px 7px;font-size:11.5px"
-        onclick="openSubjectArrange()">
-        ☰ विषय व्यवस्था
       </button>
 
     </div>
@@ -914,8 +772,8 @@ tfoot td.note-cell {
 
       <select
         id="studentSelect"
-        onchange="selectStudent()">
-      </select>
+        onchange="selectStudent()"
+      ></select>
 
     </div>
 
@@ -929,12 +787,13 @@ tfoot td.note-cell {
       <input
         id="formRoll"
         inputmode="numeric"
-        oninput="formChanged()">
+        oninput="formChanged()"
+      >
 
     </div>
 
 
-    <div style="grid-column:1 / -1">
+    <div style="grid-column:1 / -1;">
 
       <label>
         विद्यार्थी का नाम
@@ -942,30 +801,35 @@ tfoot td.note-cell {
 
       <input
         id="formName"
-        oninput="formChanged()">
+        oninput="formChanged()"
+      >
 
     </div>
 
   </div>
 
 
+  <!-- SUBJECT MARK ENTRY -->
+
   <div
     class="subject-grid"
-    id="subjectGrid">
-  </div>
+    id="subjectGrid"
+  ></div>
 
 
   <div class="form-actions">
 
     <button
       class="primary"
-      onclick="nextStudent()">
+      onclick="nextStudent()"
+    >
       Next Student →
     </button>
 
     <button
       class="green"
-      onclick="saveData()">
+      onclick="saveData()"
+    >
       💾 Save
     </button>
 
@@ -974,41 +838,38 @@ tfoot td.note-cell {
 
   <div
     class="status"
-    id="saveStatus">
+    id="saveStatus"
+  >
     ✓ Auto-save चालू है
   </div>
 
 </div>
 
 
-<!-- =====================================================
-     PAPER CONTAINER
-===================================================== -->
+<!-- ================= PAPER ================= -->
 
 <div class="paper-container">
 
   <div
     class="pages-wrap"
-    id="pagesWrap">
-  </div>
+    id="pagesWrap"
+  ></div>
 
 </div>
 
 </div>
 
 
-<!-- =====================================================
-     DELETE SUBJECT MODAL
-===================================================== -->
+<!-- ================= SUBJECT DELETE MODAL ================= -->
 
 <div
   class="dialog-bg"
-  id="subModal">
+  id="subModal"
+>
 
   <div class="dialog-box">
 
-    <h4
-      style="margin:0 0 10px 0;font-size:15px">
+    <h4 style="margin:0 0 10px 0;font-size:15px">
       कौन सा विषय हटाना चाहते हैं?
     </h4>
 
@@ -1020,24 +881,29 @@ tfoot td.note-cell {
         border:1px solid #ccc;
         border-radius:5px;
         font-size:13px;
-        margin-bottom:12px">
-    </select>
+        margin-bottom:12px
+      "
+    ></select>
 
     <div
       style="
         display:flex;
         gap:6px;
-        justify-content:flex-end">
+        justify-content:flex-end
+      "
+    >
 
       <button
         class="gray"
-        onclick="closeSubjectModal()">
+        onclick="closeSubjectModal()"
+      >
         रद्द करें
       </button>
 
       <button
         class="danger"
-        onclick="confirmRemoveSubject()">
+        onclick="confirmRemoveSubject()"
+      >
         हटाएं
       </button>
 
@@ -1048,66 +914,12 @@ tfoot td.note-cell {
 </div>
 
 
-<!-- =====================================================
-     SUBJECT ARRANGE MODAL
-===================================================== -->
-
-<div
-  class="dialog-bg"
-  id="arrangeModal">
-
-  <div class="dialog-box">
-
-    <h4
-      style="margin:0 0 10px;font-size:15px">
-      विषयों की व्यवस्था करें
-    </h4>
-
-    <p
-      style="
-        font-size:12px;
-        color:#666;
-        margin-top:0">
-      ऊपर/नीचे करके विषयों का क्रम बदलें।
-    </p>
-
-    <div
-      id="arrangeList"
-      style="margin-bottom:12px">
-    </div>
-
-    <div
-      style="
-        display:flex;
-        justify-content:flex-end;
-        gap:6px">
-
-      <button
-        class="gray"
-        onclick="closeSubjectArrange()">
-        बंद करें
-      </button>
-
-      <button
-        class="green"
-        onclick="saveSubjectArrange()">
-        ✓ Save Order
-      </button>
-
-    </div>
-
-  </div>
-
-</div>
-
-
-<!-- =====================================================
-     FOLLOW POPUP
-===================================================== -->
+<!-- ================= WHATSAPP POPUP ================= -->
 
 <div
   class="popup-bg"
-  id="followPopup">
+  id="followPopup"
+>
 
   <div class="popup">
 
@@ -1123,13 +935,15 @@ tfoot td.note-cell {
 
     <button
       class="follow-btn"
-      onclick="handleMandatoryFollow()">
+      onclick="handleMandatoryFollow()"
+    >
 
       <svg
         width="20"
         height="20"
         viewBox="0 0 24 24"
-        fill="currentColor">
+        fill="currentColor"
+      >
 
         <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
 
@@ -1150,32 +964,35 @@ tfoot td.note-cell {
 
 <script>
 
-/* =========================================================
-   LINKS
-========================================================= */
+/* ==========================================================
+   WHATSAPP CHANNEL
+   ========================================================== */
 
 const CHANNEL_LINK =
 "https://whatsapp.com/channel/0029VaIhMoY35fM4YK5xrz3P";
+
+
+/* ==========================================================
+   TUTORIAL
+   ========================================================== */
 
 const TUTORIAL_LINK =
 "https://drive.google.com/file/d/1jL6_SwXd5dLGetRmGI82dxT_udW311to/view?usp=drivesdk";
 
 
-/* =========================================================
+/* ==========================================================
    SETTINGS
-========================================================= */
+   ========================================================== */
 
 const ROWS_PER_PAGE = 30;
 
-const SUBJECT_FULL_MARKS = 50;
 
-
-/* =========================================================
-   DEFAULT SUBJECTS
-========================================================= */
+/* ==========================================================
+   SUBJECTS
+   ========================================================== */
 
 let subjects = [
-  "हिन्दी/राष्ट्र भाषा",
+  "हिंदी/राष्ट्र भाषा",
   "गणित",
   "अंग्रेजी",
   "संस्कृत/उर्दू",
@@ -1184,11 +1001,16 @@ let subjects = [
 ];
 
 
-/* =========================================================
-   DATA
-========================================================= */
+/* ==========================================================
+   STUDENTS
+   ========================================================== */
 
 let students = [];
+
+
+/* ==========================================================
+   DETAILS
+   ========================================================== */
 
 let details = {
   center: "",
@@ -1200,12 +1022,17 @@ let details = {
   maxMarks: "50"
 };
 
+
+/* ==========================================================
+   SELECTED STUDENT
+   ========================================================== */
+
 let selectedStudent = 0;
 
 
-/* =========================================================
+/* ==========================================================
    ESCAPE HTML
-========================================================= */
+   ========================================================== */
 
 function esc(s) {
 
@@ -1218,50 +1045,9 @@ function esc(s) {
 }
 
 
-/* =========================================================
-   GRADE
-=========================================================
-
-   हर विषय 50 अंक।
-
-   कुल प्राप्तांक / कुल पूर्णांक के आधार पर:
-
-   90% या अधिक = A+
-   80% या अधिक = A
-   70% या अधिक = B+
-   60% या अधिक = B
-   50% या अधिक = C
-   40% या अधिक = D
-   40% से कम = E
-
-========================================================= */
-
-function calculateGrade(total) {
-
-  const totalMax =
-    subjects.length * SUBJECT_FULL_MARKS;
-
-  if (totalMax <= 0) {
-    return "";
-  }
-
-  const percentage =
-    (Number(total || 0) / totalMax) * 100;
-
-  if (percentage >= 90) return "A+";
-  if (percentage >= 80) return "A";
-  if (percentage >= 70) return "B+";
-  if (percentage >= 60) return "B";
-  if (percentage >= 50) return "C";
-  if (percentage >= 40) return "D";
-
-  return "E";
-}
-
-
-/* =========================================================
-   VIEW COUNTER
-========================================================= */
+/* ==========================================================
+   LIVE VIEW COUNTER
+   ========================================================== */
 
 function updateViews() {
 
@@ -1275,9 +1061,8 @@ function updateViews() {
 
     if (data && data.count) {
 
-      document.getElementById(
-        "viewCount"
-      ).textContent =
+      document.getElementById("viewCount")
+        .textContent =
         Number(data.count).toLocaleString("hi-IN");
 
     }
@@ -1296,9 +1081,8 @@ function updateViews() {
       localViews
     );
 
-    document.getElementById(
-      "viewCount"
-    ).textContent =
+    document.getElementById("viewCount")
+      .textContent =
       localViews.toLocaleString("hi-IN");
 
   });
@@ -1306,24 +1090,9 @@ function updateViews() {
 }
 
 
-/* =========================================================
-   TUTORIAL
-========================================================= */
-
-function openTutorial() {
-
-  window.open(
-    TUTORIAL_LINK,
-    "_blank",
-    "noopener,noreferrer"
-  );
-
-}
-
-
-/* =========================================================
+/* ==========================================================
    SHARE
-========================================================= */
+   ========================================================== */
 
 function shareApp() {
 
@@ -1343,18 +1112,14 @@ function shareApp() {
 
   if (navigator.share) {
 
-    navigator.share(
-      shareData
-    ).catch(() => {});
+    navigator.share(shareData)
+      .catch(() => {});
 
   }
 
   else {
 
-    if (
-      navigator.clipboard &&
-      navigator.clipboard.writeText
-    ) {
+    if (navigator.clipboard) {
 
       navigator.clipboard
         .writeText(window.location.href)
@@ -1369,15 +1134,14 @@ function shareApp() {
 
         .catch(() => {
 
-          openWhatsAppShare();
+          window.open(
+            `https://api.whatsapp.com/send?text=${encodeURIComponent(
+              shareData.text + " " + shareData.url
+            )}`,
+            "_blank"
+          );
 
         });
-
-    }
-
-    else {
-
-      openWhatsAppShare();
 
     }
 
@@ -1386,24 +1150,23 @@ function shareApp() {
 }
 
 
-function openWhatsAppShare() {
+/* ==========================================================
+   TUTORIAL
+   ========================================================== */
 
-  const text =
-    "बिहार विद्यालय अंक पत्रक (Marks Folio) ऑनलाइन भरें और A4 PDF डाउनलोड करें: "
-    + window.location.href;
+function openTutorial() {
 
   window.open(
-    "https://api.whatsapp.com/send?text="
-    + encodeURIComponent(text),
+    TUTORIAL_LINK,
     "_blank"
   );
 
 }
 
 
-/* =========================================================
+/* ==========================================================
    FOLLOW POPUP
-========================================================= */
+   ========================================================== */
 
 function checkMandatoryPopup() {
 
@@ -1413,13 +1176,9 @@ function checkMandatoryPopup() {
     ) !== "1"
   ) {
 
-    setTimeout(() => {
-
-      document.getElementById(
-        "followPopup"
-      ).style.display = "flex";
-
-    }, 600);
+    document.getElementById(
+      "followPopup"
+    ).style.display = "flex";
 
   }
 
@@ -1430,8 +1189,7 @@ function handleMandatoryFollow() {
 
   window.open(
     CHANNEL_LINK,
-    "_blank",
-    "noopener,noreferrer"
+    "_blank"
   );
 
   localStorage.setItem(
@@ -1446,9 +1204,9 @@ function handleMandatoryFollow() {
 }
 
 
-/* =========================================================
+/* ==========================================================
    SUBJECT CONTROLS
-========================================================= */
+   ========================================================== */
 
 function renderSubjectControls() {
 
@@ -1456,6 +1214,7 @@ function renderSubjectControls() {
     document.getElementById(
       "subjectGrid"
     );
+
 
   grid.innerHTML =
     subjects.map((sub, i) => `
@@ -1465,19 +1224,17 @@ function renderSubjectControls() {
         <input
           class="sub-name"
           value="${esc(sub)}"
-          title="विषय का नाम एडिट करें"
-          oninput="updateSubjectName(${i}, this.value)">
-
-        <div class="subject-full">
-          पूर्णांक: ${SUBJECT_FULL_MARKS}
-        </div>
+          title="नाम एडिट करें"
+          oninput="updateSubjectName(${i}, this.value)"
+        >
 
         <input
           class="sub-marks"
           id="m${i}"
-          inputmode="decimal"
+          inputmode="numeric"
           placeholder="0"
-          oninput="formChanged()">
+          oninput="formChanged()"
+        >
 
       </div>
 
@@ -1486,9 +1243,9 @@ function renderSubjectControls() {
 }
 
 
-/* =========================================================
+/* ==========================================================
    UPDATE SUBJECT NAME
-========================================================= */
+   ========================================================== */
 
 function updateSubjectName(
   idx,
@@ -1496,7 +1253,7 @@ function updateSubjectName(
 ) {
 
   subjects[idx] =
-    val.trim() ||
+    val ||
     `विषय ${idx + 1}`;
 
   renderPages();
@@ -1506,9 +1263,9 @@ function updateSubjectName(
 }
 
 
-/* =========================================================
+/* ==========================================================
    ADD SUBJECT
-========================================================= */
+   ========================================================== */
 
 function addSubject() {
 
@@ -1517,6 +1274,7 @@ function addSubject() {
       "नए विषय का नाम दर्ज करें:",
       `विषय ${subjects.length + 1}`
     );
+
 
   if (
     name &&
@@ -1543,7 +1301,9 @@ function addSubject() {
 
 
     renderSubjectControls();
+
     renderPages();
+
     selectStudent();
 
     autoSave();
@@ -1553,13 +1313,15 @@ function addSubject() {
 }
 
 
-/* =========================================================
-   DELETE SUBJECT MODAL
-========================================================= */
+/* ==========================================================
+   SUBJECT DELETE
+   ========================================================== */
 
 function openSubjectModal() {
 
-  if (subjects.length <= 1) {
+  if (
+    subjects.length <= 1
+  ) {
 
     alert(
       "कम से कम एक विषय होना अनिवार्य है!"
@@ -1587,7 +1349,8 @@ function openSubjectModal() {
 
   document.getElementById(
     "subModal"
-  ).style.display = "flex";
+  ).style.display =
+    "flex";
 
 }
 
@@ -1596,7 +1359,8 @@ function closeSubjectModal() {
 
   document.getElementById(
     "subModal"
-  ).style.display = "none";
+  ).style.display =
+    "none";
 
 }
 
@@ -1608,6 +1372,7 @@ function confirmRemoveSubject() {
       "delSubSelect"
     );
 
+
   const idx =
     Number(sel.value);
 
@@ -1617,17 +1382,6 @@ function confirmRemoveSubject() {
     idx >= 0 &&
     idx < subjects.length
   ) {
-
-    if (
-      !confirm(
-        `क्या "${subjects[idx]}" विषय हटाना चाहते हैं?`
-      )
-    ) {
-
-      return;
-
-    }
-
 
     subjects.splice(
       idx,
@@ -1654,7 +1408,9 @@ function confirmRemoveSubject() {
     closeSubjectModal();
 
     renderSubjectControls();
+
     renderPages();
+
     selectStudent();
 
     autoSave();
@@ -1664,193 +1420,9 @@ function confirmRemoveSubject() {
 }
 
 
-/* =========================================================
-   SUBJECT ARRANGEMENT
-========================================================= */
-
-let tempSubjects = [];
-
-
-function openSubjectArrange() {
-
-  tempSubjects =
-    [...subjects];
-
-  renderArrangeList();
-
-  document.getElementById(
-    "arrangeModal"
-  ).style.display = "flex";
-
-}
-
-
-function closeSubjectArrange() {
-
-  document.getElementById(
-    "arrangeModal"
-  ).style.display = "none";
-
-}
-
-
-function renderArrangeList() {
-
-  const box =
-    document.getElementById(
-      "arrangeList"
-    );
-
-
-  box.innerHTML =
-    tempSubjects.map(
-      (s, i) => `
-
-      <div
-        style="
-          display:flex;
-          align-items:center;
-          gap:5px;
-          margin-bottom:5px;
-          border:1px solid #ddd;
-          padding:5px;
-          border-radius:5px;
-          background:#fafafa">
-
-        <span
-          style="
-            flex:1;
-            font-size:12px;
-            font-weight:700">
-          ${i + 1}. ${esc(s)}
-        </span>
-
-        <button
-          class="gray"
-          style="padding:4px 8px"
-          onclick="moveSubject(${i}, -1)"
-          ${i === 0 ? "disabled" : ""}>
-          ↑
-        </button>
-
-        <button
-          class="gray"
-          style="padding:4px 8px"
-          onclick="moveSubject(${i}, 1)"
-          ${i === tempSubjects.length - 1 ? "disabled" : ""}>
-          ↓
-        </button>
-
-      </div>
-
-    `
-    ).join("");
-
-}
-
-
-function moveSubject(
-  index,
-  direction
-) {
-
-  const newIndex =
-    index + direction;
-
-
-  if (
-    newIndex < 0 ||
-    newIndex >= tempSubjects.length
-  ) {
-
-    return;
-
-  }
-
-
-  [
-    tempSubjects[index],
-    tempSubjects[newIndex]
-  ] =
-  [
-    tempSubjects[newIndex],
-    tempSubjects[index]
-  ];
-
-
-  renderArrangeList();
-
-}
-
-
-function saveSubjectArrange() {
-
-  const oldSubjects =
-    [...subjects];
-
-
-  const newSubjects =
-    [...tempSubjects];
-
-
-  const newStudents =
-    students.map(st => {
-
-      const newMarks =
-        new Array(
-          newSubjects.length
-        ).fill("");
-
-
-      newSubjects.forEach(
-        (sub, newIndex) => {
-
-          const oldIndex =
-            oldSubjects.indexOf(sub);
-
-          if (
-            oldIndex >= 0 &&
-            st.marks
-          ) {
-
-            newMarks[newIndex] =
-              st.marks[oldIndex] || "";
-
-          }
-
-        }
-      );
-
-
-      return {
-        ...st,
-        marks: newMarks
-      };
-
-    });
-
-
-  subjects =
-    newSubjects;
-
-  students =
-    newStudents;
-
-
-  closeSubjectArrange();
-
-  renderSubjectControls();
-  renderPages();
-  selectStudent();
-
-  autoSave();
-
-}
-
-
-/* =========================================================
-   HEADER INPUTS
-========================================================= */
+/* ==========================================================
+   HEADER INPUT SYNC
+   ========================================================== */
 
 function syncHeaderInputs(
   key,
@@ -1884,9 +1456,9 @@ function syncHeaderInputs(
 }
 
 
-/* =========================================================
+/* ==========================================================
    RENDER PAGES
-========================================================= */
+   ========================================================== */
 
 function renderPages() {
 
@@ -1910,7 +1482,7 @@ function renderPages() {
 
 
   const totalCols =
-    5 + subjects.length;
+    4 + subjects.length;
 
 
   for (
@@ -1930,8 +1502,7 @@ function renderPages() {
 
 
     const startIdx =
-      p *
-      ROWS_PER_PAGE;
+      p * ROWS_PER_PAGE;
 
 
     let rowsHtml = "";
@@ -1955,9 +1526,16 @@ function renderPages() {
           students[i];
 
 
-        let subCells = "";
+        let subCells =
+          "";
 
-        let total = 0;
+
+        let total =
+          0;
+
+
+        let hasAnyEntry =
+          false;
 
 
         for (
@@ -1967,42 +1545,44 @@ function renderPages() {
         ) {
 
           const m =
-            String(
-              st.marks[s] || ""
+            (
+              st.marks &&
+              st.marks[s]
+                ? st.marks[s]
+                : ""
             ).trim();
 
 
-          let numericValue = 0;
-
-
           if (
-            m !== "" &&
-            m.toUpperCase() !== "ABSENT" &&
-            m.toUpperCase() !== "AB"
+            m !== ""
           ) {
 
-            const n =
-              Number(m);
+            hasAnyEntry =
+              true;
+
+
+            const isAbsent =
+              (
+                m.toUpperCase()
+                === "ABSENT" ||
+                m.toUpperCase()
+                === "AB"
+              );
 
 
             if (
-              !isNaN(n)
+              !isAbsent &&
+              !isNaN(
+                Number(m)
+              )
             ) {
 
-              numericValue =
-                n;
+              total +=
+                Number(m);
 
             }
 
           }
-
-
-          /*
-             खाली अंक को 0 माना गया है।
-          */
-
-          total +=
-            numericValue;
 
 
           subCells += `
@@ -2011,18 +1591,14 @@ function renderPages() {
 
               <input
                 value="${esc(m)}"
-                inputmode="decimal"
-                oninput="cellChanged(${i}, ${s}, this.value)">
+                oninput="cellChanged(${i}, ${s}, this.value)"
+              >
 
             </td>
 
           `;
 
         }
-
-
-        const grade =
-          calculateGrade(total);
 
 
         rowsHtml += `
@@ -2037,7 +1613,8 @@ function renderPages() {
 
               <input
                 value="${esc(st.roll)}"
-                oninput="cellInfoChanged(${i}, 'roll', this.value)">
+                oninput="cellInfoChanged(${i}, 'roll', this.value)"
+              >
 
             </td>
 
@@ -2045,18 +1622,21 @@ function renderPages() {
 
               <input
                 value="${esc(st.name)}"
-                oninput="cellInfoChanged(${i}, 'name', this.value)">
+                oninput="cellInfoChanged(${i}, 'name', this.value)"
+              >
 
             </td>
 
             ${subCells}
 
             <td class="col-total total">
-              ${total}
-            </td>
 
-            <td class="col-grade grade">
-              ${grade}
+              ${
+                hasAnyEntry
+                  ? total
+                  : "0"
+              }
+
             </td>
 
           </tr>
@@ -2092,8 +1672,6 @@ function renderPages() {
 
             <td class="col-total total"></td>
 
-            <td class="col-grade grade"></td>
-
           </tr>
 
         `;
@@ -2112,12 +1690,15 @@ function renderPages() {
         </div>
 
         <div class="h2">
+
           अंक पत्रक (Marks Folio)
+
           ${
             totalPages > 1
-            ? `[पृष्ठ ${p + 1}/${totalPages}]`
-            : ""
+              ? `[पृष्ठ ${p + 1}/${totalPages}]`
+              : ""
           }
+
         </div>
 
       </div>
@@ -2134,8 +1715,8 @@ function renderPages() {
           <input
             class="info-input-center"
             value="${esc(details.center)}"
-            oninput="syncHeaderInputs('center', this.value)">
-
+            oninput="syncHeaderInputs('center', this.value)"
+          >
 
           <label>
             जिला :-
@@ -2144,7 +1725,8 @@ function renderPages() {
           <input
             class="info-input-district"
             value="${esc(details.district)}"
-            oninput="syncHeaderInputs('district', this.value)">
+            oninput="syncHeaderInputs('district', this.value)"
+          >
 
         </div>
 
@@ -2158,7 +1740,8 @@ function renderPages() {
           <input
             class="info-input-school"
             value="${esc(details.school)}"
-            oninput="syncHeaderInputs('school', this.value)">
+            oninput="syncHeaderInputs('school', this.value)"
+          >
 
         </div>
 
@@ -2172,8 +1755,8 @@ function renderPages() {
           <input
             class="info-input-udise"
             value="${esc(details.udise)}"
-            oninput="syncHeaderInputs('udise', this.value)">
-
+            oninput="syncHeaderInputs('udise', this.value)"
+          >
 
           <label>
             प्रखंड का नाम :-
@@ -2182,7 +1765,8 @@ function renderPages() {
           <input
             class="info-input-block"
             value="${esc(details.block)}"
-            oninput="syncHeaderInputs('block', this.value)">
+            oninput="syncHeaderInputs('block', this.value)"
+          >
 
         </div>
 
@@ -2196,17 +1780,18 @@ function renderPages() {
           <input
             class="info-input-className"
             value="${esc(details.className)}"
-            oninput="syncHeaderInputs('className', this.value)">
-
+            oninput="syncHeaderInputs('className', this.value)"
+          >
 
           <label>
-            कुल पूर्णांक :-
+            पूर्णांक :-
           </label>
 
           <input
             class="info-input-maxMarks marks"
-            value="${subjects.length * SUBJECT_FULL_MARKS}"
-            readonly>
+            value="${esc(details.maxMarks)}"
+            oninput="syncHeaderInputs('maxMarks', this.value)"
+          >
 
         </div>
 
@@ -2233,24 +1818,19 @@ function renderPages() {
                 विद्यार्थियों का नाम
               </th>
 
-              ${subjects.map(
-                s => `
-                  <th class="col-sub">
-                    ${esc(s)}
-                    <br>
-                    <small>
-                      (${SUBJECT_FULL_MARKS})
-                    </small>
-                  </th>
-                `
-              ).join("")}
+              ${
+                subjects
+                  .map(
+                    s =>
+                      `<th class="col-sub">
+                        ${esc(s)}
+                      </th>`
+                  )
+                  .join("")
+              }
 
               <th class="col-total">
                 कुल
-              </th>
-
-              <th class="col-grade">
-                Grade
               </th>
 
             </tr>
@@ -2269,12 +1849,12 @@ function renderPages() {
 
               <td
                 colspan="${totalCols}"
-                class="note-cell">
+                class="note-cell"
+              >
 
-                ※ प्रत्येक विषय का पूर्णांक ${SUBJECT_FULL_MARKS} है।
-                खाली प्राप्तांक को 0 माना जाएगा।
-                अनुपस्थित परीक्षार्थी के कॉलम में लाल कलम से
-                ABSENT दर्ज करें।
+                ※ अनुपस्थित परीक्षार्थी के कॉलम में
+                लाल कलम से प्राप्तांक कॉलम में
+                अनुपस्थित (ABSENT) दर्ज करें।
 
               </td>
 
@@ -2318,9 +1898,9 @@ function renderPages() {
 }
 
 
-/* =========================================================
+/* ==========================================================
    CELL MARK CHANGE
-========================================================= */
+   ========================================================== */
 
 function cellChanged(
   stIdx,
@@ -2330,9 +1910,19 @@ function cellChanged(
 
   if (
     !students[stIdx]
+  ) return;
+
+
+  if (
+    !Array.isArray(
+      students[stIdx].marks
+    )
   ) {
 
-    return;
+    students[stIdx].marks =
+      new Array(
+        subjects.length
+      ).fill("");
 
   }
 
@@ -2369,9 +1959,9 @@ function cellChanged(
 }
 
 
-/* =========================================================
-   CELL INFO CHANGE
-========================================================= */
+/* ==========================================================
+   CELL STUDENT INFO CHANGE
+   ========================================================== */
 
 function cellInfoChanged(
   stIdx,
@@ -2381,11 +1971,7 @@ function cellInfoChanged(
 
   if (
     !students[stIdx]
-  ) {
-
-    return;
-
-  }
+  ) return;
 
 
   students[stIdx][key] =
@@ -2402,7 +1988,8 @@ function cellInfoChanged(
 
       document.getElementById(
         "formName"
-      ).value = val;
+      ).value =
+        val;
 
     }
 
@@ -2413,7 +2000,8 @@ function cellInfoChanged(
 
       document.getElementById(
         "formRoll"
-      ).value = val;
+      ).value =
+        val;
 
     }
 
@@ -2427,9 +2015,9 @@ function cellInfoChanged(
 }
 
 
-/* =========================================================
-   FORM OPTIONS
-========================================================= */
+/* ==========================================================
+   SYNC STUDENT SELECT
+   ========================================================== */
 
 function syncFormOptions() {
 
@@ -2491,21 +2079,17 @@ function syncFormOptions() {
 }
 
 
-/* =========================================================
+/* ==========================================================
    SELECT STUDENT
-========================================================= */
+   ========================================================== */
 
 function selectStudent() {
 
-  const select =
-    document.getElementById(
-      "studentSelect"
-    );
-
-
   selectedStudent =
     Number(
-      select.value
+      document.getElementById(
+        "studentSelect"
+      ).value
     ) || 0;
 
 
@@ -2513,11 +2097,7 @@ function selectStudent() {
     students[selectedStudent];
 
 
-  if (!st) {
-
-    return;
-
-  }
+  if (!st) return;
 
 
   document.getElementById(
@@ -2547,7 +2127,10 @@ function selectStudent() {
     if (input) {
 
       input.value =
-        st.marks[i] || "";
+        (
+          st.marks &&
+          st.marks[i]
+        ) || "";
 
     }
 
@@ -2556,9 +2139,9 @@ function selectStudent() {
 }
 
 
-/* =========================================================
+/* ==========================================================
    FORM CHANGE
-========================================================= */
+   ========================================================== */
 
 function formChanged() {
 
@@ -2566,11 +2149,7 @@ function formChanged() {
     students[selectedStudent];
 
 
-  if (!st) {
-
-    return;
-
-  }
+  if (!st) return;
 
 
   st.roll =
@@ -2583,6 +2162,18 @@ function formChanged() {
     document.getElementById(
       "formName"
     ).value;
+
+
+  if (
+    !Array.isArray(st.marks)
+  ) {
+
+    st.marks =
+      new Array(
+        subjects.length
+      ).fill("");
+
+  }
 
 
   for (
@@ -2599,8 +2190,8 @@ function formChanged() {
 
     st.marks[i] =
       input
-      ? input.value
-      : "";
+        ? input.value
+        : "";
 
   }
 
@@ -2608,7 +2199,6 @@ function formChanged() {
   renderPages();
 
   syncFormOptions();
-
 
   document.getElementById(
     "studentSelect"
@@ -2621,9 +2211,9 @@ function formChanged() {
 }
 
 
-/* =========================================================
+/* ==========================================================
    ADD STUDENT
-========================================================= */
+   ========================================================== */
 
 function addStudent() {
 
@@ -2663,75 +2253,68 @@ function addStudent() {
 }
 
 
-/* =========================================================
+/* ==========================================================
    REMOVE LAST STUDENT
-========================================================= */
+   ========================================================== */
 
 function removeStudent() {
 
   if (
-    students.length <= 1
+    students.length > 1
   ) {
+
+    if (
+      !confirm(
+        "क्या आप अंतिम विद्यार्थी को हटाना चाहते हैं?"
+      )
+    ) {
+
+      return;
+
+    }
+
+
+    students.pop();
+
+
+    renderPages();
+
+    syncFormOptions();
+
+
+    selectedStudent =
+      Math.min(
+        selectedStudent,
+        students.length - 1
+      );
+
+
+    document.getElementById(
+      "studentSelect"
+    ).value =
+      selectedStudent;
+
+
+    selectStudent();
+
+    autoSave();
+
+  }
+
+  else {
 
     alert(
       "कम से कम एक विद्यार्थी रखना आवश्यक है।"
     );
 
-    return;
-
   }
-
-
-  const last =
-    students[students.length - 1];
-
-
-  const label =
-    last.name
-      ? last.name
-      : `विद्यार्थी ${students.length}`;
-
-
-  if (
-    !confirm(
-      `"${label}" को हटाना चाहते हैं?`
-    )
-  ) {
-
-    return;
-
-  }
-
-
-  students.pop();
-
-
-  selectedStudent =
-    Math.min(
-      selectedStudent,
-      students.length - 1
-    );
-
-
-  renderPages();
-
-  syncFormOptions();
-
-  document.getElementById(
-    "studentSelect"
-  ).value =
-    selectedStudent;
-
-  selectStudent();
-
-  autoSave();
 
 }
 
 
-/* =========================================================
+/* ==========================================================
    NEXT STUDENT
-========================================================= */
+   ========================================================== */
 
 function nextStudent() {
 
@@ -2742,10 +2325,12 @@ function nextStudent() {
 
     selectedStudent++;
 
+
     document.getElementById(
       "studentSelect"
     ).value =
       selectedStudent;
+
 
     selectStudent();
 
@@ -2758,38 +2343,28 @@ function nextStudent() {
   }
 
 
-  /*
-    Mobile Chrome में ऊपर जाने के लिए
-    smooth scrolling.
-  */
-
   window.scrollTo({
-
     top: 0,
-
     behavior: "smooth"
-
   });
 
 }
 
 
-/* =========================================================
-   AUTOSAVE
-========================================================= */
+/* ==========================================================
+   AUTO SAVE
+   ========================================================== */
 
 function autoSave() {
 
   localStorage.setItem(
 
-    "deoMarksFolio_Final_v8",
+    "deoMarksFolio_Final_v6",
 
     JSON.stringify({
 
       subjects,
-
       details,
-
       students
 
     })
@@ -2806,8 +2381,7 @@ function autoSave() {
   if (status) {
 
     status.textContent =
-      "✓ Auto-saved • "
-      +
+      "✓ Auto-saved • " +
       new Date()
         .toLocaleTimeString(
           "hi-IN"
@@ -2818,9 +2392,9 @@ function autoSave() {
 }
 
 
-/* =========================================================
+/* ==========================================================
    SAVE
-========================================================= */
+   ========================================================== */
 
 function saveData() {
 
@@ -2833,15 +2407,15 @@ function saveData() {
 }
 
 
-/* =========================================================
+/* ==========================================================
    LOAD
-========================================================= */
+   ========================================================== */
 
 function loadData() {
 
   const raw =
     localStorage.getItem(
-      "deoMarksFolio_Final_v8"
+      "deoMarksFolio_Final_v6"
     );
 
 
@@ -2877,7 +2451,9 @@ function loadData() {
 
       if (
         d.students &&
-        Array.isArray(d.students)
+        Array.isArray(
+          d.students
+        )
       ) {
 
         students =
@@ -2887,14 +2463,7 @@ function loadData() {
 
     }
 
-    catch (e) {
-
-      console.log(
-        "Load error",
-        e
-      );
-
-    }
+    catch (e) {}
 
   }
 
@@ -2930,45 +2499,31 @@ function loadData() {
   }
 
 
-  /*
-    पुराने data में subjects की संख्या
-    कम/ज्यादा होने पर marks array ठीक करें।
-  */
+  /* Ensure all students have marks array */
 
   students.forEach(
-    st => {
+    s => {
 
       if (
         !Array.isArray(
-          st.marks
+          s.marks
         )
       ) {
 
-        st.marks = [];
+        s.marks =
+          new Array(
+            subjects.length
+          ).fill("");
 
       }
 
 
       while (
-        st.marks.length <
+        s.marks.length <
         subjects.length
       ) {
 
-        st.marks.push("");
-
-      }
-
-
-      if (
-        st.marks.length >
-        subjects.length
-      ) {
-
-        st.marks =
-          st.marks.slice(
-            0,
-            subjects.length
-          );
+        s.marks.push("");
 
       }
 
@@ -2987,9 +2542,9 @@ function loadData() {
 }
 
 
-/* =========================================================
+/* ==========================================================
    CLEAR
-========================================================= */
+   ========================================================== */
 
 function clearData() {
 
@@ -3000,7 +2555,7 @@ function clearData() {
   ) {
 
     localStorage.removeItem(
-      "deoMarksFolio_Final_v8"
+      "deoMarksFolio_Final_v6"
     );
 
     location.reload();
@@ -3010,9 +2565,602 @@ function clearData() {
 }
 
 
-/* =========================================================
+/* ==========================================================
+   ROLL NUMBER ASCENDING SORT
+   ========================================================== */
+
+function sortStudentsByRoll() {
+
+  if (
+    students.length === 0
+  ) {
+
+    alert(
+      "कोई विद्यार्थी उपलब्ध नहीं है।"
+    );
+
+    return;
+
+  }
+
+
+  const validStudents =
+    students.filter(
+      s =>
+        String(
+          s.roll || ""
+        ).trim() !== ""
+    );
+
+
+  const blankStudents =
+    students.filter(
+      s =>
+        String(
+          s.roll || ""
+        ).trim() === ""
+    );
+
+
+  validStudents.sort(
+    (a, b) => {
+
+      const ra =
+        parseInt(
+          String(a.roll)
+            .replace(/\D/g, ""),
+          10
+        );
+
+
+      const rb =
+        parseInt(
+          String(b.roll)
+            .replace(/\D/g, ""),
+          10
+        );
+
+
+      if (
+        !isNaN(ra) &&
+        !isNaN(rb)
+      ) {
+
+        return ra - rb;
+
+      }
+
+
+      return String(
+        a.roll || ""
+      ).localeCompare(
+        String(
+          b.roll || ""
+        ),
+        "hi"
+      );
+
+    }
+  );
+
+
+  students =
+    validStudents.concat(
+      blankStudents
+    );
+
+
+  selectedStudent = 0;
+
+
+  renderPages();
+
+  syncFormOptions();
+
+  selectStudent();
+
+  autoSave();
+
+
+  alert(
+    "✓ वर्ग क्रमांक को ascending order में व्यवस्थित कर दिया गया है।"
+  );
+
+}
+
+
+/* ==========================================================
+   EXCEL IMPORT
+   ========================================================== */
+
+function importExcel(event) {
+
+  const file =
+    event.target.files[0];
+
+
+  if (!file) return;
+
+
+  const fileName =
+    file.name.toLowerCase();
+
+
+  const allowed =
+    [
+      ".xlsx",
+      ".xls",
+      ".csv"
+    ];
+
+
+  if (
+    !allowed.some(
+      ext =>
+        fileName.endsWith(ext)
+    )
+  ) {
+
+    alert(
+      "कृपया Excel (.xlsx/.xls) या CSV file चुनें।"
+    );
+
+
+    event.target.value = "";
+
+    return;
+
+  }
+
+
+  const reader =
+    new FileReader();
+
+
+  reader.onload =
+    function(e) {
+
+      try {
+
+        const data =
+          new Uint8Array(
+            e.target.result
+          );
+
+
+        const workbook =
+          XLSX.read(
+            data,
+            {
+              type: "array"
+            }
+          );
+
+
+        const sheetName =
+          workbook
+            .SheetNames[0];
+
+
+        const worksheet =
+          workbook
+            .Sheets[sheetName];
+
+
+        const rows =
+          XLSX.utils.sheet_to_json(
+            worksheet,
+            {
+              header: 1,
+              defval: ""
+            }
+          );
+
+
+        if (
+          !rows ||
+          rows.length === 0
+        ) {
+
+          alert(
+            "Excel file खाली है।"
+          );
+
+          return;
+
+        }
+
+
+        /*
+          First row = headings
+        */
+
+        const headers =
+          rows[0].map(
+            h =>
+              String(
+                h || ""
+              )
+                .trim()
+                .toLowerCase()
+          );
+
+
+        let rollIndex = -1;
+
+        let nameIndex = -1;
+
+        let srIndex = -1;
+
+
+        headers.forEach(
+          (h, i) => {
+
+            /*
+              Roll Number headings
+            */
+
+            if (
+              h.includes("वर्ग क्रमांक") ||
+              h.includes("क्रमांक") ||
+              h.includes("roll") ||
+              h.includes("roll no") ||
+              h.includes("roll number") ||
+              h.includes("रोल")
+            ) {
+
+              if (
+                rollIndex === -1
+              ) {
+
+                rollIndex = i;
+
+              }
+
+            }
+
+
+            /*
+              Name headings
+            */
+
+            if (
+              h.includes("विद्यार्थी") ||
+              h.includes("विद्यार्थियों") ||
+              h.includes("नाम") ||
+              h.includes("name") ||
+              h.includes("student")
+            ) {
+
+              if (
+                nameIndex === -1
+              ) {
+
+                nameIndex = i;
+
+              }
+
+            }
+
+
+            /*
+              Serial number
+            */
+
+            if (
+              h.includes("क्रम संख्या") ||
+              h.includes("क्रम सं") ||
+              h === "s.no" ||
+              h === "sno" ||
+              h === "sr no" ||
+              h === "serial"
+            ) {
+
+              srIndex = i;
+
+            }
+
+          }
+        );
+
+
+        /*
+          If headings are not recognised,
+          assume:
+
+          Column A = S.No.
+          Column B = Roll
+          Column C = Name
+        */
+
+        if (
+          rollIndex === -1
+        ) {
+
+          if (
+            headers.length >= 3
+          ) {
+
+            rollIndex = 1;
+
+          }
+
+          else if (
+            headers.length === 2
+          ) {
+
+            rollIndex = 0;
+
+          }
+
+        }
+
+
+        if (
+          nameIndex === -1
+        ) {
+
+          if (
+            headers.length >= 3
+          ) {
+
+            nameIndex = 2;
+
+          }
+
+          else if (
+            headers.length === 2
+          ) {
+
+            nameIndex = 1;
+
+          }
+
+        }
+
+
+        if (
+          nameIndex === -1
+        ) {
+
+          alert(
+            "Excel में विद्यार्थी के नाम वाला column नहीं मिला।"
+          );
+
+          return;
+
+        }
+
+
+        const imported = [];
+
+
+        /*
+          Start from row 2
+        */
+
+        for (
+          let r = 1;
+          r < rows.length;
+          r++
+        ) {
+
+          const row =
+            rows[r];
+
+
+          if (
+            !row ||
+            row.length === 0
+          ) continue;
+
+
+          const name =
+            String(
+              row[nameIndex] || ""
+            ).trim();
+
+
+          const roll =
+            rollIndex >= 0
+              ? String(
+                  row[rollIndex] || ""
+                ).trim()
+              : "";
+
+
+          /*
+            Empty row skip
+          */
+
+          if (
+            !name &&
+            !roll
+          ) {
+
+            continue;
+
+          }
+
+
+          imported.push({
+
+            roll: roll,
+
+            name: name,
+
+            marks:
+              new Array(
+                subjects.length
+              ).fill("")
+
+          });
+
+        }
+
+
+        if (
+          imported.length === 0
+        ) {
+
+          alert(
+            "Excel से कोई विद्यार्थी प्राप्त नहीं हुआ।"
+          );
+
+          return;
+
+        }
+
+
+        /*
+          Ask whether replace or append
+        */
+
+        let mode =
+          confirm(
+            "Excel से " +
+            imported.length +
+            " विद्यार्थी मिले हैं।\n\n" +
+            "OK = वर्तमान सूची को Excel सूची से बदलें\n" +
+            "Cancel = विद्यार्थियों को वर्तमान सूची में जोड़ें"
+          );
+
+
+        if (mode) {
+
+          students =
+            imported;
+
+        }
+
+        else {
+
+          students =
+            students.concat(
+              imported
+            );
+
+        }
+
+
+        /*
+          Arrange ascending by roll
+        */
+
+        students.sort(
+          (a, b) => {
+
+            const ra =
+              parseInt(
+                String(
+                  a.roll || ""
+                ).replace(
+                  /\D/g,
+                  ""
+                ),
+                10
+              );
+
+
+            const rb =
+              parseInt(
+                String(
+                  b.roll || ""
+                ).replace(
+                  /\D/g,
+                  ""
+                ),
+                10
+              );
+
+
+            if (
+              isNaN(ra) &&
+              isNaN(rb)
+            ) {
+
+              return 0;
+
+            }
+
+
+            if (
+              isNaN(ra)
+            ) {
+
+              return 1;
+
+            }
+
+
+            if (
+              isNaN(rb)
+            ) {
+
+              return -1;
+
+            }
+
+
+            return ra - rb;
+
+          }
+        );
+
+
+        selectedStudent = 0;
+
+
+        renderPages();
+
+        syncFormOptions();
+
+        selectStudent();
+
+        autoSave();
+
+
+        alert(
+          "✓ Excel Import सफल!\n\n" +
+          imported.length +
+          " विद्यार्थी जोड़े गए हैं।"
+        );
+
+      }
+
+      catch (error) {
+
+        console.error(
+          error
+        );
+
+
+        alert(
+          "Excel file पढ़ने में समस्या हुई।\nकृपया सही Excel file चुनें।"
+        );
+
+      }
+
+      finally {
+
+        event.target.value =
+          "";
+
+      }
+
+    };
+
+
+  reader.readAsArrayBuffer(
+    file
+  );
+
+}
+
+
+/* ==========================================================
    DOWNLOAD PDF
-========================================================= */
+   ========================================================== */
 
 function downloadPDF() {
 
@@ -3022,17 +3170,15 @@ function downloadPDF() {
     );
 
 
-  const className =
-    details.className ||
-    "Report";
-
-
   const opt = {
 
     margin: 0,
 
     filename:
-      `Marks_Folio_${className}.pdf`,
+      `Marks_Folio_${
+        details.className ||
+        "Report"
+      }.pdf`,
 
     image: {
 
@@ -3048,11 +3194,7 @@ function downloadPDF() {
 
       useCORS: true,
 
-      scrollX: 0,
-
-      scrollY: 0,
-
-      backgroundColor: "#ffffff"
+      scrollY: 0
 
     },
 
@@ -3086,32 +3228,15 @@ function downloadPDF() {
 }
 
 
-/* =========================================================
-   INITIALIZE
-========================================================= */
+/* ==========================================================
+   INITIAL LOAD
+   ========================================================== */
 
 loadData();
 
 checkMandatoryPopup();
 
 updateViews();
-
-
-/* =========================================================
-   EXTRA MOBILE SCROLL SUPPORT
-========================================================= */
-
-document.addEventListener(
-  "touchstart",
-  function () {},
-  { passive: true }
-);
-
-document.addEventListener(
-  "touchmove",
-  function () {},
-  { passive: true }
-);
 
 </script>
 
