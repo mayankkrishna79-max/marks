@@ -100,7 +100,7 @@ button {
   height: 297mm;
   max-height: 297mm;
   background: #fff;
-  padding: 4.5mm 8mm 4.5mm;
+  padding: 4mm 8mm 4mm;
   box-shadow: 0 2px 10px #0002;
   display: flex;
   flex-direction: column;
@@ -113,15 +113,15 @@ button {
   break-inside: avoid;
 }
 
-.header { flex-shrink: 0; text-align: center; margin-bottom: 1.5mm; }
-.h1 { font-size: 15px; font-weight: 700; text-decoration: underline; margin: 0; line-height: 1.25; }
+.header { flex-shrink: 0; text-align: center; margin-bottom: 1.2mm; }
+.h1 { font-size: 15px; font-weight: 700; text-decoration: underline; margin: 0; line-height: 1.2; }
 .h2 { font-size: 13.5px; font-weight: 700; text-decoration: underline; margin-top: 1px; }
 
-.info { flex-shrink: 0; font-size: 11px; line-height: 1.55; margin-bottom: 1.5mm; }
+.info { flex-shrink: 0; font-size: 11px; line-height: 1.5; margin-bottom: 1.2mm; }
 .info-row { display: grid; grid-template-columns: 28mm 1fr 18mm 1fr; gap: 2mm; align-items: end; }
 .info-row.wide { grid-template-columns: 28mm 1fr; }
 .info label { font-weight: 700; white-space: nowrap; }
-.info input { width: 100%; border: 0; border-bottom: 1px dotted #555; outline: 0; font-family: inherit; font-size: 11px; height: 5mm; padding: 0 1mm; background: transparent; }
+.info input { width: 100%; border: 0; border-bottom: 1px dotted #555; outline: 0; font-family: inherit; font-size: 11px; height: 4.8mm; padding: 0 1mm; background: transparent; }
 .info .marks { font-weight: 700; }
 
 .table-wrap {
@@ -138,7 +138,7 @@ table {
   font-size: 10px;
 }
 th, td { border: 0.3mm solid #222; text-align: center; padding: 0; }
-thead th { height: 7.5mm; font-weight: 700; vertical-align: middle; line-height: 1.1; }
+thead th { height: 7.2mm; font-weight: 700; vertical-align: middle; line-height: 1.1; }
 tbody tr { height: 6.6mm; max-height: 6.6mm; }
 
 th.col-sr, td.col-sr { width: 9mm; }
@@ -151,7 +151,16 @@ td input { width: 100%; height: 100%; border: 0; outline: 0; background: transpa
 td.name input { text-align: left; padding-left: 1.5mm; }
 td.total { font-weight: 700; }
 
-.note { flex-shrink: 0; font-size: 9.5px; margin-top: 1.5mm; font-weight: 600; line-height: 1.1; }
+/* Note placed right below row 30 */
+.note { 
+  flex-shrink: 0; 
+  font-size: 9.5px; 
+  margin-top: 1.5mm; 
+  font-weight: 600; 
+  line-height: 1.2; 
+  text-align: left;
+}
+
 .signatures {
   flex-shrink: 0;
   display: grid;
@@ -226,7 +235,7 @@ td.total { font-weight: 700; }
     height: 297mm !important;
     max-height: 297mm !important;
     box-shadow: none !important;
-    padding: 4.5mm 8mm 4.5mm !important;
+    padding: 4mm 8mm 4mm !important;
     page-break-after: always !important;
     page-break-inside: avoid !important;
     break-after: page !important;
@@ -415,13 +424,17 @@ function renderPages(){
       if(i < students.length){
         const st = students[i];
         let subCells = "";
-        let total = 0, any = false;
+        let total = 0, hasAnyEntry = false;
         
         for(let s = 0; s < subjects.length; s++){
-          const m = st.marks[s] || "";
-          if(m.trim()){
-            any = true;
-            if(m.toUpperCase() !== "ABSENT" && !isNaN(Number(m))) total += Number(m);
+          const m = (st.marks[s] || "").trim();
+          if(m !== ""){
+            hasAnyEntry = true;
+            // यदि Absent नहीं है और मान्य संख्या है तो जोड़ें
+            const isAbsent = (m.toUpperCase() === "ABSENT" || m.toUpperCase() === "AB");
+            if(!isAbsent && !isNaN(Number(m))){
+              total += Number(m);
+            }
           }
           subCells += `<td class="col-sub"><input value="${esc(m)}" oninput="cellChanged(${i}, ${s}, this.value)"></td>`;
         }
@@ -432,7 +445,7 @@ function renderPages(){
             <td class="col-roll"><input value="${esc(st.roll)}" oninput="cellInfoChanged(${i}, 'roll', this.value)"></td>
             <td class="col-name name"><input value="${esc(st.name)}" oninput="cellInfoChanged(${i}, 'name', this.value)"></td>
             ${subCells}
-            <td class="col-total total">${any ? total : "0"}</td>
+            <td class="col-total total">${hasAnyEntry ? total : "0"}</td>
           </tr>
         `;
       } else {
@@ -488,6 +501,7 @@ function renderPages(){
         </table>
       </div>
 
+      <!-- Note strictly placed right below row 30 -->
       <div class="note">※ अनुपस्थित परीक्षार्थी के कॉलम में लाल कलम से प्राप्तांक कॉलम में अनुपस्थित (ABSENT) दर्ज करें।</div>
 
       <div class="signatures">
@@ -594,7 +608,7 @@ function nextStudent(){
 }
 
 function autoSave(){
-  localStorage.setItem("deoMarksFolio_Dynamic30", JSON.stringify({ subjects, details, students }));
+  localStorage.setItem("deoMarksFolio_Dynamic30_v2", JSON.stringify({ subjects, details, students }));
   document.getElementById("saveStatus").textContent = "✓ Auto-saved • " + new Date().toLocaleTimeString("hi-IN");
 }
 
@@ -604,7 +618,7 @@ function saveData(){
 }
 
 function loadData(){
-  const raw = localStorage.getItem("deoMarksFolio_Dynamic30");
+  const raw = localStorage.getItem("deoMarksFolio_Dynamic30_v2");
   if(raw){
     try {
       const d = JSON.parse(raw);
@@ -628,7 +642,7 @@ function loadData(){
 
 function clearData(){
   if(confirm("क्या आप पूरा डेटा रीसेट करना चाहते हैं?")){
-    localStorage.removeItem("deoMarksFolio_Dynamic30");
+    localStorage.removeItem("deoMarksFolio_Dynamic30_v2");
     location.reload();
   }
 }
