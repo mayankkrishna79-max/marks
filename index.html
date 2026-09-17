@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="theme-color" content="#0d6efd">
+<title>DEO Office - Marks Folio</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22%200%22%20100%22><text y=%22.9em%22 font-size=%2290%22>📋</text></svg>">
+<style>
+@page{size:A4 portrait;margin:0}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:#eef1f5;font-family:"Nirmala UI","Mangal","Arial Unicode MS",Arial,sans-serif;color:#111}
+body{padding:12px}
+.app{max-width:1100px;margin:auto}
+.toolbar{background:#fff;border-radius:12px;padding:10px;display:flex;gap:7px;flex-wrap:wrap;box-shadow:0 2px 10px #0002;margin-bottom:10px;position:sticky;top:0;z-index:10}
+button{border:0;border-radius:7px;padding:9px 13px;font-weight:700;cursor:pointer;font-size:14px}
+.primary{background:#0d6efd;color:#fff}.green{background:#198754;color:#fff}.gray{background:#6c757d;color:#fff}.danger{background:#dc3545;color:#fff}
+.paper{width:210mm;min-height:297mm;margin:0 auto;background:#fff;padding:7.5mm 8.5mm 7mm;box-shadow:0 2px 15px #0003}
+.header{height:25mm;position:relative;text-align:center}
+.h1{font-size:17px;font-weight:700;text-decoration:underline;margin-top:0;line-height:1.35}
+.h2{font-size:15px;font-weight:700;text-decoration:underline;margin-top:1px}
+.info{font-size:12.5px;line-height:1.9;margin-top:-2mm}
+.info-row{display:grid;grid-template-columns:30mm 1fr 20mm 1fr;gap:2mm;align-items:end}
+.info-row.wide{grid-template-columns:30mm 1fr}
+.info label{font-weight:700;white-space:nowrap}
+.info input{width:100%;border:0;border-bottom:1px dotted #555;outline:0;font-family:inherit;font-size:12px;height:6mm;padding:0 1mm;background:transparent}
+.info .marks{font-weight:700}
+.table-wrap{margin-top:2mm}
+table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:11px}
+th,td{border:0.35mm solid #222;text-align:center;padding:0}
+thead th{height:12mm;font-weight:700;vertical-align:middle;line-height:1.1}
+tbody td{height:7.15mm}
+th:nth-child(1),td:nth-child(1){width:11mm}
+th:nth-child(2),td:nth-child(2){width:12mm}
+th:nth-child(3),td:nth-child(3){width:69mm}
+th:nth-child(4),td:nth-child(4){width:13mm}
+th:nth-child(5),td:nth-child(5){width:13mm}
+th:nth-child(6),td:nth-child(6){width:13mm}
+th:nth-child(7),td:nth-child(7){width:13mm}
+th:nth-child(8),td:nth-child(8){width:16mm}
+th:nth-child(9),td:nth-child(9){width:13mm}
+th:nth-child(10),td:nth-child(10){width:13mm}
+td input{width:100%;height:100%;border:0;outline:0;background:transparent;text-align:center;font-family:inherit;font-size:11px;padding:0}
+td.name input{text-align:left;padding-left:1mm}
+td.total{font-weight:700}
+.note{font-size:11.5px;margin-top:2mm;font-weight:600}
+.signatures{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8mm;margin-top:13mm;font-size:11.5px;font-weight:700;text-align:center}
+.sig{padding-top:9mm;line-height:1.45}
+.popup-bg{position:fixed;inset:0;background:#0008;display:flex;align-items:center;justify-content:center;z-index:100}
+.popup{width:min(390px,calc(100% - 30px));background:white;border-radius:18px;padding:22px;text-align:center;box-shadow:0 15px 50px #0005;position:relative}
+.popup h3{margin:0 0 8px;font-size:21px}
+.popup p{margin:0 0 17px;line-height:1.5;color:#444}
+.follow{display:inline-block;background:#25D366;color:white;text-decoration:none;border-radius:9px;padding:11px 18px;font-weight:800}
+.close{position:absolute;right:10px;top:8px;background:#eee;color:#333;border-radius:50%;width:30px;height:30px;padding:0}
+.small{font-size:11px;color:#777;margin-top:12px}
+@media(max-width:800px){
+ body{padding:0}.toolbar{border-radius:0;position:sticky}.paper{transform-origin:top left;box-shadow:none;width:210mm}
+}
+@media print{
+ html,body{background:#fff!important}
+ body{padding:0}
+ .toolbar,.popup-bg{display:none!important}
+ .paper{margin:0;width:210mm;height:297mm;min-height:297mm;box-shadow:none;padding:7.5mm 8.5mm 7mm}
+ input{color:#000!important}
+}
+.entry-panel{background:#fff;border-radius:12px;padding:12px;margin-bottom:10px;box-shadow:0 2px 10px #0002}
+.entry-title{font-size:17px;font-weight:800;margin-bottom:9px}
+.entry-grid{display:grid;grid-template-columns:1fr 1.5fr;gap:8px}
+.entry-grid label{font-size:12px;font-weight:700}
+.entry-grid input,.entry-grid select{width:100%;padding:9px;border:1px solid #bbb;border-radius:7px;font-family:inherit;font-size:14px;background:#fff}
+.subject-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:9px}
+.subject-box{border:1px solid #ddd;border-radius:8px;padding:7px}
+.subject-box label{display:block;font-size:12px;font-weight:700;margin-bottom:4px}
+.subject-box input{width:100%;padding:8px;border:1px solid #bbb;border-radius:6px;font-size:15px;text-align:center}
+.status{font-size:12px;color:#198754;font-weight:700;margin-top:8px}
+.form-actions{display:flex;gap:7px;margin-top:10px}
+.form-actions button{flex:1}
+@media(max-width:600px){.entry-grid{grid-template-columns:1fr}.subject-grid{grid-template-columns:1fr 1fr}}
+@media print{.entry-panel{display:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="toolbar">
+    <button class="primary" onclick="addRow()">＋ विद्यार्थी</button>
+    <button class="green" onclick="saveData()">💾 Save</button>
+    <button class="gray" onclick="window.print()">🖨 Print / PDF</button>
+    <button class="gray" onclick="loadData()">↻ Reload</button>
+    <button class="danger" onclick="clearData()">Clear</button>
+  </div>
+
+  <div class="entry-panel">
+    <div class="entry-title">📝 Marks Folio Form Entry</div>
+    <div class="entry-grid">
+      <div>
+        <label>विद्यार्थी चुनें</label>
+        <select id="studentSelect" onchange="selectStudent()"></select>
+      </div>
+      <div>
+        <label>विद्यार्थी का नाम</label>
+        <input id="formName" oninput="formChanged()">
+      </div>
+      <div>
+        <label>वर्ग क्रमांक</label>
+        <input id="formRoll" oninput="formChanged()">
+      </div>
+    </div>
+    <div class="subject-grid">
+      <div class="subject-box"><label>हिंदी</label><input id="m0" inputmode="numeric" oninput="formChanged()"></div>
+      <div class="subject-box"><label>गणित</label><input id="m1" inputmode="numeric" oninput="formChanged()"></div>
+      <div class="subject-box"><label>अंग्रेजी</label><input id="m2" inputmode="numeric" oninput="formChanged()"></div>
+      <div class="subject-box"><label>संस्कृत</label><input id="m3" inputmode="numeric" oninput="formChanged()"></div>
+      <div class="subject-box"><label>सा० विज्ञान</label><input id="m4" inputmode="numeric" oninput="formChanged()"></div>
+      <div class="subject-box"><label>विज्ञान</label><input id="m5" inputmode="numeric" oninput="formChanged()"></div>
+    </div>
+    <div class="form-actions">
+      <button class="primary" onclick="nextStudent()">Next Student →</button>
+      <button class="green" onclick="saveData()">💾 Save Now</button>
+    </div>
+    <div class="status" id="saveStatus">✓ Auto-save चालू है</div>
+  </div>
+
+  <section class="paper" id="paper">
+    <div class="header">
+      <div class="h1">राज्य शिक्षा शोध एवं प्रशिक्षण परिषद, बिहार, पटना</div>
+      <div class="h2">अंक पत्रक (Marks Folio)</div>
+    </div>
+
+    <div class="info">
+      <div class="info-row">
+        <label>मूल्यांकन केंद्र का नाम :-</label><input id="center">
+        <label>जिला :-</label><input id="district">
+      </div>
+      <div class="info-row wide">
+        <label>विद्यालय का नाम :-</label><input id="school">
+      </div>
+      <div class="info-row">
+        <label>यू-डायस :-</label><input id="udise">
+        <label>प्रखंड का नाम :-</label><input id="block">
+      </div>
+      <div class="info-row">
+        <label>वर्ग/उप वर्ग :-</label><input id="className">
+        <label>पूर्णांक :-</label><input id="maxMarks" value="50" class="marks">
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>क्र०सं०</th><th>वर्ग<br>क्रमांक</th><th>विद्यार्थियों का नाम</th>
+            <th>हिंदी</th><th>गणित</th><th>अंग्रेजी</th><th>संस्कृत</th>
+            <th>सा० विज्ञान</th><th>विज्ञान</th><th>कुल</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+
+    <div class="note">※ अनुपस्थित परीक्षार्थी के कॉलम में लाल कलम से प्राप्तांक कॉलम में अनुपस्थित (ABSENT) दर्ज करें।</div>
+
+    <div class="signatures">
+      <div class="sig">परीक्षक का नाम एवं हस्ताक्षर<br>तिथि सहित</div>
+      <div class="sig">प्रधान परीक्षक का नाम एवं<br>हस्ताक्षर तिथि सहित</div>
+      <div class="sig">मूल्यांकन निदेशक का<br>हस्ताक्षर एवं मुहर</div>
+    </div>
+  </section>
+</div>
+
+<div class="popup-bg" id="followPopup">
+  <div class="popup">
+    <button class="close" onclick="closePopup()">×</button>
+    <h3>DEO Office को Follow करें</h3>
+    <p>बिहार शिक्षा विभाग से जुड़ी महत्वपूर्ण खबरें और अपडेट पाने के लिए DEO Office को Follow करें।</p>
+    <a class="follow" href="https://whatsapp.com/channel/0029VaVz8W38kyyTFnPsIA0O" target="_blank" rel="noopener">Follow DEO Office</a>
+    <div class="small">Popup केवल पहली बार खुलेगा।</div>
+  </div>
+</div>
+
+<script>
+const tbody=document.getElementById("tbody");
+const studentSelect=document.getElementById("studentSelect");
+let selectedStudent=0;
+const detailIds=["center","district","school","udise","block","className","maxMarks"];
+
+function closePopup(){
+  document.getElementById("followPopup").style.display="none";
+  localStorage.setItem("deoFollowPopupSeen","1");
+}
+
+function addRow(d={}){
+  const n=tbody.rows.length+1;
+  const tr=document.createElement("tr");
+  tr.innerHTML=`<td>${n}</td>
+    <td><input value="${esc(d.roll||"")}"></td>
+    <td class="name"><input value="${esc(d.name||"")}"></td>
+    ${Array.from({length:6},(_,i)=>`<td><input value="${esc((d.marks||[])[i]||"")}" oninput="tableChanged(${n-1})"></td>`).join("")}
+    <td class="total">0</td>`;
+  tbody.appendChild(tr);
+  calc(tr);
+}
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
+
+function calc(tr){
+  let total=0, any=false;
+  for(let i=3;i<=8;i++){
+    const v=tr.cells[i].querySelector("input").value.trim();
+    if(v){any=true;if(v.toUpperCase()!=="ABSENT" && !isNaN(Number(v))) total+=Number(v)}
+  }
+  tr.cells[9].textContent=any?total:"0";
+}
+function tableChanged(index){
+  calc(tbody.rows[index]);
+  syncFormOptions();
+  autoSave();
+}
+function collectRows(){
+  return [...tbody.rows].map(tr=>({
+    roll:tr.cells[1].querySelector("input").value,
+    name:tr.cells[2].querySelector("input").value,
+    marks:[3,4,5,6,7,8].map(i=>tr.cells[i].querySelector("input").value)
+  }));
+}
+function syncFormOptions(){
+  const rows=collectRows();
+  const previous=selectedStudent;
+  studentSelect.innerHTML="";
+  rows.forEach((r,i)=>{
+    const opt=document.createElement("option");
+    opt.value=i;
+    opt.textContent=`${i+1}. ${r.name||"नया विद्यार्थी"}`;
+    studentSelect.appendChild(opt);
+  });
+  selectedStudent=Math.min(previous,rows.length-1);
+  studentSelect.value=selectedStudent;
+}
+function selectStudent(){
+  selectedStudent=Number(studentSelect.value)||0;
+  const tr=tbody.rows[selectedStudent];
+  if(!tr)return;
+  document.getElementById("formRoll").value=tr.cells[1].querySelector("input").value;
+  document.getElementById("formName").value=tr.cells[2].querySelector("input").value;
+  for(let i=0;i<6;i++)document.getElementById("m"+i).value=tr.cells[i+3].querySelector("input").value;
+}
+function formChanged(){
+  const tr=tbody.rows[selectedStudent];
+  if(!tr)return;
+  tr.cells[1].querySelector("input").value=document.getElementById("formRoll").value;
+  tr.cells[2].querySelector("input").value=document.getElementById("formName").value;
+  for(let i=0;i<6;i++)tr.cells[i+3].querySelector("input").value=document.getElementById("m"+i).value;
+  calc(tr);
+  syncFormOptions();
+  studentSelect.value=selectedStudent;
+  autoSave();
+}
+function nextStudent(){
+  if(selectedStudent<tbody.rows.length-1){
+    selectedStudent++;
+    studentSelect.value=selectedStudent;
+    selectStudent();
+  }else{
+    addRow();
+    selectedStudent=tbody.rows.length-1;
+    syncFormOptions();
+    studentSelect.value=selectedStudent;
+    selectStudent();
+  }
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function gather(){
+  const data={details:{},rows:collectRows()};
+  detailIds.forEach(id=>data.details[id]=document.getElementById(id).value);
+  return data;
+}
+function autoSave(){
+  localStorage.setItem("deoMarksFolio",JSON.stringify(gather()));
+  const s=document.getElementById("saveStatus");
+  s.textContent="✓ Auto-saved • "+new Date().toLocaleTimeString("hi-IN");
+}
+function saveData(){
+  autoSave();
+  alert("डेटा सुरक्षित कर दिया गया है।");
+}
+function loadData(){
+  tbody.innerHTML="";
+  const raw=localStorage.getItem("deoMarksFolio");
+  if(raw){
+    try{
+      const d=JSON.parse(raw);
+      detailIds.forEach(id=>{if(d.details&&d.details[id]!==undefined)document.getElementById(id).value=d.details[id]});
+      (d.rows||[]).forEach(addRow);
+    }catch(e){}
+  }
+  while(tbody.rows.length<30)addRow();
+  syncFormOptions();
+  selectedStudent=0;
+  selectStudent();
+}
+function clearData(){
+  if(confirm("सभी दर्ज डेटा हटाना है?")){
+    localStorage.removeItem("deoMarksFolio");
+    location.reload();
+  }
+}
+detailIds.forEach(id=>document.getElementById(id).addEventListener("input",autoSave));
+
+if(localStorage.getItem("deoFollowPopupSeen")==="1")
+  document.getElementById("followPopup").style.display="none";
+
+loadData();
+</script>
+</body>
+</html>
