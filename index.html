@@ -43,7 +43,7 @@ button {
   padding: 7px 11px;
   font-weight: 700;
   cursor: pointer;
-  font-size: 12.5px;
+  font-size: 13px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -63,7 +63,7 @@ button {
   box-shadow: 0 2px 8px #0002;
 }
 .entry-title {
-  font-size: 15px;
+  font-size: 15.5px;
   font-weight: 800;
   margin-bottom: 8px;
   color: #0d6efd;
@@ -74,13 +74,13 @@ button {
   gap: 6px;
 }
 .entry-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 6px; }
-.entry-grid label { font-size: 11.5px; font-weight: 700; margin-bottom: 2px; display: block; }
-.entry-grid input, .entry-grid select { width: 100%; padding: 6px 8px; border: 1px solid #ccc; border-radius: 5px; font-family: inherit; font-size: 13px; background: #fff; }
+.entry-grid label { font-size: 12px; font-weight: 700; margin-bottom: 2px; display: block; }
+.entry-grid input, .entry-grid select { width: 100%; padding: 6px 8px; border: 1px solid #ccc; border-radius: 5px; font-family: inherit; font-size: 13.5px; background: #fff; }
 .subject-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(85px, 1fr)); gap: 5px; margin-top: 8px; }
 .subject-box { border: 1px solid #ddd; border-radius: 5px; padding: 4px; background: #fafafa; }
-.subject-box input.sub-name { border: 0; border-bottom: 1px dashed #888; border-radius: 0; background: transparent; font-weight: 700; font-size: 11px; text-align: center; padding: 2px 0; margin-bottom: 3px; width: 100%; }
-.subject-box input.sub-marks { width: 100%; padding: 5px; border: 1px solid #bbb; border-radius: 4px; font-size: 13px; text-align: center; background: #fff; }
-.status { font-size: 11px; color: #198754; font-weight: 700; margin-top: 6px; }
+.subject-box input.sub-name { border: 0; border-bottom: 1px dashed #888; border-radius: 0; background: transparent; font-weight: 700; font-size: 11.5px; text-align: center; padding: 2px 0; margin-bottom: 3px; width: 100%; }
+.subject-box input.sub-marks { width: 100%; padding: 5px; border: 1px solid #bbb; border-radius: 4px; font-size: 13.5px; text-align: center; background: #fff; }
+.status { font-size: 11.5px; color: #198754; font-weight: 700; margin-top: 6px; }
 .form-actions { display: flex; gap: 6px; margin-top: 8px; }
 .form-actions button { flex: 1; padding: 8px; }
 
@@ -100,7 +100,7 @@ button {
   height: 297mm;
   max-height: 297mm;
   background: #fff;
-  padding: 4mm 8mm 4mm;
+  padding: 3.5mm 8mm 3.5mm;
   box-shadow: 0 2px 10px #0002;
   display: flex;
   flex-direction: column;
@@ -113,15 +113,15 @@ button {
   break-inside: avoid;
 }
 
-.header { flex-shrink: 0; text-align: center; margin-bottom: 1.2mm; }
-.h1 { font-size: 15px; font-weight: 700; text-decoration: underline; margin: 0; line-height: 1.2; }
-.h2 { font-size: 13.5px; font-weight: 700; text-decoration: underline; margin-top: 1px; }
+.header { flex-shrink: 0; text-align: center; margin-bottom: 1mm; }
+.h1 { font-size: 15.5px; font-weight: 700; text-decoration: underline; margin: 0; line-height: 1.2; }
+.h2 { font-size: 14px; font-weight: 700; text-decoration: underline; margin-top: 1px; }
 
-.info { flex-shrink: 0; font-size: 11px; line-height: 1.5; margin-bottom: 1.2mm; }
-.info-row { display: grid; grid-template-columns: 28mm 1fr 18mm 1fr; gap: 2mm; align-items: end; }
-.info-row.wide { grid-template-columns: 28mm 1fr; }
+.info { flex-shrink: 0; font-size: 11.5px; line-height: 1.45; margin-bottom: 1mm; }
+.info-row { display: grid; grid-template-columns: 29mm 1fr 19mm 1fr; gap: 2mm; align-items: end; }
+.info-row.wide { grid-template-columns: 29mm 1fr; }
 .info label { font-weight: 700; white-space: nowrap; }
-.info input { width: 100%; border: 0; border-bottom: 1px dotted #555; outline: 0; font-family: inherit; font-size: 11px; height: 4.8mm; padding: 0 1mm; background: transparent; }
+.info input { width: 100%; border: 0; border-bottom: 1px dotted #555; outline: 0; font-family: inherit; font-size: 11.5px; height: 4.8mm; padding: 0 1mm; background: transparent; }
 .info .marks { font-weight: 700; }
 
 .table-wrap {
@@ -135,45 +135,51 @@ table {
   width: 100%;
   border-collapse: collapse;
   table-layout: fixed;
-  font-size: 10px;
+  font-size: 10.5px;
 }
 th, td { border: 0.3mm solid #222; text-align: center; padding: 0; }
-thead th { height: 7.2mm; font-weight: 700; vertical-align: middle; line-height: 1.1; }
-tbody tr { height: 6.6mm; max-height: 6.6mm; }
+thead th { height: 7mm; font-weight: 700; vertical-align: middle; line-height: 1.1; font-size: 10.5px; }
+tbody tr { height: 6.85mm; max-height: 6.85mm; }
 
 th.col-sr, td.col-sr { width: 9mm; }
-th.col-roll, td.col-roll { width: 11mm; }
+th.col-roll, td.col-roll { width: 11.5mm; }
 th.col-name, td.col-name { width: auto; }
 th.col-sub, td.col-sub { width: 13mm; }
 th.col-total, td.col-total { width: 12mm; }
 
-td input { width: 100%; height: 100%; border: 0; outline: 0; background: transparent; text-align: center; font-family: inherit; font-size: 10.5px; padding: 0; }
-td.name input { text-align: left; padding-left: 1.5mm; }
-td.total { font-weight: 700; }
+td input { width: 100%; height: 100%; border: 0; outline: 0; background: transparent; text-align: center; font-family: inherit; font-size: 11px; padding: 0; }
+td.name input { text-align: left; padding-left: 1.5mm; font-size: 11px; }
+td.total { font-weight: 700; font-size: 11px; }
 
-/* Note strictly below row 30 */
+/* Note right below row 30 */
 .note { 
   flex-shrink: 0; 
-  font-size: 9.5px; 
-  margin-top: 1.5mm; 
+  font-size: 10px; 
+  margin-top: 1mm; 
   font-weight: 600; 
-  line-height: 1.2; 
+  line-height: 1.15; 
   text-align: left;
 }
 
+/* Signatures with ample signing room */
 .signatures {
   flex-shrink: 0;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 5mm;
-  margin-top: 4mm;
-  font-size: 10px;
+  margin-top: 2mm;
+  margin-bottom: 0.5mm;
+  font-size: 10.5px;
   font-weight: 700;
   text-align: center;
   page-break-inside: avoid;
   break-inside: avoid;
 }
-.sig { border-top: 1px dashed #888; padding-top: 2mm; line-height: 1.3; }
+.sig { 
+  border-top: 1px dashed #777; 
+  padding-top: 11mm; 
+  line-height: 1.25; 
+}
 
 /* Subject Remove Modal */
 .dialog-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 200; }
@@ -222,7 +228,7 @@ td.total { font-weight: 700; }
 
 @media (max-width: 600px) {
   body { padding: 4px; }
-  .toolbar button { flex: 1 1 calc(33% - 5px); padding: 8px 4px; font-size: 11.5px; }
+  .toolbar button { flex: 1 1 calc(33% - 5px); padding: 8px 4px; font-size: 12px; }
 }
 
 @media print {
@@ -240,7 +246,7 @@ td.total { font-weight: 700; }
     height: 297mm !important;
     max-height: 297mm !important;
     box-shadow: none !important;
-    padding: 4mm 8mm 4mm !important;
+    padding: 3.5mm 8mm 3.5mm !important;
     page-break-after: always !important;
     page-break-inside: avoid !important;
     break-after: page !important;
@@ -266,8 +272,8 @@ td.total { font-weight: 700; }
     <div class="entry-title">
       <span>📝 Marks Folio Entry Panel</span>
       <div style="display:flex;gap:4px">
-        <button class="primary" style="padding:3px 7px;font-size:11px" onclick="addSubject()">＋ विषय जोड़ें</button>
-        <button class="danger" style="padding:3px 7px;font-size:11px" onclick="openSubjectModal()">— विषय हटाएं</button>
+        <button class="primary" style="padding:3px 7px;font-size:11.5px" onclick="addSubject()">＋ विषय जोड़ें</button>
+        <button class="danger" style="padding:3px 7px;font-size:11.5px" onclick="openSubjectModal()">— विषय हटाएं</button>
       </div>
     </div>
     <div class="entry-grid">
@@ -507,7 +513,7 @@ function renderPages(){
         </table>
       </div>
 
-      <!-- Note strictly placed right below row 30 -->
+      <!-- Note placed directly below row 30 -->
       <div class="note">※ अनुपस्थित परीक्षार्थी के कॉलम में लाल कलम से प्राप्तांक कॉलम में अनुपस्थित (ABSENT) दर्ज करें।</div>
 
       <div class="signatures">
@@ -614,7 +620,7 @@ function nextStudent(){
 }
 
 function autoSave(){
-  localStorage.setItem("deoMarksFolio_Final", JSON.stringify({ subjects, details, students }));
+  localStorage.setItem("deoMarksFolio_Final_v2", JSON.stringify({ subjects, details, students }));
   document.getElementById("saveStatus").textContent = "✓ Auto-saved • " + new Date().toLocaleTimeString("hi-IN");
 }
 
@@ -624,7 +630,7 @@ function saveData(){
 }
 
 function loadData(){
-  const raw = localStorage.getItem("deoMarksFolio_Final");
+  const raw = localStorage.getItem("deoMarksFolio_Final_v2");
   if(raw){
     try {
       const d = JSON.parse(raw);
@@ -648,7 +654,7 @@ function loadData(){
 
 function clearData(){
   if(confirm("क्या आप पूरा डेटा रीसेट करना चाहते हैं?")){
-    localStorage.removeItem("deoMarksFolio_Final");
+    localStorage.removeItem("deoMarksFolio_Final_v2");
     location.reload();
   }
 }
