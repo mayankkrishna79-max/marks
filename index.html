@@ -2,7 +2,7 @@
 <html lang="hi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#0d6efd">
 <title>DEO Office - Marks Folio</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22%200%22%20100%22><text y=%22.9em%22 font-size=%2290%22>📋</text></svg>">
@@ -10,12 +10,36 @@
 @page{size:A4 portrait;margin:0}
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;background:#eef1f5;font-family:"Nirmala UI","Mangal","Arial Unicode MS",Arial,sans-serif;color:#111}
-body{padding:12px}
+body{padding:10px}
 .app{max-width:1100px;margin:auto}
-.toolbar{background:#fff;border-radius:12px;padding:10px;display:flex;gap:7px;flex-wrap:wrap;box-shadow:0 2px 10px #0002;margin-bottom:10px;position:sticky;top:0;z-index:10}
-button{border:0;border-radius:7px;padding:9px 13px;font-weight:700;cursor:pointer;font-size:14px}
+
+/* Toolbar */
+.toolbar{background:#fff;border-radius:10px;padding:8px;display:flex;gap:6px;flex-wrap:wrap;box-shadow:0 2px 8px #0002;margin-bottom:10px;position:sticky;top:0;z-index:10}
+button{border:0;border-radius:7px;padding:8px 12px;font-weight:700;cursor:pointer;font-size:13px;display:inline-flex;align-items:center;justify-content:center}
 .primary{background:#0d6efd;color:#fff}.green{background:#198754;color:#fff}.gray{background:#6c757d;color:#fff}.danger{background:#dc3545;color:#fff}
-.paper{width:210mm;min-height:297mm;margin:0 auto;background:#fff;padding:7.5mm 8.5mm 7mm;box-shadow:0 2px 15px #0003}
+
+/* Entry Form */
+.entry-panel{background:#fff;border-radius:10px;padding:12px;margin-bottom:12px;box-shadow:0 2px 8px #0002}
+.entry-title{font-size:16px;font-weight:800;margin-bottom:10px;color:#0d6efd}
+.entry-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(130px, 1fr));gap:8px}
+.entry-grid label{font-size:12px;font-weight:700;margin-bottom:3px;display:block}
+.entry-grid input,.entry-grid select{width:100%;padding:8px;border:1px solid #ccc;border-radius:6px;font-family:inherit;font-size:13px;background:#fff}
+.subject-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(90px, 1fr));gap:6px;margin-top:10px}
+.subject-box{border:1px solid #ddd;border-radius:6px;padding:6px;background:#fafafa}
+.subject-box label{display:block;font-size:11.5px;font-weight:700;margin-bottom:3px;text-align:center}
+.subject-box input{width:100%;padding:6px;border:1px solid #bbb;border-radius:4px;font-size:14px;text-align:center;background:#fff}
+.status{font-size:11.5px;color:#198754;font-weight:700;margin-top:8px}
+.form-actions{display:flex;gap:6px;margin-top:10px}
+.form-actions button{flex:1;padding:10px}
+
+/* Paper Wrapper for mobile scroll */
+.paper-container{
+  width:100%;
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  padding-bottom:15px;
+}
+.paper{width:210mm;min-height:297mm;margin:0 auto;background:#fff;padding:7.5mm 8.5mm 7mm;box-shadow:0 2px 10px #0002}
 .header{height:25mm;position:relative;text-align:center}
 .h1{font-size:17px;font-weight:700;text-decoration:underline;margin-top:0;line-height:1.35}
 .h2{font-size:15px;font-weight:700;text-decoration:underline;margin-top:1px}
@@ -46,37 +70,33 @@ td.total{font-weight:700}
 .note{font-size:11.5px;margin-top:2mm;font-weight:600}
 .signatures{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8mm;margin-top:13mm;font-size:11.5px;font-weight:700;text-align:center}
 .sig{padding-top:9mm;line-height:1.45}
-.popup-bg{position:fixed;inset:0;background:#0008;display:flex;align-items:center;justify-content:center;z-index:100}
-.popup{width:min(390px,calc(100% - 30px));background:white;border-radius:18px;padding:22px;text-align:center;box-shadow:0 15px 50px #0005;position:relative}
-.popup h3{margin:0 0 8px;font-size:21px}
-.popup p{margin:0 0 17px;line-height:1.5;color:#444}
-.follow{display:inline-block;background:#25D366;color:white;text-decoration:none;border-radius:9px;padding:11px 18px;font-weight:800}
-.close{position:absolute;right:10px;top:8px;background:#eee;color:#333;border-radius:50%;width:30px;height:30px;padding:0}
-.small{font-size:11px;color:#777;margin-top:12px}
-@media(max-width:800px){
- body{padding:0}.toolbar{border-radius:0;position:sticky}.paper{transform-origin:top left;box-shadow:none;width:210mm}
+
+/* Follow Popup */
+.popup-bg{position:fixed;inset:0;background:#0008;display:flex;align-items:center;justify-content:center;z-index:100;padding:15px}
+.popup{width:100%;max-width:360px;background:white;border-radius:14px;padding:20px 16px;text-align:center;box-shadow:0 10px 30px #0004;position:relative}
+.popup h3{margin:0 0 8px;font-size:19px}
+.popup p{margin:0 0 16px;line-height:1.4;font-size:13px;color:#444}
+.follow{display:block;background:#25D366;color:white;text-decoration:none;border-radius:8px;padding:10px;font-weight:700;font-size:14px}
+.close{position:absolute;right:8px;top:8px;background:#eee;color:#333;border-radius:50%;width:28px;height:28px;padding:0;line-height:28px}
+.small{font-size:11px;color:#777;margin-top:10px}
+
+/* Mobile Adjustments */
+@media (max-width: 600px) {
+  body{padding:6px}
+  .toolbar{gap:5px;padding:6px}
+  .toolbar button{flex:1 1 calc(33.33% - 5px);padding:8px 4px;font-size:12px}
+  .subject-grid{grid-template-columns:repeat(3, 1fr)}
+  .entry-panel{padding:10px}
 }
+
+/* Print Rules */
 @media print{
- html,body{background:#fff!important}
- body{padding:0}
- .toolbar,.popup-bg{display:none!important}
- .paper{margin:0;width:210mm;height:297mm;min-height:297mm;box-shadow:none;padding:7.5mm 8.5mm 7mm}
- input{color:#000!important}
+  html,body{background:#fff!important;padding:0!important;margin:0!important}
+  .toolbar,.entry-panel,.popup-bg{display:none!important}
+  .paper-container{overflow:visible!important}
+  .paper{margin:0!important;width:210mm!important;height:297mm!important;box-shadow:none!important;padding:7.5mm 8.5mm 7mm!important}
+  input{color:#000!important}
 }
-.entry-panel{background:#fff;border-radius:12px;padding:12px;margin-bottom:10px;box-shadow:0 2px 10px #0002}
-.entry-title{font-size:17px;font-weight:800;margin-bottom:9px}
-.entry-grid{display:grid;grid-template-columns:1fr 1.5fr;gap:8px}
-.entry-grid label{font-size:12px;font-weight:700}
-.entry-grid input,.entry-grid select{width:100%;padding:9px;border:1px solid #bbb;border-radius:7px;font-family:inherit;font-size:14px;background:#fff}
-.subject-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:9px}
-.subject-box{border:1px solid #ddd;border-radius:8px;padding:7px}
-.subject-box label{display:block;font-size:12px;font-weight:700;margin-bottom:4px}
-.subject-box input{width:100%;padding:8px;border:1px solid #bbb;border-radius:6px;font-size:15px;text-align:center}
-.status{font-size:12px;color:#198754;font-weight:700;margin-top:8px}
-.form-actions{display:flex;gap:7px;margin-top:10px}
-.form-actions button{flex:1}
-@media(max-width:600px){.entry-grid{grid-template-columns:1fr}.subject-grid{grid-template-columns:1fr 1fr}}
-@media print{.entry-panel{display:none!important}}
 </style>
 </head>
 <body>
@@ -97,12 +117,12 @@ td.total{font-weight:700}
         <select id="studentSelect" onchange="selectStudent()"></select>
       </div>
       <div>
+        <label>वर्ग क्रमांक</label>
+        <input id="formRoll" inputmode="numeric" oninput="formChanged()">
+      </div>
+      <div style="grid-column: 1 / -1;">
         <label>विद्यार्थी का नाम</label>
         <input id="formName" oninput="formChanged()">
-      </div>
-      <div>
-        <label>वर्ग क्रमांक</label>
-        <input id="formRoll" oninput="formChanged()">
       </div>
     </div>
     <div class="subject-grid">
@@ -115,56 +135,59 @@ td.total{font-weight:700}
     </div>
     <div class="form-actions">
       <button class="primary" onclick="nextStudent()">Next Student →</button>
-      <button class="green" onclick="saveData()">💾 Save Now</button>
+      <button class="green" onclick="saveData()">💾 Save</button>
     </div>
     <div class="status" id="saveStatus">✓ Auto-save चालू है</div>
   </div>
 
-  <section class="paper" id="paper">
-    <div class="header">
-      <div class="h1">राज्य शिक्षा शोध एवं प्रशिक्षण परिषद, बिहार, पटना</div>
-      <div class="h2">अंक पत्रक (Marks Folio)</div>
-    </div>
-
-    <div class="info">
-      <div class="info-row">
-        <label>मूल्यांकन केंद्र का नाम :-</label><input id="center">
-        <label>जिला :-</label><input id="district">
+  <!-- Wrapper to enable smooth horizontal swiping on mobile -->
+  <div class="paper-container">
+    <section class="paper" id="paper">
+      <div class="header">
+        <div class="h1">राज्य शिक्षा शोध एवं प्रशिक्षण परिषद, बिहार, पटना</div>
+        <div class="h2">अंक पत्रक (Marks Folio)</div>
       </div>
-      <div class="info-row wide">
-        <label>विद्यालय का नाम :-</label><input id="school">
-      </div>
-      <div class="info-row">
-        <label>यू-डायस :-</label><input id="udise">
-        <label>प्रखंड का नाम :-</label><input id="block">
-      </div>
-      <div class="info-row">
-        <label>वर्ग/उप वर्ग :-</label><input id="className">
-        <label>पूर्णांक :-</label><input id="maxMarks" value="50" class="marks">
-      </div>
-    </div>
 
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>क्र०सं०</th><th>वर्ग<br>क्रमांक</th><th>विद्यार्थियों का नाम</th>
-            <th>हिंदी</th><th>गणित</th><th>अंग्रेजी</th><th>संस्कृत</th>
-            <th>सा० विज्ञान</th><th>विज्ञान</th><th>कुल</th>
-          </tr>
-        </thead>
-        <tbody id="tbody"></tbody>
-      </table>
-    </div>
+      <div class="info">
+        <div class="info-row">
+          <label>मूल्यांकन केंद्र का नाम :-</label><input id="center">
+          <label>जिला :-</label><input id="district">
+        </div>
+        <div class="info-row wide">
+          <label>विद्यालय का नाम :-</label><input id="school">
+        </div>
+        <div class="info-row">
+          <label>यू-डायस :-</label><input id="udise">
+          <label>प्रखंड का नाम :-</label><input id="block">
+        </div>
+        <div class="info-row">
+          <label>वर्ग/उप वर्ग :-</label><input id="className">
+          <label>पूर्णांक :-</label><input id="maxMarks" value="50" class="marks">
+        </div>
+      </div>
 
-    <div class="note">※ अनुपस्थित परीक्षार्थी के कॉलम में लाल कलम से प्राप्तांक कॉलम में अनुपस्थित (ABSENT) दर्ज करें।</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>क्र०सं०</th><th>वर्ग<br>क्रमांक</th><th>विद्यार्थियों का नाम</th>
+              <th>हिंदी</th><th>गणित</th><th>अंग्रेजी</th><th>संस्कृत</th>
+              <th>सा० विज्ञान</th><th>विज्ञान</th><th>कुल</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
 
-    <div class="signatures">
-      <div class="sig">परीक्षक का नाम एवं हस्ताक्षर<br>तिथि सहित</div>
-      <div class="sig">प्रधान परीक्षक का नाम एवं<br>हस्ताक्षर तिथि सहित</div>
-      <div class="sig">मूल्यांकन निदेशक का<br>हस्ताक्षर एवं मुहर</div>
-    </div>
-  </section>
+      <div class="note">※ अनुपस्थित परीक्षार्थी के कॉलम में लाल कलम से प्राप्तांक कॉलम में अनुपस्थित (ABSENT) दर्ज करें।</div>
+
+      <div class="signatures">
+        <div class="sig">परीक्षक का नाम एवं हस्ताक्षर<br>तिथि सहित</div>
+        <div class="sig">प्रधान परीक्षक का नाम एवं<br>हस्ताक्षर तिथि सहित</div>
+        <div class="sig">मूल्यांकन निदेशक का<br>हस्ताक्षर एवं मुहर</div>
+      </div>
+    </section>
+  </div>
 </div>
 
 <div class="popup-bg" id="followPopup">
