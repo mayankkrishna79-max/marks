@@ -2,7 +2,9 @@
 <html lang="hi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0,
+      maximum-scale=1.0, user-scalable=no">
 
 <meta name="theme-color" content="#0d6efd">
 <meta name="mobile-web-app-capable" content="yes">
@@ -10,886 +12,716 @@
 
 <title>DEO Office - Marks Folio</title>
 
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22%200%22%20100%22><text y=%22.9em%22 font-size=%2290%22>📋</text></svg>">
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <style>
-
-@page{
-    size:A4 portrait;
-    margin:0;
-}
-
 *{
-    box-sizing:border-box;
+  box-sizing:border-box;
 }
 
 html{
-    margin:0;
-    padding:0;
-    scroll-behavior:smooth;
+  scroll-behavior:smooth;
 }
 
 body{
-    margin:0;
-    padding:8px;
-    background:#eef1f5;
-    font-family:"Nirmala UI","Mangal","Arial Unicode MS",Arial,sans-serif;
-    color:#111;
-
-    /* Mobile Chrome scrolling */
-    overflow-x:hidden;
-    overflow-y:auto;
-    -webkit-overflow-scrolling:touch;
+  margin:0;
+  padding:6px;
+  background:#eef1f5;
+  color:#111;
+  font-family:"Nirmala UI","Mangal","Arial Unicode MS",Arial,sans-serif;
+  overflow-x:hidden;
 }
+
+/* ================= APP ================= */
 
 .app{
-    max-width:1100px;
-    margin:auto;
+  width:100%;
+  max-width:1100px;
+  margin:auto;
 }
 
-/* =====================================================
-   TOOLBAR
-===================================================== */
+/* ================= TOOLBAR ================= */
 
 .toolbar{
-    background:#fff;
-    border-radius:8px;
-    padding:8px;
-    display:flex;
-    gap:6px;
-    align-items:center;
-    flex-wrap:wrap;
-    box-shadow:0 2px 8px #0002;
-    margin-bottom:8px;
+  position:sticky;
+  top:0;
+  z-index:1000;
 
-    position:sticky;
-    top:0;
-    z-index:100;
+  background:#fff;
+  border-radius:8px;
+  padding:7px;
+
+  display:flex;
+  gap:6px;
+  align-items:center;
+  flex-wrap:wrap;
+
+  box-shadow:0 2px 8px #0002;
+  margin-bottom:8px;
 }
 
 button{
-    border:0;
-    border-radius:6px;
-    padding:7px 11px;
-    font-weight:700;
-    cursor:pointer;
-    font-size:13px;
-
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    gap:4px;
-
-    touch-action:manipulation;
+  border:0;
+  border-radius:6px;
+  padding:8px 11px;
+  font-weight:700;
+  cursor:pointer;
+  font-size:13px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  touch-action:manipulation;
 }
 
-button:active{
-    transform:scale(.97);
-}
-
-.primary{
-    background:#0d6efd;
-    color:#fff;
-}
-
-.green{
-    background:#198754;
-    color:#fff;
-}
-
-.gray{
-    background:#6c757d;
-    color:#fff;
-}
-
-.danger{
-    background:#dc3545;
-    color:#fff;
-}
-
-.warning{
-    background:#fd7e14;
-    color:#fff;
-}
-
-.share-btn{
-    background:#6f42c1;
-    color:#fff;
-}
+.primary{background:#0d6efd;color:#fff;}
+.green{background:#198754;color:#fff;}
+.gray{background:#6c757d;color:#fff;}
+.danger{background:#dc3545;color:#fff;}
+.warning{background:#fd7e14;color:#fff;}
+.share-btn{background:#6f42c1;color:#fff;}
 
 .view-badge{
-    background:#e9ecef;
-    color:#333;
-    padding:6px 10px;
-    border-radius:6px;
-    font-size:12.5px;
-    font-weight:700;
-
-    display:inline-flex;
-    align-items:center;
-    gap:4px;
-
-    margin-left:auto;
+  background:#e9ecef;
+  color:#333;
+  padding:7px 10px;
+  border-radius:6px;
+  font-size:12px;
+  font-weight:700;
+  margin-left:auto;
 }
 
-/* =====================================================
-   ENTRY PANEL
-===================================================== */
+/* ================= ENTRY PANEL ================= */
 
 .entry-panel{
-    background:#fff;
-    border-radius:8px;
-    padding:10px;
-    margin-bottom:12px;
-    box-shadow:0 2px 8px #0002;
+  background:#fff;
+  border-radius:8px;
+  padding:10px;
+  margin-bottom:12px;
+  box-shadow:0 2px 8px #0002;
 }
 
 .entry-title{
-    font-size:15.5px;
-    font-weight:800;
-    margin-bottom:8px;
-    color:#0d6efd;
+  font-size:15px;
+  font-weight:800;
+  margin-bottom:8px;
+  color:#0d6efd;
 
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    flex-wrap:wrap;
-    gap:6px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:6px;
 }
 
 .entry-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
-    gap:6px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
+  gap:7px;
 }
 
 .entry-grid label{
-    font-size:12px;
-    font-weight:700;
-    margin-bottom:2px;
-    display:block;
+  display:block;
+  font-size:12px;
+  font-weight:700;
+  margin-bottom:3px;
 }
 
 .entry-grid input,
 .entry-grid select{
-    width:100%;
-    padding:6px 8px;
-    border:1px solid #ccc;
-    border-radius:5px;
-    font-family:inherit;
-    font-size:13.5px;
-    background:#fff;
+  width:100%;
+  padding:7px 8px;
+  border:1px solid #ccc;
+  border-radius:5px;
+  font-family:inherit;
+  font-size:13.5px;
+  background:#fff;
 }
 
 .subject-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(95px,1fr));
-    gap:5px;
-    margin-top:8px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(110px,1fr));
+  gap:6px;
+  margin-top:9px;
 }
 
 .subject-box{
-    border:1px solid #ddd;
-    border-radius:5px;
-    padding:4px;
-    background:#fafafa;
+  border:1px solid #ddd;
+  border-radius:6px;
+  padding:5px;
+  background:#fafafa;
 }
 
 .subject-box input.sub-name{
-    border:0;
-    border-bottom:1px dashed #888;
-    border-radius:0;
-    background:transparent;
-
-    font-weight:700;
-    font-size:11.5px;
-    text-align:center;
-
-    padding:2px 0;
-    margin-bottom:3px;
-
-    width:100%;
+  width:100%;
+  border:0;
+  border-bottom:1px dashed #888;
+  border-radius:0;
+  background:transparent;
+  font-weight:700;
+  font-size:11px;
+  text-align:center;
+  padding:3px 0;
+  margin-bottom:4px;
 }
 
 .subject-box input.sub-marks{
-    width:100%;
-    padding:5px;
-
-    border:1px solid #bbb;
-    border-radius:4px;
-
-    font-size:13.5px;
-    text-align:center;
-
-    background:#fff;
+  width:100%;
+  padding:6px;
+  border:1px solid #bbb;
+  border-radius:4px;
+  font-size:13px;
+  text-align:center;
 }
 
-.subject-full{
-    text-align:center;
-    font-size:9px;
-    color:#666;
-    margin-bottom:2px;
-}
-
-.status{
-    font-size:11.5px;
-    color:#198754;
-    font-weight:700;
-    margin-top:6px;
+.full-mark{
+  text-align:center;
+  font-size:10px;
+  color:#777;
+  margin-top:2px;
 }
 
 .form-actions{
-    display:flex;
-    gap:6px;
-    margin-top:8px;
+  display:flex;
+  gap:6px;
+  margin-top:9px;
 }
 
 .form-actions button{
-    flex:1;
-    padding:8px;
+  flex:1;
 }
 
-/* =====================================================
-   MOBILE PAPER SCROLLER
-===================================================== */
+.status{
+  font-size:11px;
+  color:#198754;
+  font-weight:700;
+  margin-top:6px;
+}
+
+/* ================= MOBILE SCROLL AREA ================= */
+
+/*
+  Important:
+  Paper is intentionally A4 width.
+  Mobile Chrome will allow horizontal + vertical scrolling.
+*/
 
 .paper-container{
-    width:100%;
+  width:100%;
+  max-width:100%;
+  overflow-x:auto;
+  overflow-y:visible;
 
-    /* Horizontal scrolling only here */
-    overflow-x:auto;
-    overflow-y:visible;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior-x:contain;
+  overscroll-behavior-y:auto;
 
-    -webkit-overflow-scrolling:touch;
+  scroll-behavior:smooth;
 
-    overscroll-behavior-x:contain;
-    overscroll-behavior-y:auto;
+  padding:4px 3px 25px;
 
-    scroll-behavior:smooth;
+  touch-action:pan-x pan-y;
+}
 
-    touch-action:pan-x pan-y;
+.paper-container::-webkit-scrollbar{
+  height:11px;
+}
 
-    padding-bottom:20px;
+.paper-container::-webkit-scrollbar-track{
+  background:#d9dee5;
+  border-radius:10px;
+}
 
-    scrollbar-width:thin;
-
-    /* Prevent Chrome from creating weird shrinking */
-    position:relative;
+.paper-container::-webkit-scrollbar-thumb{
+  background:#6c757d;
+  border-radius:10px;
 }
 
 .pages-wrap{
-    display:flex;
-    flex-direction:column;
-    gap:15px;
-    align-items:center;
-
-    min-width:max-content;
-
-    padding:2px;
+  display:flex;
+  flex-direction:column;
+  gap:15px;
+  align-items:center;
 }
 
-/* =====================================================
-   A4 PAPER
-===================================================== */
+/* ================= A4 PAPER ================= */
 
 .paper{
-    width:210mm;
-    height:297mm;
-    max-height:297mm;
+  flex:0 0 auto;
 
-    min-width:210mm;
-    min-height:297mm;
+  width:210mm;
+  min-width:210mm;
 
-    background:#fff;
+  height:297mm;
+  max-height:297mm;
 
-    padding:3mm 7.5mm 2.5mm;
+  background:#fff;
 
-    box-shadow:0 2px 10px #0002;
+  padding:3mm 7.5mm 2.5mm;
 
-    display:flex;
-    flex-direction:column;
+  box-shadow:0 2px 10px #0002;
 
-    box-sizing:border-box;
+  display:flex;
+  flex-direction:column;
 
-    overflow:hidden;
+  position:relative;
 
-    position:relative;
+  overflow:hidden;
 
-    page-break-after:always;
-    page-break-inside:avoid;
+  page-break-after:always;
+  page-break-inside:avoid;
 
-    break-after:page;
-    break-inside:avoid;
+  break-after:page;
+  break-inside:avoid;
 }
 
-/* =====================================================
-   HEADER
-===================================================== */
+/* ================= HEADER ================= */
 
 .header{
-    flex-shrink:0;
-    text-align:center;
-    margin-bottom:.8mm;
+  flex-shrink:0;
+  text-align:center;
+  margin-bottom:1mm;
 }
 
 .h1{
-    font-size:15.5px;
-    font-weight:700;
-    text-decoration:underline;
-
-    margin:0;
-    line-height:1.2;
+  font-size:15.5px;
+  font-weight:700;
+  text-decoration:underline;
+  margin:0;
+  line-height:1.2;
 }
 
 .h2{
-    font-size:14px;
-    font-weight:700;
-    text-decoration:underline;
-
-    margin-top:1px;
+  font-size:14px;
+  font-weight:700;
+  text-decoration:underline;
+  margin-top:1px;
 }
 
-/* =====================================================
-   INFO
-===================================================== */
+/* ================= INFO ================= */
 
 .info{
-    flex-shrink:0;
-
-    font-size:11.5px;
-    line-height:1.4;
-
-    margin-bottom:1mm;
+  flex-shrink:0;
+  font-size:11.5px;
+  line-height:1.4;
+  margin-bottom:1mm;
 }
 
 .info-row{
-    display:grid;
-
-    grid-template-columns:
-        29mm
-        1fr
-        19mm
-        1fr;
-
-    gap:2mm;
-
-    align-items:end;
+  display:grid;
+  grid-template-columns:29mm 1fr 19mm 1fr;
+  gap:2mm;
+  align-items:end;
 }
 
 .info-row.wide{
-    grid-template-columns:29mm 1fr;
+  grid-template-columns:29mm 1fr;
 }
 
 .info label{
-    font-weight:700;
-    white-space:nowrap;
+  font-weight:700;
+  white-space:nowrap;
 }
 
 .info input{
-    width:100%;
-
-    border:0;
-    border-bottom:1px dotted #555;
-
-    outline:0;
-
-    font-family:inherit;
-    font-size:11.5px;
-
-    height:4.8mm;
-    padding:0 1mm;
-
-    background:transparent;
+  width:100%;
+  border:0;
+  border-bottom:1px dotted #555;
+  outline:0;
+  font-family:inherit;
+  font-size:11.5px;
+  height:4.8mm;
+  padding:0 1mm;
+  background:transparent;
 }
 
-.info .marks{
-    font-weight:700;
-}
-
-/* =====================================================
-   TABLE
-===================================================== */
+/* ================= TABLE SCROLL ================= */
 
 .table-wrap{
-    flex-shrink:0;
-    display:block;
+  flex-shrink:0;
+  width:100%;
+  overflow:visible;
 }
 
 table{
-    width:100%;
-
-    border-collapse:collapse;
-
-    table-layout:fixed;
-
-    font-size:11px;
+  width:100%;
+  border-collapse:collapse;
+  table-layout:fixed;
+  font-size:10.5px;
 }
 
 th,
 td{
-    border:.3mm solid #222;
-
-    text-align:center;
-
-    padding:0;
+  border:0.3mm solid #222;
+  text-align:center;
+  padding:0;
 }
 
 thead th{
-    height:8mm;
-
-    font-weight:700;
-
-    vertical-align:middle;
-
-    line-height:1.1;
-
-    font-size:11px;
+  height:8mm;
+  font-weight:700;
+  vertical-align:middle;
+  line-height:1.1;
+  font-size:10.5px;
 }
 
 tbody tr{
-    height:7.2mm;
-    max-height:7.2mm;
+  height:7.1mm;
+  max-height:7.1mm;
 }
-
-/* Columns */
 
 th.col-sr,
 td.col-sr{
-    width:9mm;
+  width:9mm;
 }
 
 th.col-roll,
 td.col-roll{
-    width:11.5mm;
+  width:12mm;
 }
 
 th.col-name,
 td.col-name{
-    width:auto;
+  width:40mm;
 }
-
-/* Each subject */
 
 th.col-sub,
 td.col-sub{
-    width:13mm;
+  width:17mm;
 }
-
-/* Total */
 
 th.col-total,
 td.col-total{
-    width:12mm;
+  width:15mm;
 }
 
-/* Grade */
+th.col-percent,
+td.col-percent{
+  width:17mm;
+}
 
 th.col-grade,
 td.col-grade{
-    width:13mm;
+  width:15mm;
 }
 
 td input{
-    width:100%;
-    height:100%;
+  width:100%;
+  height:100%;
+  border:0;
+  outline:0;
+  background:transparent;
 
-    border:0;
-    outline:0;
+  text-align:center;
+  font-family:inherit;
+  font-size:10.8px;
+  padding:0;
 
-    background:transparent;
-
-    text-align:center;
-
-    font-family:inherit;
-    font-size:11.5px;
-
-    padding:0;
-
-    font-weight:500;
+  font-weight:500;
 }
 
 td.name input{
-    text-align:left;
-    padding-left:1.5mm;
-
-    font-size:11.5px;
+  text-align:left;
+  padding-left:1.5mm;
+  font-size:10.8px;
 }
 
-td.total{
-    font-weight:700;
-    font-size:11.5px;
-}
-
+td.total,
+td.percent,
 td.grade{
-    font-weight:800;
-    font-size:11.5px;
+  font-weight:700;
+  font-size:10.8px;
 }
 
-/* Note */
+/* ================= NOTE ================= */
 
 tfoot td.note-cell{
-    border:0 !important;
-
-    text-align:left;
-
-    font-size:10px;
-    font-weight:600;
-
-    padding-top:1mm;
-    padding-bottom:.5mm;
-
-    line-height:1.15;
+  border:0 !important;
+  text-align:left;
+  font-size:9.5px;
+  font-weight:600;
+  padding-top:1mm;
+  padding-bottom:.5mm;
+  line-height:1.15;
 }
 
-/* =====================================================
-   SIGNATURE
-===================================================== */
+/* ================= SIGNATURE ================= */
 
 .signatures{
-    margin-top:auto;
+  margin-top:auto;
 
-    display:grid;
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
 
-    grid-template-columns:
-        1fr
-        1fr
-        1fr;
+  gap:5mm;
+  margin-bottom:1.5mm;
 
-    gap:5mm;
+  font-size:10px;
+  font-weight:700;
+  text-align:center;
 
-    margin-bottom:1.5mm;
-
-    font-size:10.5px;
-    font-weight:700;
-
-    text-align:center;
-
-    page-break-inside:avoid;
-    break-inside:avoid;
+  page-break-inside:avoid;
+  break-inside:avoid;
 }
 
 .sig{
-    border-top:1px dashed #666;
-
-    padding-top:9mm;
-
-    line-height:1.25;
+  border-top:1px dashed #666;
+  padding-top:9mm;
+  line-height:1.25;
 }
 
-/* =====================================================
-   MODAL
-===================================================== */
+/* ================= SUBJECT ARRANGE MODAL ================= */
 
 .dialog-bg{
-    position:fixed;
-    inset:0;
+  position:fixed;
+  inset:0;
 
-    background:rgba(0,0,0,.5);
+  background:rgba(0,0,0,.55);
 
-    display:none;
+  display:none;
+  align-items:center;
+  justify-content:center;
 
-    align-items:center;
-    justify-content:center;
+  z-index:5000;
 
-    z-index:200;
+  padding:15px;
 }
 
 .dialog-box{
-    background:#fff;
+  background:#fff;
+  border-radius:10px;
 
-    border-radius:8px;
+  padding:16px;
 
-    padding:16px;
+  width:100%;
+  max-width:360px;
 
-    width:90%;
-    max-width:350px;
+  max-height:90vh;
+  overflow-y:auto;
 
-    box-shadow:0 4px 15px rgba(0,0,0,.3);
+  box-shadow:0 5px 25px rgba(0,0,0,.3);
 }
 
-/* =====================================================
-   FOLLOW POPUP
-===================================================== */
+.subject-sort-item{
+  display:flex;
+  align-items:center;
+  gap:5px;
+
+  padding:7px;
+
+  border:1px solid #ddd;
+  border-radius:6px;
+
+  margin-bottom:6px;
+
+  background:#fafafa;
+}
+
+.subject-sort-item span{
+  flex:1;
+  font-weight:700;
+  font-size:13px;
+}
+
+.sort-btn{
+  padding:5px 8px;
+  font-size:12px;
+}
+
+/* ================= FOLLOW POPUP ================= */
 
 .popup-bg{
-    position:fixed;
-    inset:0;
+  position:fixed;
+  inset:0;
 
-    background:rgba(0,0,0,.85);
+  background:rgba(0,0,0,.85);
+  backdrop-filter:blur(4px);
 
-    backdrop-filter:blur(4px);
+  display:none;
+  align-items:center;
+  justify-content:center;
 
-    display:none;
+  z-index:9999;
 
-    align-items:center;
-    justify-content:center;
-
-    z-index:9999;
-
-    padding:15px;
+  padding:15px;
 }
 
 .popup{
-    width:100%;
-    max-width:350px;
+  width:100%;
+  max-width:350px;
 
-    background:#fff;
+  background:#fff;
 
-    border-radius:14px;
+  border-radius:14px;
 
-    padding:24px 20px;
+  padding:24px 20px;
 
-    text-align:center;
+  text-align:center;
 
-    box-shadow:0 15px 40px rgba(0,0,0,.5);
+  box-shadow:0 15px 40px rgba(0,0,0,.5);
 }
 
 .popup h3{
-    margin:0 0 10px;
-    font-size:19px;
-    color:#111;
+  margin:0 0 10px;
+  font-size:19px;
 }
 
 .popup p{
-    margin:0 0 18px;
-
-    line-height:1.5;
-
-    font-size:13.5px;
-
-    color:#444;
+  margin:0 0 18px;
+  line-height:1.5;
+  font-size:13.5px;
+  color:#444;
 }
 
 .follow-btn{
-    display:flex;
+  width:100%;
 
-    align-items:center;
-    justify-content:center;
+  background:#25D366;
+  color:#fff;
 
-    gap:8px;
+  border:0;
+  border-radius:8px;
 
-    background:#25D366;
-    color:#fff;
+  padding:12px;
 
-    border:0;
+  font-weight:800;
+  font-size:15px;
 
-    border-radius:8px;
-
-    padding:12px;
-
-    font-weight:800;
-    font-size:15px;
-
-    width:100%;
-
-    cursor:pointer;
-
-    box-shadow:0 4px 10px rgba(37,211,102,.3);
+  cursor:pointer;
 }
 
 .small{
-    font-size:11px;
-    color:#888;
-    margin-top:12px;
+  font-size:11px;
+  color:#888;
+  margin-top:12px;
 }
 
-/* =====================================================
-   MOBILE
-===================================================== */
+/* ================= MOBILE ================= */
 
 @media(max-width:600px){
 
-    body{
-        padding:4px;
+  body{
+    padding:3px;
+  }
 
-        /* Browser vertical scrolling */
-        overflow-x:hidden;
-        overflow-y:auto;
+  .toolbar{
+    position:sticky;
+    top:0;
 
-        -webkit-overflow-scrolling:touch;
-    }
+    padding:5px;
 
-    .toolbar{
-        position:sticky;
-        top:0;
+    gap:5px;
+  }
 
-        padding:5px;
+  .toolbar button{
+    flex:1 1 calc(33.33% - 5px);
 
-        margin-bottom:6px;
-    }
+    min-height:38px;
 
-    .toolbar button{
-        flex:1 1 calc(33.33% - 5px);
+    padding:7px 4px;
 
-        padding:8px 4px;
+    font-size:11.5px;
+  }
 
-        font-size:12px;
+  .view-badge{
+    width:100%;
+    justify-content:center;
 
-        min-height:36px;
-    }
+    margin-left:0;
+    order:-1;
+  }
 
-    .view-badge{
-        width:100%;
+  .entry-panel{
+    padding:8px;
+  }
 
-        justify-content:center;
+  .entry-title{
+    font-size:14px;
+  }
 
-        margin-left:0;
+  .subject-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
 
-        order:-1;
+  /*
+    Keep paper at A4 size.
+    Do NOT scale it.
+    User can scroll left-right.
+  */
 
-        margin-bottom:4px;
-    }
+  .paper-container{
+    width:100vw;
+    margin-left:calc(-1 * 3px);
 
-    .entry-panel{
-        padding:8px;
-    }
+    padding-left:3px;
+    padding-right:3px;
 
-    .entry-title{
-        font-size:14px;
-    }
+    overflow-x:scroll;
+  }
 
-    .subject-grid{
-        grid-template-columns:
-            repeat(3,minmax(90px,1fr));
-    }
+  .pages-wrap{
+    align-items:flex-start;
+  }
 
-    /*
-       Important:
-       Paper keeps A4 width.
-       User can swipe left/right.
-    */
-
-    .paper-container{
-        width:100vw;
-        max-width:100vw;
-
-        margin-left:-4px;
-
-        padding-left:4px;
-        padding-right:12px;
-
-        overflow-x:auto;
-        overflow-y:visible;
-
-        touch-action:pan-x pan-y;
-
-        scroll-behavior:smooth;
-
-        -webkit-overflow-scrolling:touch;
-
-        overscroll-behavior-x:contain;
-    }
-
-    .pages-wrap{
-        width:max-content;
-        min-width:210mm;
-
-        align-items:flex-start;
-
-        gap:15px;
-    }
-
-    .paper{
-        flex:0 0 auto;
-
-        width:210mm;
-        min-width:210mm;
-
-        height:297mm;
-        min-height:297mm;
-    }
-
-    /*
-       Horizontal scrolling hint
-    */
-
-    .paper-container::after{
-        content:"← 左右滑動查看完整 अंक पत्रक →";
-
-        position:sticky;
-
-        left:0;
-
-        display:block;
-
-        width:max-content;
-
-        margin:4px auto 0;
-
-        font-size:10px;
-
-        color:#777;
-
-        pointer-events:none;
-    }
+  .paper{
+    width:210mm;
+    min-width:210mm;
+  }
 }
 
-/* =====================================================
-   PRINT
-===================================================== */
+/* ================= PRINT ================= */
 
 @media print{
 
-    html,
-    body{
-        background:#fff !important;
+  html,
+  body{
+    background:#fff !important;
+    padding:0 !important;
+    margin:0 !important;
+    overflow:visible !important;
+  }
 
-        padding:0 !important;
-        margin:0 !important;
+  .toolbar,
+  .entry-panel,
+  .dialog-bg,
+  .popup-bg{
+    display:none !important;
+  }
 
-        overflow:visible !important;
-    }
+  .paper-container{
+    overflow:visible !important;
+    padding:0 !important;
+    width:auto !important;
+  }
 
-    .toolbar,
-    .entry-panel,
-    .dialog-bg,
-    .popup-bg{
-        display:none !important;
-    }
+  .pages-wrap{
+    gap:0 !important;
+  }
 
-    .paper-container{
-        overflow:visible !important;
+  .paper{
+    margin:0 !important;
 
-        padding:0 !important;
+    width:210mm !important;
+    min-width:210mm !important;
 
-        width:auto !important;
-    }
+    height:297mm !important;
+    max-height:297mm !important;
 
-    .paper-container::after{
-        display:none !important;
-    }
+    box-shadow:none !important;
 
-    .pages-wrap{
-        gap:0 !important;
-    }
+    padding:3mm 7.5mm 2.5mm !important;
 
-    .paper{
-        margin:0 !important;
+    page-break-after:always !important;
+    page-break-inside:avoid !important;
 
-        width:210mm !important;
-        min-width:210mm !important;
+    break-after:page !important;
+    break-inside:avoid !important;
+  }
 
-        height:297mm !important;
-        max-height:297mm !important;
-
-        box-shadow:none !important;
-
-        padding:3mm 7.5mm 2.5mm !important;
-
-        page-break-after:always !important;
-        page-break-inside:avoid !important;
-
-        break-after:page !important;
-        break-inside:avoid !important;
-    }
-
-    input{
-        color:#000 !important;
-    }
+  input{
+    color:#000 !important;
+  }
 }
-
 </style>
 </head>
 
@@ -897,366 +729,309 @@ tfoot td.note-cell{
 
 <div class="app">
 
-<!-- =====================================================
-     TOOLBAR
-===================================================== -->
+<!-- ================= TOOLBAR ================= -->
 
 <div class="toolbar">
 
-    <button class="primary" onclick="addStudent()">
-        ＋ विद्यार्थी
-    </button>
+<button class="primary" onclick="addStudent()">
+＋ विद्यार्थी
+</button>
 
-    <button class="danger" onclick="removeStudent()">
-        — अंतिम विद्यार्थी
-    </button>
+<button class="danger" onclick="removeStudent()">
+− विद्यार्थी
+</button>
 
-    <button class="warning" onclick="downloadPDF()">
-        📥 Download PDF
-    </button>
+<button class="warning" onclick="downloadPDF()">
+📥 PDF
+</button>
 
-    <button class="gray" onclick="window.print()">
-        🖨 Print
-    </button>
+<button class="gray" onclick="window.print()">
+🖨 Print
+</button>
 
-    <button class="share-btn" onclick="shareApp()">
-        🔗 Share
-    </button>
+<button class="share-btn" onclick="shareApp()">
+🔗 Share
+</button>
 
-    <button class="green" onclick="saveData()">
-        💾 Save
-    </button>
+<button class="green" onclick="saveData()">
+💾 Save
+</button>
 
-    <button class="gray" onclick="loadData()">
-        ↻ Reload
-    </button>
+<button class="gray" onclick="loadData()">
+↻ Reload
+</button>
 
-    <button class="danger" onclick="clearData()">
-        Clear
-    </button>
+<button class="danger" onclick="clearData()">
+Clear
+</button>
 
-    <div class="view-badge">
-        👁️ Views:
-        <span id="viewCount">...</span>
-    </div>
+<div class="view-badge">
+👁️ Views:
+<span id="viewCount">...</span>
+</div>
 
 </div>
 
 
-<!-- =====================================================
-     ENTRY PANEL
-===================================================== -->
+<!-- ================= ENTRY PANEL ================= -->
 
 <div class="entry-panel">
 
-    <div class="entry-title">
+<div class="entry-title">
 
-        <span>
-            📝 Marks Folio Entry Panel
-        </span>
+<span>
+📝 Marks Folio Entry Panel
+</span>
 
-        <div style="display:flex;gap:4px;flex-wrap:wrap">
+<div style="display:flex;gap:4px;flex-wrap:wrap">
 
-            <button
-                class="primary"
-                style="padding:3px 7px;font-size:11.5px"
-                onclick="addSubject()">
+<button
+class="primary"
+style="padding:4px 7px;font-size:11px"
+onclick="addSubject()">
 
-                ＋ विषय जोड़ें
+＋ विषय
 
-            </button>
+</button>
 
-            <button
-                class="warning"
-                style="padding:3px 7px;font-size:11.5px"
-                onclick="openReorderModal()">
+<button
+class="warning"
+style="padding:4px 7px;font-size:11px"
+onclick="openArrangeModal()">
 
-                ↕ विषय क्रम
+↕ विषय व्यवस्थित करें
 
-            </button>
+</button>
 
-            <button
-                class="danger"
-                style="padding:3px 7px;font-size:11.5px"
-                onclick="openSubjectModal()">
+<button
+class="danger"
+style="padding:4px 7px;font-size:11px"
+onclick="openSubjectModal()">
 
-                — विषय हटाएं
+− विषय हटाएं
 
-            </button>
+</button>
 
-        </div>
-
-    </div>
-
-
-    <div class="entry-grid">
-
-        <div>
-
-            <label>
-                विद्यार्थी चुनें
-            </label>
-
-            <select
-                id="studentSelect"
-                onchange="selectStudent()">
-            </select>
-
-        </div>
-
-
-        <div>
-
-            <label>
-                वर्ग क्रमांक
-            </label>
-
-            <input
-                id="formRoll"
-                inputmode="numeric"
-                oninput="formChanged()">
-
-        </div>
-
-
-        <div style="grid-column:1 / -1">
-
-            <label>
-                विद्यार्थी का नाम
-            </label>
-
-            <input
-                id="formName"
-                oninput="formChanged()">
-
-        </div>
-
-    </div>
-
-
-    <div
-        class="subject-grid"
-        id="subjectGrid">
-    </div>
-
-
-    <div class="form-actions">
-
-        <button
-            class="primary"
-            onclick="nextStudent()">
-
-            Next Student →
-
-        </button>
-
-        <button
-            class="green"
-            onclick="saveData()">
-
-            💾 Save
-
-        </button>
-
-    </div>
-
-
-    <div
-        class="status"
-        id="saveStatus">
-
-        ✓ Auto-save चालू है
-
-    </div>
+</div>
 
 </div>
 
 
-<!-- =====================================================
-     PAPER
-===================================================== -->
+<div class="entry-grid">
+
+<div>
+
+<label>विद्यार्थी चुनें</label>
+
+<select
+id="studentSelect"
+onchange="selectStudent()">
+</select>
+
+</div>
+
+
+<div>
+
+<label>वर्ग क्रमांक</label>
+
+<input
+id="formRoll"
+inputmode="numeric"
+oninput="formChanged()">
+
+</div>
+
+
+<div style="grid-column:1/-1">
+
+<label>विद्यार्थी का नाम</label>
+
+<input
+id="formName"
+oninput="formChanged()">
+
+</div>
+
+</div>
+
+
+<div
+class="subject-grid"
+id="subjectGrid">
+</div>
+
+
+<div class="form-actions">
+
+<button
+class="primary"
+onclick="nextStudent()">
+
+Next Student →
+
+</button>
+
+<button
+class="green"
+onclick="saveData()">
+
+💾 Save
+
+</button>
+
+</div>
+
+
+<div
+class="status"
+id="saveStatus">
+
+✓ Auto-save चालू है
+
+</div>
+
+</div>
+
+
+<!-- ================= PAPER ================= -->
 
 <div class="paper-container">
 
-    <div
-        class="pages-wrap"
-        id="pagesWrap">
-    </div>
-
+<div
+class="pages-wrap"
+id="pagesWrap">
 </div>
 
 </div>
 
+</div>
 
-<!-- =====================================================
-     DELETE SUBJECT MODAL
-===================================================== -->
+
+<!-- ================= SUBJECT DELETE MODAL ================= -->
 
 <div
-    class="dialog-bg"
-    id="subModal">
+class="dialog-bg"
+id="subModal">
 
-    <div class="dialog-box">
+<div class="dialog-box">
 
-        <h4
-            style="margin:0 0 10px;font-size:15px">
+<h4>
+कौन सा विषय हटाना चाहते हैं?
+</h4>
 
-            कौन सा विषय हटाना चाहते हैं?
+<select
+id="delSubSelect"
+style="
+width:100%;
+padding:8px;
+border:1px solid #ccc;
+border-radius:5px;
+font-size:13px;
+margin-bottom:12px;">
+</select>
 
-        </h4>
+<div style="display:flex;gap:6px;justify-content:flex-end">
 
-        <select
-            id="delSubSelect"
-            style="
-                width:100%;
-                padding:8px;
-                border:1px solid #ccc;
-                border-radius:5px;
-                font-size:13px;
-                margin-bottom:12px;
-            ">
-        </select>
+<button
+class="gray"
+onclick="closeSubjectModal()">
 
-        <div
-            style="
-                display:flex;
-                gap:6px;
-                justify-content:flex-end;
-            ">
+रद्द करें
 
-            <button
-                class="gray"
-                onclick="closeSubjectModal()">
+</button>
 
-                रद्द करें
+<button
+class="danger"
+onclick="confirmRemoveSubject()">
 
-            </button>
+हटाएं
 
-            <button
-                class="danger"
-                onclick="confirmRemoveSubject()">
-
-                हटाएं
-
-            </button>
-
-        </div>
-
-    </div>
+</button>
 
 </div>
 
-
-<!-- =====================================================
-     SUBJECT REORDER MODAL
-===================================================== -->
-
-<div
-    class="dialog-bg"
-    id="reorderModal">
-
-    <div class="dialog-box">
-
-        <h4
-            style="margin:0 0 8px;font-size:15px">
-
-            📚 विषयों का क्रम व्यवस्थित करें
-
-        </h4>
-
-        <p
-            style="
-                font-size:11px;
-                color:#666;
-                margin:0 0 10px;
-            ">
-
-            ऊपर/नीचे करके विषयों का क्रम बदलें।
-
-        </p>
-
-        <div
-            id="reorderList"
-            style="
-                max-height:300px;
-                overflow-y:auto;
-                margin-bottom:12px;
-            ">
-        </div>
-
-        <div
-            style="
-                display:flex;
-                gap:6px;
-                justify-content:flex-end;
-            ">
-
-            <button
-                class="gray"
-                onclick="closeReorderModal()">
-
-                रद्द करें
-
-            </button>
-
-            <button
-                class="green"
-                onclick="saveSubjectOrder()">
-
-                ✓ लागू करें
-
-            </button>
-
-        </div>
-
-    </div>
-
+</div>
 </div>
 
 
-<!-- =====================================================
-     WHATSAPP FOLLOW POPUP
-===================================================== -->
+<!-- ================= SUBJECT ARRANGE MODAL ================= -->
 
 <div
-    class="popup-bg"
-    id="followPopup">
+class="dialog-bg"
+id="arrangeModal">
 
-    <div class="popup">
+<div class="dialog-box">
 
-        <h3>
-            📢 DEO Office से जुड़ें
-        </h3>
+<h4 style="margin-top:0">
+↕ विषयों का क्रम व्यवस्थित करें
+</h4>
 
-        <p>
-            बिहार शिक्षा विभाग से जुड़े सभी जरूरी प्रपत्र,
-            अंक पत्रक और ताजा अपडेट पाने के लिए हमारे
-            WhatsApp चैनल को Follow करें।
-        </p>
+<p style="
+font-size:11px;
+color:#666;
+margin-top:-4px;">
 
-        <button
-            class="follow-btn"
-            onclick="handleMandatoryFollow()">
+ऊपर / नीचे बटन से विषय का क्रम बदलें।
 
-            <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="currentColor">
+</p>
 
-                <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+<div id="sortSubjects"></div>
 
-            </svg>
+<div style="
+display:flex;
+justify-content:flex-end;
+margin-top:10px;">
 
-            Follow DEO Office
+<button
+class="green"
+onclick="closeArrangeModal()">
 
-        </button>
+✓ Done
 
-        <div class="small">
-            आगे बढ़ने के लिए Follow करना अनिवार्य है।
-        </div>
+</button>
 
-    </div>
+</div>
+
+</div>
+</div>
+
+
+<!-- ================= FOLLOW POPUP ================= -->
+
+<div
+class="popup-bg"
+id="followPopup">
+
+<div class="popup">
+
+<h3>
+📢 DEO Office से जुड़ें
+</h3>
+
+<p>
+
+बिहार शिक्षा विभाग से जुड़े सभी जरूरी प्रपत्र,
+अंक पत्रक और ताजा अपडेट पाने के लिए हमारे
+WhatsApp चैनल को Follow करें।
+
+</p>
+
+<button
+class="follow-btn"
+onclick="handleMandatoryFollow()">
+
+💬 Follow DEO Office
+
+</button>
+
+<div class="small">
+
+आगे बढ़ने के लिए Follow करना अनिवार्य है।
+
+</div>
+
+</div>
 
 </div>
 
@@ -1264,56 +1039,54 @@ tfoot td.note-cell{
 <script>
 
 /* ==========================================================
-   CONFIGURATION
+   WHATSAPP CHANNEL
 ========================================================== */
 
-/* आपका WhatsApp Channel Link */
 const CHANNEL_LINK =
 "https://whatsapp.com/channel/0029VaIhMoY35fM4YK5xrz3P";
 
-/* हर page पर 30 विद्यार्थी */
+
+/* ==========================================================
+   SETTINGS
+========================================================== */
+
 const ROWS_PER_PAGE = 30;
 
-/* प्रत्येक विषय का पूर्णांक */
 const SUBJECT_FULL_MARKS = 50;
 
 
 /* ==========================================================
-   DEFAULT SUBJECTS
+   DEFAULT SUBJECT ORDER
 ========================================================== */
 
 let subjects = [
 
-    "हिन्दी/राष्ट्र भाषा",
+  "हिन्दी/राष्ट्र भाषा",
 
-    "गणित",
+  "अंग्रेजी",
 
-    "अंग्रेजी",
+  "गणित",
 
-    "संस्कृत/उर्दू",
+  "विज्ञान",
 
-    "सा० विज्ञान",
+  "सा० विज्ञान",
 
-    "विज्ञान"
+  "संस्कृत/उर्दू"
 
 ];
 
-
-/* ==========================================================
-   DATA
-========================================================== */
 
 let students = [];
 
 let details = {
 
-    center:"",
-    district:"",
-    school:"",
-    udise:"",
-    block:"",
-    className:"",
-    maxMarks:"50"
+  center:"",
+  district:"",
+  school:"",
+  udise:"",
+  block:"",
+  className:"",
+  maxMarks:"50"
 
 };
 
@@ -1321,17 +1094,16 @@ let selectedStudent = 0;
 
 
 /* ==========================================================
-   ESCAPE HTML
+   ESCAPE
 ========================================================== */
 
 function esc(s){
 
-    return String(s || "")
-
-        .replace(/&/g,"&amp;")
-        .replace(/"/g,"&quot;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;");
+  return String(s || "")
+    .replace(/&/g,"&amp;")
+    .replace(/"/g,"&quot;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;");
 
 }
 
@@ -1340,10 +1112,1863 @@ function esc(s){
    GRADE CALCULATION
 ========================================================== */
 
-/*
-   Subject full marks = 50
+function getGrade(percent){
 
-   0       = A0
-   1-20    = E
-   21-30   = D
-   31
+  percent = Number(percent) || 0;
+
+  if(percent >= 91) return "A+";
+  if(percent >= 81) return "A";
+  if(percent >= 71) return "B+";
+  if(percent >= 61) return "B";
+  if(percent >= 51) return "C";
+  if(percent >= 41) return "D";
+  if(percent >= 33) return "E";
+
+  return "F";
+
+}
+
+
+/* ==========================================================
+   MARK CALCULATION
+========================================================== */
+
+function calculateStudent(st){
+
+  let total = 0;
+
+  const maxTotal =
+    subjects.length * SUBJECT_FULL_MARKS;
+
+  subjects.forEach((sub,index)=>{
+
+    let value =
+      String(st.marks[index] || "")
+      .trim()
+      .toUpperCase();
+
+    /*
+      ABSENT / AB = 0
+    */
+
+    if(
+      value === "ABSENT" ||
+      value === "AB"
+    ){
+
+      value = "0";
+
+    }
+
+    const n = Number(value);
+
+    if(!isNaN(n) && value !== ""){
+
+      total += n;
+
+    }
+
+  });
+
+
+  const percent =
+    maxTotal > 0
+      ? (total / maxTotal) * 100
+      : 0;
+
+
+  return {
+
+    total:total,
+
+    percent:percent,
+
+    grade:getGrade(percent)
+
+  };
+
+}
+
+
+/* ==========================================================
+   SUBJECT CONTROLS
+========================================================== */
+
+function renderSubjectControls(){
+
+  const grid =
+    document.getElementById("subjectGrid");
+
+
+  grid.innerHTML = subjects.map((sub,i)=>`
+
+    <div class="subject-box">
+
+      <input
+        class="sub-name"
+        value="${esc(sub)}"
+        title="विषय का नाम बदलें"
+        oninput="updateSubjectName(${i},this.value)">
+
+      <input
+        class="sub-marks"
+        id="m${i}"
+        inputmode="decimal"
+        placeholder="0 / AB"
+        oninput="formChanged()">
+
+      <div class="full-mark">
+        पूर्णांक: ${SUBJECT_FULL_MARKS}
+      </div>
+
+    </div>
+
+  `).join("");
+
+}
+
+
+/* ==========================================================
+   SUBJECT NAME
+========================================================== */
+
+function updateSubjectName(idx,val){
+
+  subjects[idx] =
+    val.trim() || `विषय ${idx+1}`;
+
+  renderPages();
+
+  autoSave();
+
+}
+
+
+/* ==========================================================
+   ADD SUBJECT
+========================================================== */
+
+function addSubject(){
+
+  const name =
+    prompt(
+      "नए विषय का नाम दर्ज करें:",
+      `विषय ${subjects.length+1}`
+    );
+
+
+  if(
+    name &&
+    name.trim()
+  ){
+
+    subjects.push(name.trim());
+
+
+    students.forEach(st=>{
+
+      while(
+        st.marks.length <
+        subjects.length
+      ){
+
+        st.marks.push("");
+
+      }
+
+    });
+
+
+    renderSubjectControls();
+
+    renderPages();
+
+    selectStudent();
+
+    autoSave();
+
+  }
+
+}
+
+
+/* ==========================================================
+   DELETE SUBJECT
+========================================================== */
+
+function openSubjectModal(){
+
+  if(subjects.length <= 1){
+
+    alert(
+      "कम से कम एक विषय होना अनिवार्य है!"
+    );
+
+    return;
+
+  }
+
+
+  const sel =
+    document.getElementById("delSubSelect");
+
+
+  sel.innerHTML =
+    subjects.map((s,i)=>`
+
+      <option value="${i}">
+        ${i+1}. ${esc(s)}
+      </option>
+
+    `).join("");
+
+
+  document.getElementById(
+    "subModal"
+  ).style.display = "flex";
+
+}
+
+
+function closeSubjectModal(){
+
+  document.getElementById(
+    "subModal"
+  ).style.display = "none";
+
+}
+
+
+function confirmRemoveSubject(){
+
+  const sel =
+    document.getElementById(
+      "delSubSelect"
+    );
+
+  const idx =
+    Number(sel.value);
+
+
+  if(
+    !Number.isInteger(idx) ||
+    idx < 0 ||
+    idx >= subjects.length
+  ){
+
+    return;
+
+  }
+
+
+  const subjectName =
+    subjects[idx];
+
+
+  if(
+    !confirm(
+      `"${subjectName}" विषय हटाना चाहते हैं?`
+    )
+  ){
+
+    return;
+
+  }
+
+
+  subjects.splice(idx,1);
+
+
+  students.forEach(st=>{
+
+    if(
+      Array.isArray(st.marks)
+    ){
+
+      st.marks.splice(idx,1);
+
+    }
+
+  });
+
+
+  closeSubjectModal();
+
+  renderSubjectControls();
+
+  renderPages();
+
+  selectStudent();
+
+  autoSave();
+
+}
+
+
+/* ==========================================================
+   ARRANGE SUBJECTS
+========================================================== */
+
+function openArrangeModal(){
+
+  renderArrangeList();
+
+  document.getElementById(
+    "arrangeModal"
+  ).style.display = "flex";
+
+}
+
+
+function closeArrangeModal(){
+
+  document.getElementById(
+    "arrangeModal"
+  ).style.display = "none";
+
+  renderSubjectControls();
+
+  renderPages();
+
+  selectStudent();
+
+  autoSave();
+
+}
+
+
+function renderArrangeList(){
+
+  const box =
+    document.getElementById(
+      "sortSubjects"
+    );
+
+
+  box.innerHTML =
+    subjects.map((sub,i)=>`
+
+      <div class="subject-sort-item">
+
+        <span>
+          ${i+1}. ${esc(sub)}
+        </span>
+
+        <button
+          class="gray sort-btn"
+          onclick="moveSubject(${i},-1)">
+          ↑
+        </button>
+
+        <button
+          class="primary sort-btn"
+          onclick="moveSubject(${i},1)">
+          ↓
+        </button>
+
+      </div>
+
+    `).join("");
+
+}
+
+
+function moveSubject(index,direction){
+
+  const newIndex =
+    index + direction;
+
+
+  if(
+    newIndex < 0 ||
+    newIndex >= subjects.length
+  ){
+
+    return;
+
+  }
+
+
+  /*
+    Subjects and all student marks
+    are moved together.
+  */
+
+  [
+    subjects[index],
+    subjects[newIndex]
+  ] = [
+    subjects[newIndex],
+    subjects[index]
+  ];
+
+
+  students.forEach(st=>{
+
+    [
+      st.marks[index],
+      st.marks[newIndex]
+    ] = [
+      st.marks[newIndex],
+      st.marks[index]
+    ];
+
+  });
+
+
+  renderArrangeList();
+
+  renderSubjectControls();
+
+  renderPages();
+
+  selectStudent();
+
+  autoSave();
+
+}
+
+
+/* ==========================================================
+   HEADER DATA
+========================================================== */
+
+function syncHeaderInputs(key,value){
+
+  details[key] = value;
+
+
+  document
+    .querySelectorAll(
+      `.info-input-${key}`
+    )
+    .forEach(el=>{
+
+      if(el.value !== value){
+
+        el.value = value;
+
+      }
+
+    });
+
+
+  autoSave();
+
+}
+
+
+/* ==========================================================
+   RENDER PAGES
+========================================================== */
+
+function renderPages(){
+
+  const wrap =
+    document.getElementById(
+      "pagesWrap"
+    );
+
+
+  wrap.innerHTML = "";
+
+
+  const totalPages =
+    Math.max(
+      1,
+      Math.ceil(
+        students.length /
+        ROWS_PER_PAGE
+      )
+    );
+
+
+  const totalCols =
+    7 + subjects.length;
+
+
+  for(
+    let p=0;
+    p<totalPages;
+    p++
+  ){
+
+    const pageDiv =
+      document.createElement(
+        "section"
+      );
+
+
+    pageDiv.className =
+      "paper";
+
+
+    const startIdx =
+      p * ROWS_PER_PAGE;
+
+
+    let rowsHtml = "";
+
+
+    for(
+      let r=0;
+      r<ROWS_PER_PAGE;
+      r++
+    ){
+
+      const i =
+        startIdx + r;
+
+
+      if(i < students.length){
+
+        const st =
+          students[i];
+
+
+        let subCells = "";
+
+
+        subjects.forEach(
+          (sub,s)=>{
+
+            let m =
+              String(
+                st.marks[s] || ""
+              );
+
+
+            subCells += `
+
+              <td class="col-sub">
+
+                <input
+                  value="${esc(m)}"
+                  placeholder=""
+                  oninput="
+                    cellChanged(
+                      ${i},
+                      ${s},
+                      this.value
+                    )
+                  ">
+
+              </td>
+
+            `;
+
+          }
+        );
+
+
+        const result =
+          calculateStudent(st);
+
+
+        rowsHtml += `
+
+          <tr>
+
+            <td class="col-sr">
+              ${i+1}
+            </td>
+
+
+            <td class="col-roll">
+
+              <input
+                value="${esc(st.roll)}"
+                oninput="
+                  cellInfoChanged(
+                    ${i},
+                    'roll',
+                    this.value
+                  )
+                ">
+
+            </td>
+
+
+            <td class="col-name name">
+
+              <input
+                value="${esc(st.name)}"
+                oninput="
+                  cellInfoChanged(
+                    ${i},
+                    'name',
+                    this.value
+                  )
+                ">
+
+            </td>
+
+
+            ${subCells}
+
+
+            <td class="col-total total">
+              ${result.total}
+            </td>
+
+
+            <td class="col-percent percent">
+              ${result.percent.toFixed(1)}%
+            </td>
+
+
+            <td class="col-grade grade">
+              ${result.grade}
+            </td>
+
+          </tr>
+
+        `;
+
+
+      }else{
+
+        const blankSub =
+          subjects
+          .map(()=>
+            `<td class="col-sub"></td>`
+          )
+          .join("");
+
+
+        rowsHtml += `
+
+          <tr>
+
+            <td class="col-sr">
+              ${i+1}
+            </td>
+
+            <td class="col-roll"></td>
+
+            <td class="col-name name"></td>
+
+            ${blankSub}
+
+            <td class="col-total total"></td>
+
+            <td class="col-percent percent"></td>
+
+            <td class="col-grade grade"></td>
+
+          </tr>
+
+        `;
+
+      }
+
+    }
+
+
+    pageDiv.innerHTML = `
+
+      <div class="header">
+
+        <div class="h1">
+          राज्य शिक्षा शोध एवं प्रशिक्षण परिषद, बिहार, पटना
+        </div>
+
+        <div class="h2">
+
+          अंक पत्रक (Marks Folio)
+
+          ${
+            totalPages > 1
+            ? `[पृष्ठ ${p+1}/${totalPages}]`
+            : ""
+          }
+
+        </div>
+
+      </div>
+
+
+      <div class="info">
+
+        <div class="info-row">
+
+          <label>
+            मूल्यांकन केंद्र का नाम :-
+          </label>
+
+          <input
+            class="info-input-center"
+            value="${esc(details.center)}"
+            oninput="
+              syncHeaderInputs(
+                'center',
+                this.value
+              )
+            ">
+
+
+          <label>
+            जिला :-
+          </label>
+
+          <input
+            class="info-input-district"
+            value="${esc(details.district)}"
+            oninput="
+              syncHeaderInputs(
+                'district',
+                this.value
+              )
+            ">
+
+        </div>
+
+
+        <div class="info-row wide">
+
+          <label>
+            विद्यालय का नाम :-
+          </label>
+
+          <input
+            class="info-input-school"
+            value="${esc(details.school)}"
+            oninput="
+              syncHeaderInputs(
+                'school',
+                this.value
+              )
+            ">
+
+        </div>
+
+
+        <div class="info-row">
+
+          <label>
+            यू-डायस :-
+          </label>
+
+          <input
+            class="info-input-udise"
+            value="${esc(details.udise)}"
+            oninput="
+              syncHeaderInputs(
+                'udise',
+                this.value
+              )
+            ">
+
+
+          <label>
+            प्रखंड का नाम :-
+          </label>
+
+          <input
+            class="info-input-block"
+            value="${esc(details.block)}"
+            oninput="
+              syncHeaderInputs(
+                'block',
+                this.value
+              )
+            ">
+
+        </div>
+
+
+        <div class="info-row">
+
+          <label>
+            वर्ग/उप वर्ग :-
+          </label>
+
+          <input
+            class="info-input-className"
+            value="${esc(details.className)}"
+            oninput="
+              syncHeaderInputs(
+                'className',
+                this.value
+              )
+            ">
+
+
+          <label>
+            प्रत्येक विषय पूर्णांक :-
+          </label>
+
+          <input
+            class="info-input-maxMarks marks"
+            value="50"
+            readonly>
+
+        </div>
+
+      </div>
+
+
+      <div class="table-wrap">
+
+        <table>
+
+          <thead>
+
+            <tr>
+
+              <th class="col-sr">
+                क्र०सं०
+              </th>
+
+              <th class="col-roll">
+                वर्ग<br>क्रमांक
+              </th>
+
+              <th class="col-name">
+                विद्यार्थियों का नाम
+              </th>
+
+
+              ${subjects.map(
+                s=>`
+                  <th class="col-sub">
+                    ${esc(s)}
+                    <br>
+                    <small>(50)</small>
+                  </th>
+                `
+              ).join("")}
+
+
+              <th class="col-total">
+                कुल
+              </th>
+
+              <th class="col-percent">
+                प्रतिशत
+              </th>
+
+              <th class="col-grade">
+                Grade
+              </th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody>
+            ${rowsHtml}
+          </tbody>
+
+
+          <tfoot>
+
+            <tr>
+
+              <td
+                colspan="${totalCols}"
+                class="note-cell">
+
+                ※ प्रत्येक विषय का पूर्णांक 50 है।
+                ABSENT / AB को 0 अंक माना जाएगा।
+                Grade कुल प्रतिशत के आधार पर निकाला गया है।
+
+              </td>
+
+            </tr>
+
+          </tfoot>
+
+        </table>
+
+      </div>
+
+
+      <div class="signatures">
+
+        <div class="sig">
+
+          परीक्षक का नाम एवं हस्ताक्षर<br>
+          तिथि सहित
+
+        </div>
+
+
+        <div class="sig">
+
+          प्रधान परीक्षक का नाम एवं<br>
+          हस्ताक्षर तिथि सहित
+
+        </div>
+
+
+        <div class="sig">
+
+          मूल्यांकन निदेशक का<br>
+          हस्ताक्षर एवं मुहर
+
+        </div>
+
+      </div>
+
+    `;
+
+
+    wrap.appendChild(pageDiv);
+
+  }
+
+}
+
+
+/* ==========================================================
+   CELL CHANGE
+========================================================== */
+
+function cellChanged(
+  stIdx,
+  subIdx,
+  val
+){
+
+  if(
+    !students[stIdx]
+  ){
+
+    return;
+
+  }
+
+
+  if(
+    !Array.isArray(
+      students[stIdx].marks
+    )
+  ){
+
+    students[stIdx].marks = [];
+
+  }
+
+
+  students[stIdx].marks[subIdx] =
+    val;
+
+
+  renderPages();
+
+  autoSave();
+
+}
+
+
+/* ==========================================================
+   STUDENT INFO CHANGE
+========================================================== */
+
+function cellInfoChanged(
+  stIdx,
+  key,
+  val
+){
+
+  if(!students[stIdx]){
+    return;
+  }
+
+
+  students[stIdx][key] =
+    val;
+
+
+  if(
+    stIdx === selectedStudent
+  ){
+
+    if(key === "name"){
+
+      document.getElementById(
+        "formName"
+      ).value = val;
+
+    }
+
+
+    if(key === "roll"){
+
+      document.getElementById(
+        "formRoll"
+      ).value = val;
+
+    }
+
+  }
+
+
+  syncFormOptions();
+
+  autoSave();
+
+}
+
+
+/* ==========================================================
+   FORM OPTIONS
+========================================================== */
+
+function syncFormOptions(){
+
+  const previous =
+    selectedStudent;
+
+
+  const select =
+    document.getElementById(
+      "studentSelect"
+    );
+
+
+  select.innerHTML = "";
+
+
+  students.forEach(
+    (st,i)=>{
+
+      const opt =
+        document.createElement(
+          "option"
+        );
+
+
+      opt.value = i;
+
+
+      opt.textContent =
+        `${i+1}. ${
+          st.name ||
+          "नया विद्यार्थी"
+        }`;
+
+
+      select.appendChild(opt);
+
+    }
+  );
+
+
+  selectedStudent =
+    Math.min(
+      previous,
+      Math.max(
+        0,
+        students.length-1
+      )
+    );
+
+
+  select.value =
+    selectedStudent;
+
+}
+
+
+/* ==========================================================
+   SELECT STUDENT
+========================================================== */
+
+function selectStudent(){
+
+  const value =
+    document.getElementById(
+      "studentSelect"
+    ).value;
+
+
+  selectedStudent =
+    Number(value) || 0;
+
+
+  const st =
+    students[selectedStudent];
+
+
+  if(!st){
+    return;
+  }
+
+
+  document.getElementById(
+    "formRoll"
+  ).value =
+    st.roll || "";
+
+
+  document.getElementById(
+    "formName"
+  ).value =
+    st.name || "";
+
+
+  if(
+    !Array.isArray(st.marks)
+  ){
+
+    st.marks = [];
+
+  }
+
+
+  subjects.forEach(
+    (sub,i)=>{
+
+      const input =
+        document.getElementById(
+          "m"+i
+        );
+
+
+      if(input){
+
+        input.value =
+          st.marks[i] || "";
+
+      }
+
+    }
+  );
+
+}
+
+
+/* ==========================================================
+   FORM CHANGE
+========================================================== */
+
+function formChanged(){
+
+  const st =
+    students[selectedStudent];
+
+
+  if(!st){
+    return;
+  }
+
+
+  st.roll =
+    document.getElementById(
+      "formRoll"
+    ).value;
+
+
+  st.name =
+    document.getElementById(
+      "formName"
+    ).value;
+
+
+  if(
+    !Array.isArray(st.marks)
+  ){
+
+    st.marks = [];
+
+  }
+
+
+  subjects.forEach(
+    (sub,i)=>{
+
+      const input =
+        document.getElementById(
+          "m"+i
+        );
+
+
+      st.marks[i] =
+        input
+        ? input.value
+        : "";
+
+    }
+  );
+
+
+  renderPages();
+
+  syncFormOptions();
+
+  document.getElementById(
+    "studentSelect"
+  ).value =
+    selectedStudent;
+
+
+  autoSave();
+
+}
+
+
+/* ==========================================================
+   ADD STUDENT
+========================================================== */
+
+function addStudent(){
+
+  students.push({
+
+    roll:"",
+    name:"",
+
+    marks:
+      new Array(
+        subjects.length
+      ).fill("")
+
+  });
+
+
+  renderPages();
+
+  syncFormOptions();
+
+
+  selectedStudent =
+    students.length-1;
+
+
+  document.getElementById(
+    "studentSelect"
+  ).value =
+    selectedStudent;
+
+
+  selectStudent();
+
+  autoSave();
+
+}
+
+
+/* ==========================================================
+   REMOVE LAST STUDENT
+========================================================== */
+
+function removeStudent(){
+
+  if(students.length <= 1){
+
+    alert(
+      "कम से कम एक विद्यार्थी रखना आवश्यक है।"
+    );
+
+    return;
+
+  }
+
+
+  const last =
+    students[students.length-1];
+
+
+  const hasData =
+    (
+      last.name ||
+      last.roll ||
+      last.marks.some(
+        x=>String(x || "").trim() !== ""
+      )
+    );
+
+
+  if(
+    hasData &&
+    !confirm(
+      "अंतिम विद्यार्थी का डेटा हटाना चाहते हैं?"
+    )
+  ){
+
+    return;
+
+  }
+
+
+  students.pop();
+
+
+  selectedStudent =
+    Math.min(
+      selectedStudent,
+      students.length-1
+    );
+
+
+  renderPages();
+
+  syncFormOptions();
+
+  selectStudent();
+
+  autoSave();
+
+}
+
+
+/* ==========================================================
+   NEXT STUDENT
+========================================================== */
+
+function nextStudent(){
+
+  if(
+    selectedStudent <
+    students.length-1
+  ){
+
+    selectedStudent++;
+
+  }else{
+
+    addStudent();
+
+    window.scrollTo({
+      top:0,
+      behavior:"smooth"
+    });
+
+    return;
+
+  }
+
+
+  document.getElementById(
+    "studentSelect"
+  ).value =
+    selectedStudent;
+
+
+  selectStudent();
+
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+
+}
+
+
+/* ==========================================================
+   SAVE
+========================================================== */
+
+function autoSave(){
+
+  localStorage.setItem(
+
+    "deoMarksFolio_Final_v10",
+
+    JSON.stringify({
+
+      subjects,
+      details,
+      students
+
+    })
+
+  );
+
+
+  const status =
+    document.getElementById(
+      "saveStatus"
+    );
+
+
+  if(status){
+
+    status.textContent =
+      "✓ Auto-saved • " +
+      new Date()
+        .toLocaleTimeString(
+          "hi-IN"
+        );
+
+  }
+
+}
+
+
+function saveData(){
+
+  autoSave();
+
+  alert(
+    "डेटा सुरक्षित कर दिया गया है।"
+  );
+
+}
+
+
+/* ==========================================================
+   LOAD
+========================================================== */
+
+function loadData(){
+
+  const raw =
+    localStorage.getItem(
+      "deoMarksFolio_Final_v10"
+    );
+
+
+  if(raw){
+
+    try{
+
+      const d =
+        JSON.parse(raw);
+
+
+      if(
+        Array.isArray(d.subjects) &&
+        d.subjects.length
+      ){
+
+        subjects =
+          d.subjects;
+
+      }
+
+
+      if(d.details){
+
+        details =
+          Object.assign(
+            details,
+            d.details
+          );
+
+      }
+
+
+      if(
+        Array.isArray(d.students)
+      ){
+
+        students =
+          d.students;
+
+      }
+
+    }catch(e){
+
+      console.log(e);
+
+    }
+
+  }
+
+
+  /*
+    Make sure every student
+    has correct marks array.
+  */
+
+  students.forEach(st=>{
+
+    if(
+      !Array.isArray(st.marks)
+    ){
+
+      st.marks = [];
+
+    }
+
+
+    while(
+      st.marks.length <
+      subjects.length
+    ){
+
+      st.marks.push("");
+
+    }
+
+  });
+
+
+  if(
+    students.length === 0
+  ){
+
+    for(
+      let i=0;
+      i<30;
+      i++
+    ){
+
+      students.push({
+
+        roll:"",
+        name:"",
+
+        marks:
+          new Array(
+            subjects.length
+          ).fill("")
+
+      });
+
+    }
+
+  }
+
+
+  renderSubjectControls();
+
+  renderPages();
+
+  syncFormOptions();
+
+  selectedStudent = 0;
+
+  selectStudent();
+
+}
+
+
+/* ==========================================================
+   CLEAR
+========================================================== */
+
+function clearData(){
+
+  if(
+    confirm(
+      "क्या आप पूरा डेटा रीसेट करना चाहते हैं?"
+    )
+  ){
+
+    localStorage.removeItem(
+      "deoMarksFolio_Final_v10"
+    );
+
+    location.reload();
+
+  }
+
+}
+
+
+/* ==========================================================
+   PDF
+========================================================== */
+
+function downloadPDF(){
+
+  const element =
+    document.getElementById(
+      "pagesWrap"
+    );
+
+
+  const opt = {
+
+    margin:0,
+
+    filename:
+      `Marks_Folio_${
+        details.className ||
+        "Report"
+      }.pdf`,
+
+    image:{
+      type:"jpeg",
+      quality:.98
+    },
+
+    html2canvas:{
+
+      scale:2,
+
+      useCORS:true,
+
+      scrollX:0,
+
+      scrollY:0
+
+    },
+
+    jsPDF:{
+
+      unit:"mm",
+
+      format:"a4",
+
+      orientation:"portrait"
+
+    },
+
+    pagebreak:{
+
+      mode:[
+        "css",
+        "legacy"
+      ]
+
+    }
+
+  };
+
+
+  html2pdf()
+    .set(opt)
+    .from(element)
+    .save();
+
+}
+
+
+/* ==========================================================
+   SHARE
+========================================================== */
+
+function shareApp(){
+
+  const shareData = {
+
+    title:
+      "DEO Office - Marks Folio Maker",
+
+    text:
+      "बिहार विद्यालय अंक पत्रक ऑनलाइन भरें और A4 PDF डाउनलोड करें:",
+
+    url:
+      window.location.href
+
+  };
+
+
+  if(
+    navigator.share
+  ){
+
+    navigator.share(
+      shareData
+    ).catch(()=>{});
+
+  }else{
+
+    if(
+      navigator.clipboard
+    ){
+
+      navigator.clipboard
+        .writeText(
+          window.location.href
+        )
+        .then(()=>{
+
+          alert(
+            "📋 लिंक कॉपी हो गया है।"
+          );
+
+        })
+        .catch(()=>{
+
+          whatsappShare();
+
+        });
+
+    }else{
+
+      whatsappShare();
+
+    }
+
+  }
+
+}
+
+
+function whatsappShare(){
+
+  window.open(
+
+    `https://api.whatsapp.com/send?text=${
+      encodeURIComponent(
+        "DEO Office Marks Folio: " +
+        window.location.href
+      )
+    }`,
+
+    "_blank"
+
+  );
+
+}
+
+
+/* ==========================================================
+   MANDATORY FOLLOW
+========================================================== */
+
+function checkMandatoryPopup(){
+
+  if(
+    localStorage.getItem(
+      "deoFollowCompleted_v10"
+    ) !== "1"
+  ){
+
+    document.getElementById(
+      "followPopup"
+    ).style.display =
+      "flex";
+
+  }
+
+}
+
+
+function handleMandatoryFollow(){
+
+  window.open(
+    CHANNEL_LINK,
+    "_blank"
+  );
+
+
+  localStorage.setItem(
+    "deoFollowCompleted_v10",
+    "1"
+  );
+
+
+  document.getElementById(
+    "followPopup"
+  ).style.display =
+    "none";
+
+}
+
+
+/* ==========================================================
+   VIEW COUNTER
+========================================================== */
+
+function updateViews(){
+
+  fetch(
+    "https://api.counterapi.dev/v1/deo_marks_folio_bihar/views/up"
+  )
+
+  .then(
+    res=>res.json()
+  )
+
+  .then(
+    data=>{
+
+      if(
+        data &&
+        data.count
+      ){
+
+        document.getElementById(
+          "viewCount"
+        ).textContent =
+          Number(
+            data.count
+          ).toLocaleString(
+            "hi-IN"
+          );
+
+      }
+
+    }
+  )
+
+  .catch(()=>{
+
+    let localViews =
+      Number(
+        localStorage.getItem(
+          "deo_local_views"
+        ) || 1054
+      ) + 1;
+
+
+    localStorage.setItem(
+      "deo_local_views",
+      localViews
+    );
+
+
+    document.getElementById(
+      "viewCount"
+    ).textContent =
+      localViews.toLocaleString(
+        "hi-IN"
+      );
+
+  });
+
+}
+
+
+/* ==========================================================
+   INITIALIZE
+========================================================== */
+
+loadData();
+
+checkMandatoryPopup();
+
+updateViews();
+
+
+/*
+  Improve mobile horizontal scrolling:
+  keep scroll position stable and allow
+  touch scrolling in Chrome.
+*/
+
+const paperContainer =
+  document.querySelector(
+    ".paper-container"
+  );
+
+
+if(paperContainer){
+
+  paperContainer.addEventListener(
+    "wheel",
+    function(e){
+
+      /*
+        Shift + wheel gives
+        horizontal scrolling.
+      */
+
+      if(e.shiftKey){
+
+        e.preventDefault();
+
+        paperContainer.scrollLeft +=
+          e.deltaY;
+
+      }
+
+    },
+    {passive:false}
+  );
+
+}
+
+</script>
+
+</body>
+</html>
