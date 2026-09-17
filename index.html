@@ -94,12 +94,13 @@ button {
   align-items: center;
 }
 
+/* Strict A4 page constraint */
 .paper {
   width: 210mm;
-  height: 296.5mm;
-  max-height: 296.5mm;
+  height: 297mm;
+  max-height: 297mm;
   background: #fff;
-  padding: 5mm 8mm 4mm;
+  padding: 4.5mm 8mm 4.5mm;
   box-shadow: 0 2px 10px #0002;
   display: flex;
   flex-direction: column;
@@ -112,15 +113,15 @@ button {
   break-inside: avoid;
 }
 
-.header { flex-shrink: 0; text-align: center; margin-bottom: 1mm; }
-.h1 { font-size: 14.5px; font-weight: 700; text-decoration: underline; margin: 0; line-height: 1.2; }
-.h2 { font-size: 13px; font-weight: 700; text-decoration: underline; margin-top: 1px; }
+.header { flex-shrink: 0; text-align: center; margin-bottom: 1.5mm; }
+.h1 { font-size: 15px; font-weight: 700; text-decoration: underline; margin: 0; line-height: 1.25; }
+.h2 { font-size: 13.5px; font-weight: 700; text-decoration: underline; margin-top: 1px; }
 
-.info { flex-shrink: 0; font-size: 10.5px; line-height: 1.45; margin-bottom: 1mm; }
+.info { flex-shrink: 0; font-size: 11px; line-height: 1.55; margin-bottom: 1.5mm; }
 .info-row { display: grid; grid-template-columns: 28mm 1fr 18mm 1fr; gap: 2mm; align-items: end; }
 .info-row.wide { grid-template-columns: 28mm 1fr; }
 .info label { font-weight: 700; white-space: nowrap; }
-.info input { width: 100%; border: 0; border-bottom: 1px dotted #555; outline: 0; font-family: inherit; font-size: 10.5px; height: 4.5mm; padding: 0 1mm; background: transparent; }
+.info input { width: 100%; border: 0; border-bottom: 1px dotted #555; outline: 0; font-family: inherit; font-size: 11px; height: 5mm; padding: 0 1mm; background: transparent; }
 .info .marks { font-weight: 700; }
 
 .table-wrap {
@@ -134,11 +135,11 @@ table {
   width: 100%;
   border-collapse: collapse;
   table-layout: fixed;
-  font-size: 9.5px;
+  font-size: 10px;
 }
 th, td { border: 0.3mm solid #222; text-align: center; padding: 0; }
-thead th { height: 7mm; font-weight: 700; vertical-align: middle; line-height: 1.05; }
-tbody tr { height: 5.8mm; max-height: 5.8mm; }
+thead th { height: 7.5mm; font-weight: 700; vertical-align: middle; line-height: 1.1; }
+tbody tr { height: 6.6mm; max-height: 6.6mm; }
 
 th.col-sr, td.col-sr { width: 9mm; }
 th.col-roll, td.col-roll { width: 11mm; }
@@ -146,24 +147,24 @@ th.col-name, td.col-name { width: auto; }
 th.col-sub, td.col-sub { width: 13mm; }
 th.col-total, td.col-total { width: 12mm; }
 
-td input { width: 100%; height: 100%; border: 0; outline: 0; background: transparent; text-align: center; font-family: inherit; font-size: 10px; padding: 0; }
+td input { width: 100%; height: 100%; border: 0; outline: 0; background: transparent; text-align: center; font-family: inherit; font-size: 10.5px; padding: 0; }
 td.name input { text-align: left; padding-left: 1.5mm; }
 td.total { font-weight: 700; }
 
-.note { flex-shrink: 0; font-size: 9px; margin-top: 1.5mm; font-weight: 600; line-height: 1.1; }
+.note { flex-shrink: 0; font-size: 9.5px; margin-top: 1.5mm; font-weight: 600; line-height: 1.1; }
 .signatures {
   flex-shrink: 0;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 5mm;
-  margin-top: 3.5mm;
-  font-size: 9.5px;
+  margin-top: 4mm;
+  font-size: 10px;
   font-weight: 700;
   text-align: center;
   page-break-inside: avoid;
   break-inside: avoid;
 }
-.sig { border-top: 1px dashed #888; padding-top: 1.5mm; line-height: 1.25; }
+.sig { border-top: 1px dashed #888; padding-top: 2mm; line-height: 1.3; }
 
 /* Dialog Box */
 .dialog-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 200; }
@@ -222,10 +223,10 @@ td.total { font-weight: 700; }
   .paper {
     margin: 0 !important;
     width: 210mm !important;
-    height: 296.5mm !important;
-    max-height: 296.5mm !important;
+    height: 297mm !important;
+    max-height: 297mm !important;
     box-shadow: none !important;
-    padding: 5mm 8mm 4mm !important;
+    padding: 4.5mm 8mm 4.5mm !important;
     page-break-after: always !important;
     page-break-inside: avoid !important;
     break-after: page !important;
@@ -284,7 +285,6 @@ td.total { font-weight: 700; }
   </div>
 </div>
 
-<!-- Modal for selecting which subject to remove -->
 <div class="dialog-bg" id="subModal">
   <div class="dialog-box">
     <h4 style="margin:0 0 10px 0;font-size:15px">कौन सा विषय हटाना चाहते हैं?</h4>
@@ -296,7 +296,6 @@ td.total { font-weight: 700; }
   </div>
 </div>
 
-<!-- Mandatory First-Time WhatsApp Follow Popup -->
 <div class="popup-bg" id="followPopup">
   <div class="popup">
     <h3>📢 DEO Office से जुड़ें</h3>
@@ -310,7 +309,7 @@ td.total { font-weight: 700; }
 </div>
 
 <script>
-const ROWS_PER_PAGE = 25;
+const ROWS_PER_PAGE = 30;
 let subjects = ["हिंदी", "गणित", "अंग्रेजी", "संस्कृत", "सा० विज्ञान", "विज्ञान"];
 let students = [];
 let details = { center: "", district: "", school: "", udise: "", block: "", className: "", maxMarks: "50" };
@@ -318,7 +317,6 @@ let selectedStudent = 0;
 
 function esc(s){ return String(s || "").replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
 
-// Mandatory follow handler
 function checkMandatoryPopup(){
   if(localStorage.getItem("deoFollowCompleted") !== "1"){
     document.getElementById("followPopup").style.display = "flex";
@@ -596,7 +594,7 @@ function nextStudent(){
 }
 
 function autoSave(){
-  localStorage.setItem("deoMarksFolio_Dynamic", JSON.stringify({ subjects, details, students }));
+  localStorage.setItem("deoMarksFolio_Dynamic30", JSON.stringify({ subjects, details, students }));
   document.getElementById("saveStatus").textContent = "✓ Auto-saved • " + new Date().toLocaleTimeString("hi-IN");
 }
 
@@ -606,7 +604,7 @@ function saveData(){
 }
 
 function loadData(){
-  const raw = localStorage.getItem("deoMarksFolio_Dynamic");
+  const raw = localStorage.getItem("deoMarksFolio_Dynamic30");
   if(raw){
     try {
       const d = JSON.parse(raw);
@@ -618,7 +616,7 @@ function loadData(){
   renderSubjectControls();
   
   if(students.length === 0){
-    for(let i = 0; i < 15; i++){
+    for(let i = 0; i < 30; i++){
       students.push({ roll: "", name: "", marks: new Array(subjects.length).fill("") });
     }
   }
@@ -630,7 +628,7 @@ function loadData(){
 
 function clearData(){
   if(confirm("क्या आप पूरा डेटा रीसेट करना चाहते हैं?")){
-    localStorage.removeItem("deoMarksFolio_Dynamic");
+    localStorage.removeItem("deoMarksFolio_Dynamic30");
     location.reload();
   }
 }
