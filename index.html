@@ -365,7 +365,6 @@ function updateViews(){
       }
     })
     .catch(() => {
-      // Local fallback counter if offline/blocked
       let localViews = Number(localStorage.getItem("deo_local_views") || 1054) + 1;
       localStorage.setItem("deo_local_views", localViews);
       document.getElementById("viewCount").textContent = localViews.toLocaleString('hi-IN');
@@ -391,14 +390,14 @@ function shareApp(){
 }
 
 function checkMandatoryPopup(){
-  if(localStorage.getItem("deoFollowCompleted") !== "1"){
+  if(localStorage.getItem("deoFollowCompleted_v2") !== "1"){
     document.getElementById("followPopup").style.display = "flex";
   }
 }
 
 function handleMandatoryFollow(){
-  window.open("https://whatsapp.com/channel/0029VaVz8W38kyyTFnPsIA0O", "_blank");
-  localStorage.setItem("deoFollowCompleted", "1");
+  window.open("https://whatsapp.com/channel/0029VaIhMoY35fM4YK5xrz3P", "_blank");
+  localStorage.setItem("deoFollowCompleted_v2", "1");
   document.getElementById("followPopup").style.display = "none";
 }
 
