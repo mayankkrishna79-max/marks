@@ -94,7 +94,6 @@ button {
   align-items: center;
 }
 
-/* Strict A4 page constraint */
 .paper {
   width: 210mm;
   height: 296.5mm;
@@ -166,13 +165,58 @@ td.total { font-weight: 700; }
 }
 .sig { border-top: 1px dashed #888; padding-top: 1.5mm; line-height: 1.25; }
 
+/* Dialog Box */
+.dialog-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 200; }
+.dialog-box { background: #fff; border-radius: 8px; padding: 16px; width: 90%; max-width: 320px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+
+/* Mandatory Follow Popup */
+.popup-bg { 
+  position: fixed; 
+  inset: 0; 
+  background: rgba(0, 0, 0, 0.85); 
+  backdrop-filter: blur(4px); 
+  display: none; 
+  align-items: center; 
+  justify-content: center; 
+  z-index: 9999; 
+  padding: 15px; 
+}
+.popup { 
+  width: 100%; 
+  max-width: 350px; 
+  background: white; 
+  border-radius: 14px; 
+  padding: 24px 20px; 
+  text-align: center; 
+  box-shadow: 0 15px 40px rgba(0,0,0,0.5); 
+}
+.popup h3 { margin: 0 0 10px; font-size: 19px; color: #111; }
+.popup p { margin: 0 0 18px; line-height: 1.5; font-size: 13.5px; color: #444; }
+.follow-btn { 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  gap: 8px; 
+  background: #25D366; 
+  color: white; 
+  border: 0; 
+  border-radius: 8px; 
+  padding: 12px; 
+  font-weight: 800; 
+  font-size: 15px; 
+  width: 100%; 
+  cursor: pointer; 
+  box-shadow: 0 4px 10px rgba(37,211,102,0.3); 
+}
+.small { font-size: 11px; color: #888; margin-top: 12px; }
+
 @media print {
   html, body {
     background: #fff !important;
     padding: 0 !important;
     margin: 0 !important;
   }
-  .toolbar, .entry-panel { display: none !important; }
+  .toolbar, .entry-panel, .dialog-bg, .popup-bg { display: none !important; }
   .paper-container { overflow: visible !important; padding: 0 !important; }
   .pages-wrap { gap: 0 !important; }
   .paper {
@@ -195,7 +239,7 @@ td.total { font-weight: 700; }
 <div class="app">
   <div class="toolbar">
     <button class="primary" onclick="addStudent()">＋ विद्यार्थी</button>
-    <button class="danger" onclick="removeStudent()">— विद्यार्थी हटाएं</button>
+    <button class="danger" onclick="removeStudent()">— अंतिम विद्यार्थी हटाएं</button>
     <button class="warning" onclick="downloadPDF()">📥 Download A4 PDF</button>
     <button class="gray" onclick="window.print()">🖨 Print</button>
     <button class="green" onclick="saveData()">💾 Save</button>
@@ -207,8 +251,8 @@ td.total { font-weight: 700; }
     <div class="entry-title">
       <span>📝 Marks Folio Entry Panel</span>
       <div style="display:flex;gap:4px">
-        <button class="primary" style="padding:3px 7px;font-size:11px" onclick="addSubject()">＋ विषय</button>
-        <button class="danger" style="padding:3px 7px;font-size:11px" onclick="removeSubject()">— विषय</button>
+        <button class="primary" style="padding:3px 7px;font-size:11px" onclick="addSubject()">＋ विषय जोड़ें</button>
+        <button class="danger" style="padding:3px 7px;font-size:11px" onclick="openSubjectModal()">— विषय हटाएं</button>
       </div>
     </div>
     <div class="entry-grid">
@@ -240,8 +284,32 @@ td.total { font-weight: 700; }
   </div>
 </div>
 
+<!-- Modal for selecting which subject to remove -->
+<div class="dialog-bg" id="subModal">
+  <div class="dialog-box">
+    <h4 style="margin:0 0 10px 0;font-size:15px">कौन सा विषय हटाना चाहते हैं?</h4>
+    <select id="delSubSelect" style="width:100%;padding:8px;border:1px solid #ccc;border-radius:5px;font-size:13px;margin-bottom:12px"></select>
+    <div style="display:flex;gap:6px;justify-content:flex-end">
+      <button class="gray" onclick="closeSubjectModal()">रद्द करें</button>
+      <button class="danger" onclick="confirmRemoveSubject()">हटाएं</button>
+    </div>
+  </div>
+</div>
+
+<!-- Mandatory First-Time WhatsApp Follow Popup -->
+<div class="popup-bg" id="followPopup">
+  <div class="popup">
+    <h3>📢 DEO Office से जुड़ें</h3>
+    <p>बिहार शिक्षा विभाग से जुड़े सभी जरूरी प्रपत्र, अंक पत्रक और ताजा अपडेट पाने के लिए हमारे WhatsApp चैनल को Follow करें।</p>
+    <button class="follow-btn" onclick="handleMandatoryFollow()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+      Follow DEO Office
+    </button>
+    <div class="small">आगे बढ़ने के लिए Follow करना अनिवार्य है।</div>
+  </div>
+</div>
+
 <script>
-// 25 rows fit exactly on A4 without pushing signatures to next page
 const ROWS_PER_PAGE = 25;
 let subjects = ["हिंदी", "गणित", "अंग्रेजी", "संस्कृत", "सा० विज्ञान", "विज्ञान"];
 let students = [];
@@ -249,6 +317,19 @@ let details = { center: "", district: "", school: "", udise: "", block: "", clas
 let selectedStudent = 0;
 
 function esc(s){ return String(s || "").replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+
+// Mandatory follow handler
+function checkMandatoryPopup(){
+  if(localStorage.getItem("deoFollowCompleted") !== "1"){
+    document.getElementById("followPopup").style.display = "flex";
+  }
+}
+
+function handleMandatoryFollow(){
+  window.open("https://whatsapp.com/channel/0029VaVz8W38kyyTFnPsIA0O", "_blank");
+  localStorage.setItem("deoFollowCompleted", "1");
+  document.getElementById("followPopup").style.display = "none";
+}
 
 function renderSubjectControls(){
   const grid = document.getElementById("subjectGrid");
@@ -268,8 +349,8 @@ function updateSubjectName(idx, val){
 
 function addSubject(){
   const name = prompt("नए विषय का नाम दर्ज करें:", `विषय ${subjects.length + 1}`);
-  if(name){
-    subjects.push(name);
+  if(name && name.trim()){
+    subjects.push(name.trim());
     students.forEach(s => {
       while(s.marks.length < subjects.length) s.marks.push("");
     });
@@ -280,14 +361,29 @@ function addSubject(){
   }
 }
 
-function removeSubject(){
+function openSubjectModal(){
   if(subjects.length <= 1){
     alert("कम से कम एक विषय होना अनिवार्य है!");
     return;
   }
-  if(confirm(`क्या आप '${subjects[subjects.length-1]}' विषय हटाना चाहते हैं?`)){
-    subjects.pop();
-    students.forEach(s => s.marks.pop());
+  const sel = document.getElementById("delSubSelect");
+  sel.innerHTML = subjects.map((s, i) => `<option value="${i}">${i+1}. ${esc(s)}</option>`).join("");
+  document.getElementById("subModal").style.display = "flex";
+}
+
+function closeSubjectModal(){
+  document.getElementById("subModal").style.display = "none";
+}
+
+function confirmRemoveSubject(){
+  const sel = document.getElementById("delSubSelect");
+  const idx = Number(sel.value);
+  if(!isNaN(idx) && idx >= 0 && idx < subjects.length){
+    subjects.splice(idx, 1);
+    students.forEach(s => {
+      s.marks.splice(idx, 1);
+    });
+    closeSubjectModal();
     renderSubjectControls();
     renderPages();
     selectStudent();
@@ -314,32 +410,45 @@ function renderPages(){
     pageDiv.className = "paper";
     
     const startIdx = p * ROWS_PER_PAGE;
-    const endIdx = Math.min(startIdx + ROWS_PER_PAGE, students.length);
-    
     let rowsHtml = "";
-    for(let i = startIdx; i < endIdx; i++){
-      const st = students[i];
-      let subCells = "";
-      let total = 0, any = false;
-      
-      for(let s = 0; s < subjects.length; s++){
-        const m = st.marks[s] || "";
-        if(m.trim()){
-          any = true;
-          if(m.toUpperCase() !== "ABSENT" && !isNaN(Number(m))) total += Number(m);
+
+    for(let r = 0; r < ROWS_PER_PAGE; r++){
+      const i = startIdx + r;
+      if(i < students.length){
+        const st = students[i];
+        let subCells = "";
+        let total = 0, any = false;
+        
+        for(let s = 0; s < subjects.length; s++){
+          const m = st.marks[s] || "";
+          if(m.trim()){
+            any = true;
+            if(m.toUpperCase() !== "ABSENT" && !isNaN(Number(m))) total += Number(m);
+          }
+          subCells += `<td class="col-sub"><input value="${esc(m)}" oninput="cellChanged(${i}, ${s}, this.value)"></td>`;
         }
-        subCells += `<td class="col-sub"><input value="${esc(m)}" oninput="cellChanged(${i}, ${s}, this.value)"></td>`;
+        
+        rowsHtml += `
+          <tr>
+            <td class="col-sr">${i + 1}</td>
+            <td class="col-roll"><input value="${esc(st.roll)}" oninput="cellInfoChanged(${i}, 'roll', this.value)"></td>
+            <td class="col-name name"><input value="${esc(st.name)}" oninput="cellInfoChanged(${i}, 'name', this.value)"></td>
+            ${subCells}
+            <td class="col-total total">${any ? total : "0"}</td>
+          </tr>
+        `;
+      } else {
+        const blankSub = subjects.map(() => `<td class="col-sub"></td>`).join("");
+        rowsHtml += `
+          <tr>
+            <td class="col-sr">${i + 1}</td>
+            <td class="col-roll"></td>
+            <td class="col-name name"></td>
+            ${blankSub}
+            <td class="col-total total"></td>
+          </tr>
+        `;
       }
-      
-      rowsHtml += `
-        <tr>
-          <td class="col-sr">${i + 1}</td>
-          <td class="col-roll"><input value="${esc(st.roll)}" oninput="cellInfoChanged(${i}, 'roll', this.value)"></td>
-          <td class="col-name name"><input value="${esc(st.name)}" oninput="cellInfoChanged(${i}, 'name', this.value)"></td>
-          ${subCells}
-          <td class="col-total total">${any ? total : "0"}</td>
-        </tr>
-      `;
     }
 
     pageDiv.innerHTML = `
@@ -487,7 +596,7 @@ function nextStudent(){
 }
 
 function autoSave(){
-  localStorage.setItem("deoMarksFolio_Fit", JSON.stringify({ subjects, details, students }));
+  localStorage.setItem("deoMarksFolio_Dynamic", JSON.stringify({ subjects, details, students }));
   document.getElementById("saveStatus").textContent = "✓ Auto-saved • " + new Date().toLocaleTimeString("hi-IN");
 }
 
@@ -497,7 +606,7 @@ function saveData(){
 }
 
 function loadData(){
-  const raw = localStorage.getItem("deoMarksFolio_Fit");
+  const raw = localStorage.getItem("deoMarksFolio_Dynamic");
   if(raw){
     try {
       const d = JSON.parse(raw);
@@ -507,9 +616,11 @@ function loadData(){
     } catch(e){}
   }
   renderSubjectControls();
-  // Default 25 students (fits perfectly on 1 A4 page)
-  while(students.length < 25){
-    students.push({ roll: "", name: "", marks: new Array(subjects.length).fill("") });
+  
+  if(students.length === 0){
+    for(let i = 0; i < 15; i++){
+      students.push({ roll: "", name: "", marks: new Array(subjects.length).fill("") });
+    }
   }
   renderPages();
   syncFormOptions();
@@ -519,7 +630,7 @@ function loadData(){
 
 function clearData(){
   if(confirm("क्या आप पूरा डेटा रीसेट करना चाहते हैं?")){
-    localStorage.removeItem("deoMarksFolio_Fit");
+    localStorage.removeItem("deoMarksFolio_Dynamic");
     location.reload();
   }
 }
@@ -538,6 +649,7 @@ function downloadPDF(){
 }
 
 loadData();
+checkMandatoryPopup();
 </script>
 </body>
 </html>
