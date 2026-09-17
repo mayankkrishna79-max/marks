@@ -4,16 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#0d6efd">
-
 <title>DEO Office - Marks Folio</title>
 
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22%200%22%20100%22><text y=%22.9em%22 font-size=%2290%22>📋</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%200%20100%20100%22><text y=%22.9em%22 font-size=%2290%22>📋</text></svg>">
 
-<!-- PDF -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
-<!-- Excel Import -->
-<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
 <style>
 @page {
@@ -27,18 +23,15 @@
 
 html {
   scroll-behavior: smooth;
-}
-
-html, body {
-  margin: 0;
-  padding: 0;
-  background: #eef1f5;
-  font-family: "Nirmala UI", "Mangal", "Arial Unicode MS", Arial, sans-serif;
-  color: #111;
+  -webkit-overflow-scrolling: touch;
 }
 
 body {
+  margin: 0;
   padding: 8px;
+  background: #eef1f5;
+  font-family: "Nirmala UI", "Mangal", "Arial Unicode MS", Arial, sans-serif;
+  color: #111;
   overflow-x: hidden;
 }
 
@@ -108,19 +101,9 @@ button {
   color: #fff;
 }
 
-.excel-btn {
-  background: #198754;
-  color: #fff;
-}
-
-.sort-btn {
+.info-btn {
   background: #0dcaf0;
   color: #000;
-}
-
-.tutorial-btn {
-  background: #212529;
-  color: #fff;
 }
 
 .view-badge {
@@ -219,6 +202,14 @@ button {
   background: #fff;
 }
 
+.full-marks {
+  display: block;
+  text-align: center;
+  font-size: 10px;
+  color: #555;
+  margin-top: 2px;
+}
+
 .status {
   font-size: 11.5px;
   color: #198754;
@@ -237,33 +228,33 @@ button {
   padding: 8px;
 }
 
-/* ================= MOBILE SCROLL ================= */
+/* ================= MOBILE NAVIGATION ================= */
+
+.mobile-help {
+  background: #fff3cd;
+  border: 1px solid #ffe69c;
+  border-radius: 7px;
+  padding: 7px 9px;
+  margin-bottom: 8px;
+  font-size: 11.5px;
+  font-weight: 700;
+  text-align: center;
+}
+
+/*
+  Horizontal scrolling is deliberately kept on the outer
+  container. This works much better on Android Chrome.
+*/
 
 .paper-container {
   width: 100%;
-  max-width: 100%;
   overflow-x: auto;
   overflow-y: visible;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-x: contain;
-  overscroll-behavior-y: auto;
   touch-action: pan-x pan-y;
   padding: 5px 3px 20px;
   scroll-behavior: smooth;
-}
-
-.paper-container::-webkit-scrollbar {
-  height: 9px;
-}
-
-.paper-container::-webkit-scrollbar-track {
-  background: #ddd;
-  border-radius: 10px;
-}
-
-.paper-container::-webkit-scrollbar-thumb {
-  background: #777;
-  border-radius: 10px;
 }
 
 .pages-wrap {
@@ -271,7 +262,8 @@ button {
   flex-direction: column;
   gap: 15px;
   align-items: center;
-  min-width: max-content;
+  width: max-content;
+  min-width: 100%;
 }
 
 /* ================= A4 PAPER ================= */
@@ -281,25 +273,16 @@ button {
   height: 297mm;
   max-height: 297mm;
   min-width: 210mm;
-
   background: #fff;
-
   padding: 3mm 7.5mm 2.5mm;
-
   box-shadow: 0 2px 10px #0002;
-
   display: flex;
   flex-direction: column;
-
   box-sizing: border-box;
-
   overflow: hidden;
-
   position: relative;
-
   page-break-after: always;
   page-break-inside: avoid;
-
   break-after: page;
   break-inside: avoid;
 }
@@ -427,6 +410,11 @@ td.col-total {
   width: 12mm;
 }
 
+th.col-grade,
+td.col-grade {
+  width: 24mm;
+}
+
 td input {
   width: 100%;
   height: 100%;
@@ -451,6 +439,12 @@ td.total {
   font-size: 11.5px;
 }
 
+td.grade {
+  font-weight: 700;
+  font-size: 9.5px;
+  line-height: 1.05;
+}
+
 /* ================= NOTE ================= */
 
 tfoot td.note-cell {
@@ -463,7 +457,7 @@ tfoot td.note-cell {
   line-height: 1.15;
 }
 
-/* ================= SIGNATURE ================= */
+/* ================= SIGNATURES ================= */
 
 .signatures {
   margin-top: auto;
@@ -501,7 +495,7 @@ tfoot td.note-cell {
   border-radius: 8px;
   padding: 16px;
   width: 90%;
-  max-width: 320px;
+  max-width: 350px;
   box-shadow: 0 4px 15px rgba(0,0,0,0.3);
 }
 
@@ -571,6 +565,7 @@ tfoot td.note-cell {
 
   body {
     padding: 4px;
+    overflow-x: hidden;
   }
 
   .toolbar {
@@ -582,9 +577,9 @@ tfoot td.note-cell {
 
   .toolbar button {
     flex: 1 1 calc(33.33% - 5px);
-    min-height: 38px;
     padding: 8px 4px;
     font-size: 11.5px;
+    min-height: 36px;
   }
 
   .view-badge {
@@ -592,7 +587,7 @@ tfoot td.note-cell {
     justify-content: center;
     margin-left: 0;
     order: -1;
-    margin-bottom: 4px;
+    margin-bottom: 3px;
   }
 
   .entry-panel {
@@ -603,10 +598,45 @@ tfoot td.note-cell {
     font-size: 14px;
   }
 
+  .entry-title > div {
+    width: 100%;
+  }
+
+  .entry-title > div button {
+    flex: 1;
+  }
+
+  .subject-grid {
+    grid-template-columns: repeat(3, minmax(85px, 1fr));
+  }
+
+  .mobile-help {
+    position: sticky;
+    top: 58px;
+    z-index: 50;
+  }
+
+  /*
+   * A4 remains real A4 size.
+   * User can swipe left-right to see the complete page.
+   */
+
   .paper-container {
-    margin-left: -2px;
-    margin-right: -2px;
-    width: calc(100% + 4px);
+    width: 100vw;
+    margin-left: -4px;
+    padding-left: 4px;
+    padding-right: 4px;
+    overflow-x: scroll;
+    overflow-y: visible;
+    scrollbar-width: thin;
+  }
+
+  .pages-wrap {
+    align-items: flex-start;
+  }
+
+  .paper {
+    flex-shrink: 0;
   }
 }
 
@@ -619,12 +649,14 @@ tfoot td.note-cell {
     background: #fff !important;
     padding: 0 !important;
     margin: 0 !important;
+    overflow: visible !important;
   }
 
   .toolbar,
   .entry-panel,
   .dialog-bg,
-  .popup-bg {
+  .popup-bg,
+  .mobile-help {
     display: none !important;
   }
 
@@ -636,6 +668,9 @@ tfoot td.note-cell {
 
   .pages-wrap {
     gap: 0 !important;
+    width: auto !important;
+    min-width: 0 !important;
+    align-items: center !important;
   }
 
   .paper {
@@ -675,22 +710,8 @@ tfoot td.note-cell {
     — अंतिम विद्यार्थी
   </button>
 
-  <!-- EXCEL IMPORT -->
-  <button class="excel-btn" onclick="document.getElementById('excelFile').click()">
+  <button class="info-btn" onclick="excelImport()">
     📊 Excel Import
-  </button>
-
-  <input
-    type="file"
-    id="excelFile"
-    accept=".xlsx,.xls,.csv"
-    style="display:none"
-    onchange="importExcel(event)"
-  >
-
-  <!-- SORT ROLL -->
-  <button class="sort-btn" onclick="sortStudentsByRoll()">
-    ↕ Roll क्रम
   </button>
 
   <button class="warning" onclick="downloadPDF()">
@@ -717,17 +738,38 @@ tfoot td.note-cell {
     Clear
   </button>
 
-  <button class="tutorial-btn" onclick="openTutorial()">
+  <button class="primary" onclick="sortByRoll()">
+    🔢 Roll Ascending
+  </button>
+
+  <button class="warning" onclick="openSubjectOrderModal()">
+    ☰ विषय व्यवस्था
+  </button>
+
+  <button class="gray" onclick="openTutorial()">
     🎥 Tutorial
   </button>
 
-  <div class="view-badge" title="कुल पृष्ठ दृश्य">
+  <div class="view-badge">
     👁️ Views:
     <span id="viewCount">...</span>
   </div>
 
 </div>
 
+<!-- Hidden Excel Input -->
+<input
+  type="file"
+  id="excelFile"
+  accept=".xlsx,.xls,.csv"
+  style="display:none"
+  onchange="processExcel(this.files[0])"
+>
+
+<div class="mobile-help">
+  📱 मोबाइल Chrome: अंक पत्रक को <b>↔️ Left-Right</b> swipe करके पूरा देखें और
+  <b>↕️ ऊपर-नीचे</b> सामान्य रूप से scroll करें।
+</div>
 
 <!-- ================= ENTRY PANEL ================= -->
 
@@ -739,7 +781,7 @@ tfoot td.note-cell {
       📝 Marks Folio Entry Panel
     </span>
 
-    <div style="display:flex;gap:4px;flex-wrap:wrap">
+    <div style="display:flex;gap:4px">
 
       <button
         class="primary"
@@ -761,43 +803,25 @@ tfoot td.note-cell {
 
   </div>
 
-
   <div class="entry-grid">
 
     <div>
-
-      <label>
-        विद्यार्थी चुनें
-      </label>
-
-      <select
-        id="studentSelect"
-        onchange="selectStudent()"
-      ></select>
-
+      <label>विद्यार्थी चुनें</label>
+      <select id="studentSelect" onchange="selectStudent()"></select>
     </div>
 
-
     <div>
-
-      <label>
-        वर्ग क्रमांक
-      </label>
-
+      <label>वर्ग क्रमांक</label>
       <input
         id="formRoll"
         inputmode="numeric"
         oninput="formChanged()"
       >
-
     </div>
-
 
     <div style="grid-column:1 / -1;">
 
-      <label>
-        विद्यार्थी का नाम
-      </label>
+      <label>विद्यार्थी का नाम</label>
 
       <input
         id="formName"
@@ -808,14 +832,10 @@ tfoot td.note-cell {
 
   </div>
 
-
-  <!-- SUBJECT MARK ENTRY -->
-
   <div
     class="subject-grid"
     id="subjectGrid"
   ></div>
-
 
   <div class="form-actions">
 
@@ -835,7 +855,6 @@ tfoot td.note-cell {
 
   </div>
 
-
   <div
     class="status"
     id="saveStatus"
@@ -845,10 +864,9 @@ tfoot td.note-cell {
 
 </div>
 
-
 <!-- ================= PAPER ================= -->
 
-<div class="paper-container">
+<div class="paper-container" id="paperContainer">
 
   <div
     class="pages-wrap"
@@ -875,22 +893,11 @@ tfoot td.note-cell {
 
     <select
       id="delSubSelect"
-      style="
-        width:100%;
-        padding:8px;
-        border:1px solid #ccc;
-        border-radius:5px;
-        font-size:13px;
-        margin-bottom:12px
-      "
+      style="width:100%;padding:8px;border:1px solid #ccc;border-radius:5px;font-size:13px;margin-bottom:12px"
     ></select>
 
     <div
-      style="
-        display:flex;
-        gap:6px;
-        justify-content:flex-end
-      "
+      style="display:flex;gap:6px;justify-content:flex-end"
     >
 
       <button
@@ -914,7 +921,63 @@ tfoot td.note-cell {
 </div>
 
 
-<!-- ================= WHATSAPP POPUP ================= -->
+<!-- ================= SUBJECT ORDER MODAL ================= -->
+
+<div
+  class="dialog-bg"
+  id="orderModal"
+>
+
+  <div class="dialog-box">
+
+    <h4 style="margin:0 0 10px 0;font-size:15px">
+      विषय व्यवस्था
+    </h4>
+
+    <p style="font-size:11.5px;color:#555;margin-top:0">
+      विषय को क्रम बदलने के लिए ऊपर/नीचे वाले विकल्प चुनें।
+    </p>
+
+    <select
+      id="orderSubSelect"
+      size="6"
+      style="width:100%;padding:6px;border:1px solid #ccc;border-radius:5px;font-size:13px;margin-bottom:10px"
+    ></select>
+
+    <div style="display:flex;gap:5px;margin-bottom:10px">
+
+      <button
+        class="primary"
+        style="flex:1"
+        onclick="moveSubjectUp()"
+      >
+        ↑ ऊपर
+      </button>
+
+      <button
+        class="primary"
+        style="flex:1"
+        onclick="moveSubjectDown()"
+      >
+        ↓ नीचे
+      </button>
+
+    </div>
+
+    <button
+      class="green"
+      style="width:100%"
+      onclick="closeSubjectOrderModal()"
+    >
+      ✓ पूरा
+    </button>
+
+  </div>
+
+</div>
+
+
+<!-- ================= FOLLOW POPUP ================= -->
 
 <div
   class="popup-bg"
@@ -944,9 +1007,7 @@ tfoot td.note-cell {
         viewBox="0 0 24 24"
         fill="currentColor"
       >
-
         <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
-
       </svg>
 
       Follow DEO Office
@@ -964,35 +1025,27 @@ tfoot td.note-cell {
 
 <script>
 
-/* ==========================================================
-   WHATSAPP CHANNEL
-   ========================================================== */
+/* =========================================================
+   SETTINGS
+========================================================= */
 
 const CHANNEL_LINK =
 "https://whatsapp.com/channel/0029VaIhMoY35fM4YK5xrz3P";
 
-
-/* ==========================================================
-   TUTORIAL
-   ========================================================== */
-
 const TUTORIAL_LINK =
 "https://drive.google.com/file/d/1jL6_SwXd5dLGetRmGI82dxT_udW311to/view?usp=drivesdk";
 
-
-/* ==========================================================
-   SETTINGS
-   ========================================================== */
-
 const ROWS_PER_PAGE = 30;
 
+const SUBJECT_FULL_MARKS = 50;
 
-/* ==========================================================
-   SUBJECTS
-   ========================================================== */
+
+/* =========================================================
+   DEFAULT SUBJECTS
+========================================================= */
 
 let subjects = [
-  "हिंदी/राष्ट्र भाषा",
+  "हिन्दी/राष्ट्र भाषा",
   "गणित",
   "अंग्रेजी",
   "संस्कृत/उर्दू",
@@ -1001,16 +1054,11 @@ let subjects = [
 ];
 
 
-/* ==========================================================
-   STUDENTS
-   ========================================================== */
+/* =========================================================
+   DATA
+========================================================= */
 
 let students = [];
-
-
-/* ==========================================================
-   DETAILS
-   ========================================================== */
 
 let details = {
   center: "",
@@ -1022,34 +1070,106 @@ let details = {
   maxMarks: "50"
 };
 
-
-/* ==========================================================
-   SELECTED STUDENT
-   ========================================================== */
-
 let selectedStudent = 0;
 
 
-/* ==========================================================
+/* =========================================================
    ESCAPE HTML
-   ========================================================== */
+========================================================= */
 
-function esc(s) {
+function esc(s){
 
   return String(s || "")
-    .replace(/&/g, "&amp;")
-    .replace(/"/g, "&quot;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;");
+    .replace(/&/g,"&amp;")
+    .replace(/"/g,"&quot;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;");
 
 }
 
 
-/* ==========================================================
-   LIVE VIEW COUNTER
-   ========================================================== */
+/* =========================================================
+   GRADE CALCULATION
+========================================================= */
 
-function updateViews() {
+function getGrade(percentage){
+
+  if(percentage >= 90) return "A+";
+  if(percentage >= 80) return "A";
+  if(percentage >= 70) return "B+";
+  if(percentage >= 60) return "B";
+  if(percentage >= 50) return "C";
+  if(percentage >= 33) return "D";
+
+  return "E";
+
+}
+
+
+function calculateStudent(st){
+
+  let total = 0;
+
+  let hasAnyEntry = false;
+
+  for(let i = 0; i < subjects.length; i++){
+
+    const value =
+      String(st.marks[i] || "").trim();
+
+    if(value !== ""){
+      hasAnyEntry = true;
+    }
+
+    const upper = value.toUpperCase();
+
+    if(
+      upper !== "ABSENT" &&
+      upper !== "AB" &&
+      !isNaN(Number(value)) &&
+      value !== ""
+    ){
+
+      let n = Number(value);
+
+      if(n < 0) n = 0;
+
+      if(n > SUBJECT_FULL_MARKS){
+        n = SUBJECT_FULL_MARKS;
+      }
+
+      total += n;
+    }
+
+  }
+
+  const maxTotal =
+    subjects.length * SUBJECT_FULL_MARKS;
+
+  const percentage =
+    maxTotal > 0
+      ? (total / maxTotal) * 100
+      : 0;
+
+  const grade =
+    getGrade(percentage);
+
+  return {
+    total,
+    percentage,
+    grade,
+    hasAnyEntry,
+    maxTotal
+  };
+
+}
+
+
+/* =========================================================
+   VIEW COUNTER
+========================================================= */
+
+function updateViews(){
 
   fetch(
     "https://api.counterapi.dev/v1/deo_marks_folio_bihar/views/up"
@@ -1059,7 +1179,7 @@ function updateViews() {
 
   .then(data => {
 
-    if (data && data.count) {
+    if(data && data.count){
 
       document.getElementById("viewCount")
         .textContent =
@@ -1090,11 +1210,11 @@ function updateViews() {
 }
 
 
-/* ==========================================================
+/* =========================================================
    SHARE
-   ========================================================== */
+========================================================= */
 
-function shareApp() {
+function shareApp(){
 
   const shareData = {
 
@@ -1109,17 +1229,14 @@ function shareApp() {
 
   };
 
-
-  if (navigator.share) {
+  if(navigator.share){
 
     navigator.share(shareData)
       .catch(() => {});
 
-  }
+  }else{
 
-  else {
-
-    if (navigator.clipboard) {
+    if(navigator.clipboard){
 
       navigator.clipboard
         .writeText(window.location.href)
@@ -1134,14 +1251,13 @@ function shareApp() {
 
         .catch(() => {
 
-          window.open(
-            `https://api.whatsapp.com/send?text=${encodeURIComponent(
-              shareData.text + " " + shareData.url
-            )}`,
-            "_blank"
-          );
+          whatsappShare();
 
         });
+
+    }else{
+
+      whatsappShare();
 
     }
 
@@ -1150,11 +1266,25 @@ function shareApp() {
 }
 
 
-/* ==========================================================
-   TUTORIAL
-   ========================================================== */
+function whatsappShare(){
 
-function openTutorial() {
+  const url =
+    "https://api.whatsapp.com/send?text=" +
+    encodeURIComponent(
+      "DEO Office Marks Folio " +
+      window.location.href
+    );
+
+  window.open(url,"_blank");
+
+}
+
+
+/* =========================================================
+   TUTORIAL
+========================================================= */
+
+function openTutorial(){
 
   window.open(
     TUTORIAL_LINK,
@@ -1164,17 +1294,17 @@ function openTutorial() {
 }
 
 
-/* ==========================================================
+/* =========================================================
    FOLLOW POPUP
-   ========================================================== */
+========================================================= */
 
-function checkMandatoryPopup() {
+function checkMandatoryPopup(){
 
-  if (
+  if(
     localStorage.getItem(
       "deoFollowCompleted_v3"
     ) !== "1"
-  ) {
+  ){
 
     document.getElementById(
       "followPopup"
@@ -1185,7 +1315,7 @@ function checkMandatoryPopup() {
 }
 
 
-function handleMandatoryFollow() {
+function handleMandatoryFollow(){
 
   window.open(
     CHANNEL_LINK,
@@ -1204,29 +1334,30 @@ function handleMandatoryFollow() {
 }
 
 
-/* ==========================================================
+/* =========================================================
    SUBJECT CONTROLS
-   ========================================================== */
+========================================================= */
 
-function renderSubjectControls() {
+function renderSubjectControls(){
 
   const grid =
-    document.getElementById(
-      "subjectGrid"
-    );
-
+    document.getElementById("subjectGrid");
 
   grid.innerHTML =
-    subjects.map((sub, i) => `
+    subjects.map((sub,i) => `
 
       <div class="subject-box">
 
         <input
           class="sub-name"
           value="${esc(sub)}"
-          title="नाम एडिट करें"
+          title="विषय का नाम एडिट करें"
           oninput="updateSubjectName(${i}, this.value)"
         >
+
+        <div class="full-marks">
+          पूर्णांक: ${SUBJECT_FULL_MARKS}
+        </div>
 
         <input
           class="sub-marks"
@@ -1243,17 +1374,14 @@ function renderSubjectControls() {
 }
 
 
-/* ==========================================================
+/* =========================================================
    UPDATE SUBJECT NAME
-   ========================================================== */
+========================================================= */
 
-function updateSubjectName(
-  idx,
-  val
-) {
+function updateSubjectName(idx,val){
 
   subjects[idx] =
-    val ||
+    val.trim() ||
     `विषय ${idx + 1}`;
 
   renderPages();
@@ -1263,11 +1391,11 @@ function updateSubjectName(
 }
 
 
-/* ==========================================================
+/* =========================================================
    ADD SUBJECT
-   ========================================================== */
+========================================================= */
 
-function addSubject() {
+function addSubject(){
 
   const name =
     prompt(
@@ -1275,37 +1403,31 @@ function addSubject() {
       `विषय ${subjects.length + 1}`
     );
 
-
-  if (
+  if(
     name &&
     name.trim()
-  ) {
+  ){
 
     subjects.push(
       name.trim()
     );
 
+    students.forEach(st => {
 
-    students.forEach(s => {
-
-      while (
-        s.marks.length <
+      while(
+        st.marks.length <
         subjects.length
-      ) {
+      ){
 
-        s.marks.push("");
+        st.marks.push("");
 
       }
 
     });
 
-
     renderSubjectControls();
-
     renderPages();
-
     selectStudent();
-
     autoSave();
 
   }
@@ -1313,15 +1435,13 @@ function addSubject() {
 }
 
 
-/* ==========================================================
-   SUBJECT DELETE
-   ========================================================== */
+/* =========================================================
+   DELETE SUBJECT
+========================================================= */
 
-function openSubjectModal() {
+function openSubjectModal(){
 
-  if (
-    subjects.length <= 1
-  ) {
+  if(subjects.length <= 1){
 
     alert(
       "कम से कम एक विषय होना अनिवार्य है!"
@@ -1331,71 +1451,63 @@ function openSubjectModal() {
 
   }
 
-
   const sel =
     document.getElementById(
       "delSubSelect"
     );
-
 
   sel.innerHTML =
     subjects.map(
-      (s, i) =>
-        `<option value="${i}">
-          ${i + 1}. ${esc(s)}
-        </option>`
+      (s,i) =>
+      `<option value="${i}">
+        ${i + 1}. ${esc(s)}
+      </option>`
     ).join("");
 
-
   document.getElementById(
     "subModal"
-  ).style.display =
-    "flex";
+  ).style.display = "flex";
 
 }
 
 
-function closeSubjectModal() {
+function closeSubjectModal(){
 
   document.getElementById(
     "subModal"
-  ).style.display =
-    "none";
+  ).style.display = "none";
 
 }
 
 
-function confirmRemoveSubject() {
+function confirmRemoveSubject(){
 
   const sel =
     document.getElementById(
       "delSubSelect"
     );
-
 
   const idx =
     Number(sel.value);
 
-
-  if (
+  if(
     !isNaN(idx) &&
     idx >= 0 &&
     idx < subjects.length
-  ) {
+  ){
 
     subjects.splice(
       idx,
       1
     );
 
+    students.forEach(st => {
 
-    students.forEach(s => {
+      if(
+        Array.isArray(st.marks)
+      ){
 
-      if (
-        Array.isArray(s.marks)
-      ) {
-
-        s.marks.splice(
+        st.marks.splice(
           idx,
           1
         );
@@ -1404,15 +1516,11 @@ function confirmRemoveSubject() {
 
     });
 
-
     closeSubjectModal();
 
     renderSubjectControls();
-
     renderPages();
-
     selectStudent();
-
     autoSave();
 
   }
@@ -1420,56 +1528,193 @@ function confirmRemoveSubject() {
 }
 
 
-/* ==========================================================
-   HEADER INPUT SYNC
-   ========================================================== */
+/* =========================================================
+   SUBJECT ORDER
+========================================================= */
 
-function syncHeaderInputs(
-  key,
-  value
-) {
+function openSubjectOrderModal(){
 
-  details[key] =
-    value;
+  renderOrderSelect();
+
+  document.getElementById(
+    "orderModal"
+  ).style.display = "flex";
+
+}
 
 
-  document
-    .querySelectorAll(
-      `.info-input-${key}`
-    )
-    .forEach(el => {
+function closeSubjectOrderModal(){
 
-      if (
-        el.value !== value
-      ) {
+  document.getElementById(
+    "orderModal"
+  ).style.display = "none";
 
-        el.value =
-          value;
+}
 
-      }
 
-    });
+function renderOrderSelect(){
 
+  const sel =
+    document.getElementById(
+      "orderSubSelect"
+    );
+
+  sel.innerHTML =
+    subjects.map(
+      (s,i) =>
+      `<option value="${i}">
+        ${i + 1}. ${esc(s)}
+      </option>`
+    ).join("");
+
+}
+
+
+function moveSubjectUp(){
+
+  const sel =
+    document.getElementById(
+      "orderSubSelect"
+    );
+
+  const idx =
+    Number(sel.value);
+
+  if(idx <= 0) return;
+
+  [
+    subjects[idx - 1],
+    subjects[idx]
+  ] =
+  [
+    subjects[idx],
+    subjects[idx - 1]
+  ];
+
+  students.forEach(st => {
+
+    [
+      st.marks[idx - 1],
+      st.marks[idx]
+    ] =
+    [
+      st.marks[idx],
+      st.marks[idx - 1]
+    ];
+
+  });
+
+  renderOrderSelect();
+
+  sel.value =
+    String(idx - 1);
+
+  renderSubjectControls();
+  renderPages();
+  selectStudent();
 
   autoSave();
 
 }
 
 
-/* ==========================================================
-   RENDER PAGES
-   ========================================================== */
+function moveSubjectDown(){
 
-function renderPages() {
+  const sel =
+    document.getElementById(
+      "orderSubSelect"
+    );
+
+  const idx =
+    Number(sel.value);
+
+  if(
+    idx < 0 ||
+    idx >= subjects.length - 1
+  ){
+
+    return;
+
+  }
+
+  [
+    subjects[idx],
+    subjects[idx + 1]
+  ] =
+  [
+    subjects[idx + 1],
+    subjects[idx]
+  ];
+
+  students.forEach(st => {
+
+    [
+      st.marks[idx],
+      st.marks[idx + 1]
+    ] =
+    [
+      st.marks[idx + 1],
+      st.marks[idx]
+    ];
+
+  });
+
+  renderOrderSelect();
+
+  sel.value =
+    String(idx + 1);
+
+  renderSubjectControls();
+  renderPages();
+  selectStudent();
+
+  autoSave();
+
+}
+
+
+/* =========================================================
+   HEADER INPUT SYNC
+========================================================= */
+
+function syncHeaderInputs(
+  key,
+  value
+){
+
+  details[key] =
+    value;
+
+  document.querySelectorAll(
+    `.info-input-${key}`
+  ).forEach(el => {
+
+    if(el.value !== value){
+
+      el.value =
+        value;
+
+    }
+
+  });
+
+  autoSave();
+
+}
+
+
+/* =========================================================
+   RENDER PAGES
+========================================================= */
+
+function renderPages(){
 
   const wrap =
     document.getElementById(
       "pagesWrap"
     );
 
-
   wrap.innerHTML = "";
-
 
   const totalPages =
     Math.max(
@@ -1480,110 +1725,86 @@ function renderPages() {
       )
     );
 
+  /*
+    3 basic columns:
+    S.No + Roll + Name
+    + Subjects
+    + Total
+    + Grade
+  */
 
   const totalCols =
-    4 + subjects.length;
+    5 + subjects.length;
 
 
-  for (
+  for(
     let p = 0;
     p < totalPages;
     p++
-  ) {
+  ){
 
     const pageDiv =
       document.createElement(
         "section"
       );
 
-
     pageDiv.className =
       "paper";
-
 
     const startIdx =
       p * ROWS_PER_PAGE;
 
-
     let rowsHtml = "";
 
 
-    for (
+    for(
       let r = 0;
       r < ROWS_PER_PAGE;
       r++
-    ) {
+    ){
 
       const i =
         startIdx + r;
 
 
-      if (
-        i < students.length
-      ) {
+      if(i < students.length){
 
         const st =
           students[i];
 
 
-        let subCells =
-          "";
+        while(
+          !Array.isArray(st.marks) ||
+          st.marks.length <
+          subjects.length
+        ){
+
+          if(!Array.isArray(st.marks)){
+            st.marks = [];
+          }
+
+          st.marks.push("");
+
+        }
 
 
-        let total =
-          0;
+        const result =
+          calculateStudent(st);
 
 
-        let hasAnyEntry =
-          false;
+        let subCells = "";
 
 
-        for (
+        for(
           let s = 0;
           s < subjects.length;
           s++
-        ) {
+        ){
 
           const m =
-            (
-              st.marks &&
-              st.marks[s]
-                ? st.marks[s]
-                : ""
-            ).trim();
-
-
-          if (
-            m !== ""
-          ) {
-
-            hasAnyEntry =
-              true;
-
-
-            const isAbsent =
-              (
-                m.toUpperCase()
-                === "ABSENT" ||
-                m.toUpperCase()
-                === "AB"
-              );
-
-
-            if (
-              !isAbsent &&
-              !isNaN(
-                Number(m)
-              )
-            ) {
-
-              total +=
-                Number(m);
-
-            }
-
-          }
-
+            String(
+              st.marks[s] || ""
+            );
 
           subCells += `
 
@@ -1591,7 +1812,14 @@ function renderPages() {
 
               <input
                 value="${esc(m)}"
-                oninput="cellChanged(${i}, ${s}, this.value)"
+                inputmode="numeric"
+                oninput="
+                  cellChanged(
+                    ${i},
+                    ${s},
+                    this.value
+                  )
+                "
               >
 
             </td>
@@ -1613,7 +1841,14 @@ function renderPages() {
 
               <input
                 value="${esc(st.roll)}"
-                oninput="cellInfoChanged(${i}, 'roll', this.value)"
+                inputmode="numeric"
+                oninput="
+                  cellInfoChanged(
+                    ${i},
+                    'roll',
+                    this.value
+                  )
+                "
               >
 
             </td>
@@ -1622,7 +1857,13 @@ function renderPages() {
 
               <input
                 value="${esc(st.name)}"
-                oninput="cellInfoChanged(${i}, 'name', this.value)"
+                oninput="
+                  cellInfoChanged(
+                    ${i},
+                    'name',
+                    this.value
+                  )
+                "
               >
 
             </td>
@@ -1630,12 +1871,14 @@ function renderPages() {
             ${subCells}
 
             <td class="col-total total">
+              ${result.total}
+            </td>
 
-              ${
-                hasAnyEntry
-                  ? total
-                  : "0"
-              }
+            <td class="col-grade grade">
+
+              ${result.grade}
+              <br>
+              ${result.percentage.toFixed(0)}%
 
             </td>
 
@@ -1643,15 +1886,13 @@ function renderPages() {
 
         `;
 
-      }
-
-      else {
+      }else{
 
         const blankSub =
           subjects
             .map(
               () =>
-                `<td class="col-sub"></td>`
+              `<td class="col-sub"></td>`
             )
             .join("");
 
@@ -1672,6 +1913,8 @@ function renderPages() {
 
             <td class="col-total total"></td>
 
+            <td class="col-grade grade"></td>
+
           </tr>
 
         `;
@@ -1690,15 +1933,12 @@ function renderPages() {
         </div>
 
         <div class="h2">
-
           अंक पत्रक (Marks Folio)
-
           ${
             totalPages > 1
               ? `[पृष्ठ ${p + 1}/${totalPages}]`
               : ""
           }
-
         </div>
 
       </div>
@@ -1715,7 +1955,12 @@ function renderPages() {
           <input
             class="info-input-center"
             value="${esc(details.center)}"
-            oninput="syncHeaderInputs('center', this.value)"
+            oninput="
+              syncHeaderInputs(
+                'center',
+                this.value
+              )
+            "
           >
 
           <label>
@@ -1725,7 +1970,12 @@ function renderPages() {
           <input
             class="info-input-district"
             value="${esc(details.district)}"
-            oninput="syncHeaderInputs('district', this.value)"
+            oninput="
+              syncHeaderInputs(
+                'district',
+                this.value
+              )
+            "
           >
 
         </div>
@@ -1740,7 +1990,12 @@ function renderPages() {
           <input
             class="info-input-school"
             value="${esc(details.school)}"
-            oninput="syncHeaderInputs('school', this.value)"
+            oninput="
+              syncHeaderInputs(
+                'school',
+                this.value
+              )
+            "
           >
 
         </div>
@@ -1755,7 +2010,12 @@ function renderPages() {
           <input
             class="info-input-udise"
             value="${esc(details.udise)}"
-            oninput="syncHeaderInputs('udise', this.value)"
+            oninput="
+              syncHeaderInputs(
+                'udise',
+                this.value
+              )
+            "
           >
 
           <label>
@@ -1765,7 +2025,12 @@ function renderPages() {
           <input
             class="info-input-block"
             value="${esc(details.block)}"
-            oninput="syncHeaderInputs('block', this.value)"
+            oninput="
+              syncHeaderInputs(
+                'block',
+                this.value
+              )
+            "
           >
 
         </div>
@@ -1780,17 +2045,22 @@ function renderPages() {
           <input
             class="info-input-className"
             value="${esc(details.className)}"
-            oninput="syncHeaderInputs('className', this.value)"
+            oninput="
+              syncHeaderInputs(
+                'className',
+                this.value
+              )
+            "
           >
 
           <label>
-            पूर्णांक :-
+            प्रत्येक विषय का पूर्णांक :-
           </label>
 
           <input
             class="info-input-maxMarks marks"
-            value="${esc(details.maxMarks)}"
-            oninput="syncHeaderInputs('maxMarks', this.value)"
+            value="${SUBJECT_FULL_MARKS}"
+            readonly
           >
 
         </div>
@@ -1818,19 +2088,21 @@ function renderPages() {
                 विद्यार्थियों का नाम
               </th>
 
-              ${
-                subjects
-                  .map(
-                    s =>
-                      `<th class="col-sub">
-                        ${esc(s)}
-                      </th>`
-                  )
-                  .join("")
-              }
+              ${subjects.map(
+                s =>
+                `<th class="col-sub">
+                  ${esc(s)}
+                  <br>
+                  <small>(50)</small>
+                </th>`
+              ).join("")}
 
               <th class="col-total">
                 कुल
+              </th>
+
+              <th class="col-grade">
+                ग्रेड<br>प्रतिशत
               </th>
 
             </tr>
@@ -1839,7 +2111,9 @@ function renderPages() {
 
 
           <tbody>
+
             ${rowsHtml}
+
           </tbody>
 
 
@@ -1851,11 +2125,7 @@ function renderPages() {
                 colspan="${totalCols}"
                 class="note-cell"
               >
-
-                ※ अनुपस्थित परीक्षार्थी के कॉलम में
-                लाल कलम से प्राप्तांक कॉलम में
-                अनुपस्थित (ABSENT) दर्ज करें।
-
+                ※ अनुपस्थित परीक्षार्थी के कॉलम में लाल कलम से प्राप्तांक कॉलम में अनुपस्थित (ABSENT) दर्ज करें।
               </td>
 
             </tr>
@@ -1898,51 +2168,33 @@ function renderPages() {
 }
 
 
-/* ==========================================================
-   CELL MARK CHANGE
-   ========================================================== */
+/* =========================================================
+   CELL CHANGE
+========================================================= */
 
 function cellChanged(
   stIdx,
   subIdx,
   val
-) {
+){
 
-  if (
-    !students[stIdx]
-  ) return;
-
-
-  if (
-    !Array.isArray(
-      students[stIdx].marks
-    )
-  ) {
-
-    students[stIdx].marks =
-      new Array(
-        subjects.length
-      ).fill("");
-
+  if(!students[stIdx]){
+    return;
   }
 
-
-  students[stIdx]
-    .marks[subIdx] =
+  students[stIdx].marks[subIdx] =
     val;
 
-
-  if (
+  if(
     stIdx === selectedStudent
-  ) {
+  ){
 
     const formInput =
       document.getElementById(
         "m" + subIdx
       );
 
-
-    if (formInput) {
+    if(formInput){
 
       formInput.value =
         val;
@@ -1951,7 +2203,6 @@ function cellChanged(
 
   }
 
-
   renderPages();
 
   autoSave();
@@ -1959,54 +2210,44 @@ function cellChanged(
 }
 
 
-/* ==========================================================
-   CELL STUDENT INFO CHANGE
-   ========================================================== */
+/* =========================================================
+   CELL INFO CHANGE
+========================================================= */
 
 function cellInfoChanged(
   stIdx,
   key,
   val
-) {
+){
 
-  if (
-    !students[stIdx]
-  ) return;
-
+  if(!students[stIdx]){
+    return;
+  }
 
   students[stIdx][key] =
     val;
 
-
-  if (
+  if(
     stIdx === selectedStudent
-  ) {
+  ){
 
-    if (
-      key === "name"
-    ) {
+    if(key === "name"){
 
       document.getElementById(
         "formName"
-      ).value =
-        val;
+      ).value = val;
 
     }
 
-
-    if (
-      key === "roll"
-    ) {
+    if(key === "roll"){
 
       document.getElementById(
         "formRoll"
-      ).value =
-        val;
+      ).value = val;
 
     }
 
   }
-
 
   syncFormOptions();
 
@@ -2015,45 +2256,39 @@ function cellInfoChanged(
 }
 
 
-/* ==========================================================
-   SYNC STUDENT SELECT
-   ========================================================== */
+/* =========================================================
+   FORM OPTIONS
+========================================================= */
 
-function syncFormOptions() {
+function syncFormOptions(){
 
   const previous =
     selectedStudent;
-
 
   const studentSelect =
     document.getElementById(
       "studentSelect"
     );
 
-
   studentSelect.innerHTML =
     "";
 
-
   students.forEach(
-    (r, i) => {
+    (r,i) => {
 
       const opt =
         document.createElement(
           "option"
         );
 
-
       opt.value =
         i;
-
 
       opt.textContent =
         `${i + 1}. ${
           r.name ||
           "नया विद्यार्थी"
         }`;
-
 
       studentSelect.appendChild(
         opt
@@ -2072,18 +2307,17 @@ function syncFormOptions() {
       )
     );
 
-
   studentSelect.value =
     selectedStudent;
 
 }
 
 
-/* ==========================================================
+/* =========================================================
    SELECT STUDENT
-   ========================================================== */
+========================================================= */
 
-function selectStudent() {
+function selectStudent(){
 
   selectedStudent =
     Number(
@@ -2092,19 +2326,17 @@ function selectStudent() {
       ).value
     ) || 0;
 
-
   const st =
     students[selectedStudent];
 
-
-  if (!st) return;
-
+  if(!st){
+    return;
+  }
 
   document.getElementById(
     "formRoll"
   ).value =
     st.roll || "";
-
 
   document.getElementById(
     "formName"
@@ -2112,25 +2344,21 @@ function selectStudent() {
     st.name || "";
 
 
-  for (
+  for(
     let i = 0;
     i < subjects.length;
     i++
-  ) {
+  ){
 
     const input =
       document.getElementById(
         "m" + i
       );
 
-
-    if (input) {
+    if(input){
 
       input.value =
-        (
-          st.marks &&
-          st.marks[i]
-        ) || "";
+        st.marks[i] || "";
 
     }
 
@@ -2139,24 +2367,23 @@ function selectStudent() {
 }
 
 
-/* ==========================================================
+/* =========================================================
    FORM CHANGE
-   ========================================================== */
+========================================================= */
 
-function formChanged() {
+function formChanged(){
 
   const st =
     students[selectedStudent];
 
-
-  if (!st) return;
-
+  if(!st){
+    return;
+  }
 
   st.roll =
     document.getElementById(
       "formRoll"
     ).value;
-
 
   st.name =
     document.getElementById(
@@ -2164,34 +2391,23 @@ function formChanged() {
     ).value;
 
 
-  if (
-    !Array.isArray(st.marks)
-  ) {
-
-    st.marks =
-      new Array(
-        subjects.length
-      ).fill("");
-
-  }
-
-
-  for (
+  for(
     let i = 0;
     i < subjects.length;
     i++
-  ) {
+  ){
 
     const input =
       document.getElementById(
         "m" + i
       );
 
+    if(input){
 
-    st.marks[i] =
-      input
-        ? input.value
-        : "";
+      st.marks[i] =
+        input.value;
+
+    }
 
   }
 
@@ -2205,17 +2421,16 @@ function formChanged() {
   ).value =
     selectedStudent;
 
-
   autoSave();
 
 }
 
 
-/* ==========================================================
+/* =========================================================
    ADD STUDENT
-   ========================================================== */
+========================================================= */
 
-function addStudent() {
+function addStudent(){
 
   students.push({
 
@@ -2235,16 +2450,13 @@ function addStudent() {
 
   syncFormOptions();
 
-
   selectedStudent =
     students.length - 1;
-
 
   document.getElementById(
     "studentSelect"
   ).value =
     selectedStudent;
-
 
   selectStudent();
 
@@ -2253,90 +2465,90 @@ function addStudent() {
 }
 
 
-/* ==========================================================
-   REMOVE LAST STUDENT
-   ========================================================== */
+/* =========================================================
+   REMOVE STUDENT
+========================================================= */
 
-function removeStudent() {
+function removeStudent(){
 
-  if (
-    students.length > 1
-  ) {
-
-    if (
-      !confirm(
-        "क्या आप अंतिम विद्यार्थी को हटाना चाहते हैं?"
-      )
-    ) {
-
-      return;
-
-    }
-
-
-    students.pop();
-
-
-    renderPages();
-
-    syncFormOptions();
-
-
-    selectedStudent =
-      Math.min(
-        selectedStudent,
-        students.length - 1
-      );
-
-
-    document.getElementById(
-      "studentSelect"
-    ).value =
-      selectedStudent;
-
-
-    selectStudent();
-
-    autoSave();
-
-  }
-
-  else {
+  if(students.length <= 1){
 
     alert(
       "कम से कम एक विद्यार्थी रखना आवश्यक है।"
     );
 
+    return;
+
   }
+
+
+  const deleted =
+    students[
+      students.length - 1
+    ];
+
+
+  if(
+    !confirm(
+      `क्या अंतिम विद्यार्थी "${
+        deleted.name ||
+        "नया विद्यार्थी"
+      }" को हटाना चाहते हैं?`
+    )
+  ){
+
+    return;
+
+  }
+
+
+  students.pop();
+
+
+  selectedStudent =
+    Math.min(
+      selectedStudent,
+      students.length - 1
+    );
+
+
+  renderPages();
+
+  syncFormOptions();
+
+  document.getElementById(
+    "studentSelect"
+  ).value =
+    selectedStudent;
+
+  selectStudent();
+
+  autoSave();
 
 }
 
 
-/* ==========================================================
+/* =========================================================
    NEXT STUDENT
-   ========================================================== */
+========================================================= */
 
-function nextStudent() {
+function nextStudent(){
 
-  if (
+  if(
     selectedStudent <
     students.length - 1
-  ) {
+  ){
 
     selectedStudent++;
-
 
     document.getElementById(
       "studentSelect"
     ).value =
       selectedStudent;
 
-
     selectStudent();
 
-  }
-
-  else {
+  }else{
 
     addStudent();
 
@@ -2344,59 +2556,145 @@ function nextStudent() {
 
 
   window.scrollTo({
+
     top: 0,
+
     behavior: "smooth"
+
   });
 
 }
 
 
-/* ==========================================================
-   AUTO SAVE
-   ========================================================== */
+/* =========================================================
+   SORT ROLL NUMBER ASCENDING
+========================================================= */
 
-function autoSave() {
+function sortByRoll(){
 
-  localStorage.setItem(
+  if(
+    !confirm(
+      "रोल नंबर को ascending order में व्यवस्थित करें?"
+    )
+  ){
 
-    "deoMarksFolio_Final_v6",
+    return;
 
-    JSON.stringify({
+  }
 
-      subjects,
-      details,
-      students
 
-    })
+  students.sort(
+    (a,b) => {
 
+      const ra =
+        String(
+          a.roll || ""
+        ).trim();
+
+      const rb =
+        String(
+          b.roll || ""
+        ).trim();
+
+
+      const na =
+        Number(ra);
+
+      const nb =
+        Number(rb);
+
+
+      if(
+        !isNaN(na) &&
+        !isNaN(nb)
+      ){
+
+        return na - nb;
+
+      }
+
+
+      return ra.localeCompare(
+        rb,
+        "hi"
+      );
+
+    }
   );
 
 
-  const status =
-    document.getElementById(
-      "saveStatus"
+  selectedStudent = 0;
+
+  renderPages();
+
+  syncFormOptions();
+
+  selectStudent();
+
+  autoSave();
+
+  alert(
+    "✓ रोल नंबर ascending order में व्यवस्थित कर दिए गए हैं।"
+  );
+
+}
+
+
+/* =========================================================
+   AUTOSAVE
+========================================================= */
+
+function autoSave(){
+
+  try{
+
+    localStorage.setItem(
+
+      "deoMarksFolio_Final_v10",
+
+      JSON.stringify({
+
+        subjects,
+
+        details,
+
+        students
+
+      })
+
     );
 
 
-  if (status) {
+    const status =
+      document.getElementById(
+        "saveStatus"
+      );
 
-    status.textContent =
-      "✓ Auto-saved • " +
-      new Date()
-        .toLocaleTimeString(
-          "hi-IN"
-        );
+    if(status){
+
+      status.textContent =
+        "✓ Auto-saved • " +
+        new Date()
+          .toLocaleTimeString(
+            "hi-IN"
+          );
+
+    }
+
+  }catch(e){
+
+    console.error(e);
 
   }
 
 }
 
 
-/* ==========================================================
+/* =========================================================
    SAVE
-   ========================================================== */
+========================================================= */
 
-function saveData() {
+function saveData(){
 
   autoSave();
 
@@ -2407,30 +2705,32 @@ function saveData() {
 }
 
 
-/* ==========================================================
+/* =========================================================
    LOAD
-   ========================================================== */
+========================================================= */
 
-function loadData() {
+function loadData(){
 
   const raw =
     localStorage.getItem(
-      "deoMarksFolio_Final_v6"
+      "deoMarksFolio_Final_v10"
     );
 
 
-  if (raw) {
+  if(raw){
 
-    try {
+    try{
 
       const d =
         JSON.parse(raw);
 
 
-      if (
+      if(
         d.subjects &&
-        Array.isArray(d.subjects)
-      ) {
+        Array.isArray(
+          d.subjects
+        )
+      ){
 
         subjects =
           d.subjects;
@@ -2438,7 +2738,7 @@ function loadData() {
       }
 
 
-      if (d.details) {
+      if(d.details){
 
         details =
           Object.assign(
@@ -2449,21 +2749,23 @@ function loadData() {
       }
 
 
-      if (
+      if(
         d.students &&
         Array.isArray(
           d.students
         )
-      ) {
+      ){
 
         students =
           d.students;
 
       }
 
-    }
+    }catch(e){
 
-    catch (e) {}
+      console.error(e);
+
+    }
 
   }
 
@@ -2471,15 +2773,15 @@ function loadData() {
   renderSubjectControls();
 
 
-  if (
+  if(
     students.length === 0
-  ) {
+  ){
 
-    for (
+    for(
       let i = 0;
       i < 30;
       i++
-    ) {
+    ){
 
       students.push({
 
@@ -2499,36 +2801,25 @@ function loadData() {
   }
 
 
-  /* Ensure all students have marks array */
+  students.forEach(st => {
 
-  students.forEach(
-    s => {
+    if(!Array.isArray(st.marks)){
 
-      if (
-        !Array.isArray(
-          s.marks
-        )
-      ) {
-
-        s.marks =
-          new Array(
-            subjects.length
-          ).fill("");
-
-      }
-
-
-      while (
-        s.marks.length <
-        subjects.length
-      ) {
-
-        s.marks.push("");
-
-      }
+      st.marks = [];
 
     }
-  );
+
+
+    while(
+      st.marks.length <
+      subjects.length
+    ){
+
+      st.marks.push("");
+
+    }
+
+  });
 
 
   renderPages();
@@ -2542,20 +2833,20 @@ function loadData() {
 }
 
 
-/* ==========================================================
+/* =========================================================
    CLEAR
-   ========================================================== */
+========================================================= */
 
-function clearData() {
+function clearData(){
 
-  if (
+  if(
     confirm(
       "क्या आप पूरा डेटा रीसेट करना चाहते हैं?"
     )
-  ) {
+  ){
 
     localStorage.removeItem(
-      "deoMarksFolio_Final_v6"
+      "deoMarksFolio_Final_v10"
     );
 
     location.reload();
@@ -2565,18 +2856,18 @@ function clearData() {
 }
 
 
-/* ==========================================================
-   ROLL NUMBER ASCENDING SORT
-   ========================================================== */
+/* =========================================================
+   EXCEL TEMPLATE DOWNLOAD
+========================================================= */
 
-function sortStudentsByRoll() {
+function downloadExcelTemplate(){
 
-  if (
-    students.length === 0
-  ) {
+  if(
+    typeof XLSX === "undefined"
+  ){
 
     alert(
-      "कोई विद्यार्थी उपलब्ध नहीं है।"
+      "Excel library load नहीं हुई। Internet connection check करें।"
     );
 
     return;
@@ -2584,129 +2875,280 @@ function sortStudentsByRoll() {
   }
 
 
-  const validStudents =
-    students.filter(
-      s =>
-        String(
-          s.roll || ""
-        ).trim() !== ""
+  const data = [
+
+    [
+      "क्रम संख्या",
+      "रोल नंबर",
+      "विद्यार्थी का नाम"
+    ],
+
+    [
+      1,
+      "",
+      ""
+    ],
+
+    [
+      2,
+      "",
+      ""
+    ],
+
+    [
+      3,
+      "",
+      ""
+    ],
+
+    [
+      4,
+      "",
+      ""
+    ],
+
+    [
+      5,
+      "",
+      ""
+    ],
+
+    [
+      6,
+      "",
+      ""
+    ],
+
+    [
+      7,
+      "",
+      ""
+    ],
+
+    [
+      8,
+      "",
+      ""
+    ],
+
+    [
+      9,
+      "",
+      ""
+    ],
+
+    [
+      10,
+      "",
+      ""
+    ],
+
+    [
+      11,
+      "",
+      ""
+    ],
+
+    [
+      12,
+      "",
+      ""
+    ],
+
+    [
+      13,
+      "",
+      ""
+    ],
+
+    [
+      14,
+      "",
+      ""
+    ],
+
+    [
+      15,
+      "",
+      ""
+    ],
+
+    [
+      16,
+      "",
+      ""
+    ],
+
+    [
+      17,
+      "",
+      ""
+    ],
+
+    [
+      18,
+      "",
+      ""
+    ],
+
+    [
+      19,
+      "",
+      ""
+    ],
+
+    [
+      20,
+      "",
+      ""
+    ],
+
+    [
+      21,
+      "",
+      ""
+    ],
+
+    [
+      22,
+      "",
+      ""
+    ],
+
+    [
+      23,
+      "",
+      ""
+    ],
+
+    [
+      24,
+      "",
+      ""
+    ],
+
+    [
+      25,
+      "",
+      ""
+    ],
+
+    [
+      26,
+      "",
+      ""
+    ],
+
+    [
+      27,
+      "",
+      ""
+    ],
+
+    [
+      28,
+      "",
+      ""
+    ],
+
+    [
+      29,
+      "",
+      ""
+    ],
+
+    [
+      30,
+      "",
+      ""
+    ]
+
+  ];
+
+
+  const ws =
+    XLSX.utils.aoa_to_sheet(
+      data
     );
 
 
-  const blankStudents =
-    students.filter(
-      s =>
-        String(
-          s.roll || ""
-        ).trim() === ""
-    );
+  ws["!cols"] = [
+
+    { wch: 15 },
+
+    { wch: 15 },
+
+    { wch: 35 }
+
+  ];
 
 
-  validStudents.sort(
-    (a, b) => {
-
-      const ra =
-        parseInt(
-          String(a.roll)
-            .replace(/\D/g, ""),
-          10
-        );
+  const wb =
+    XLSX.utils.book_new();
 
 
-      const rb =
-        parseInt(
-          String(b.roll)
-            .replace(/\D/g, ""),
-          10
-        );
-
-
-      if (
-        !isNaN(ra) &&
-        !isNaN(rb)
-      ) {
-
-        return ra - rb;
-
-      }
-
-
-      return String(
-        a.roll || ""
-      ).localeCompare(
-        String(
-          b.roll || ""
-        ),
-        "hi"
-      );
-
-    }
+  XLSX.utils.book_append_sheet(
+    wb,
+    ws,
+    "विद्यार्थी डेटा"
   );
 
 
-  students =
-    validStudents.concat(
-      blankStudents
-    );
-
-
-  selectedStudent = 0;
-
-
-  renderPages();
-
-  syncFormOptions();
-
-  selectStudent();
-
-  autoSave();
-
-
-  alert(
-    "✓ वर्ग क्रमांक को ascending order में व्यवस्थित कर दिया गया है।"
+  XLSX.writeFile(
+    wb,
+    "Marks_Folio_Import_Format.xlsx"
   );
 
 }
 
 
-/* ==========================================================
+/* =========================================================
    EXCEL IMPORT
-   ========================================================== */
+========================================================= */
 
-function importExcel(event) {
+function excelImport(){
 
-  const file =
-    event.target.files[0];
+  /*
+    First download the desired format.
+  */
 
-
-  if (!file) return;
-
-
-  const fileName =
-    file.name.toLowerCase();
+  downloadExcelTemplate();
 
 
-  const allowed =
-    [
-      ".xlsx",
-      ".xls",
-      ".csv"
-    ];
+  /*
+    Small delay allows browser to start
+    download before opening file picker.
+  */
+
+  setTimeout(() => {
+
+    document.getElementById(
+      "excelFile"
+    ).click();
+
+  }, 500);
+
+}
 
 
-  if (
-    !allowed.some(
-      ext =>
-        fileName.endsWith(ext)
-    )
-  ) {
+/* =========================================================
+   PROCESS EXCEL
+========================================================= */
+
+function processExcel(file){
+
+  if(!file){
+    return;
+  }
+
+
+  if(
+    typeof XLSX === "undefined"
+  ){
 
     alert(
-      "कृपया Excel (.xlsx/.xls) या CSV file चुनें।"
+      "Excel library load नहीं हुई।"
     );
-
-
-    event.target.value = "";
 
     return;
 
@@ -2718,9 +3160,9 @@ function importExcel(event) {
 
 
   reader.onload =
-    function(e) {
+    function(e){
 
-      try {
+      try{
 
         const data =
           new Uint8Array(
@@ -2738,18 +3180,18 @@ function importExcel(event) {
 
 
         const sheetName =
-          workbook
-            .SheetNames[0];
+          workbook.SheetNames[0];
 
 
-        const worksheet =
-          workbook
-            .Sheets[sheetName];
+        const sheet =
+          workbook.Sheets[
+            sheetName
+          ];
 
 
         const rows =
           XLSX.utils.sheet_to_json(
-            worksheet,
+            sheet,
             {
               header: 1,
               defval: ""
@@ -2757,13 +3199,13 @@ function importExcel(event) {
           );
 
 
-        if (
+        if(
           !rows ||
-          rows.length === 0
-        ) {
+          rows.length < 2
+        ){
 
           alert(
-            "Excel file खाली है।"
+            "Excel में विद्यार्थी डेटा नहीं मिला।"
           );
 
           return;
@@ -2771,18 +3213,12 @@ function importExcel(event) {
         }
 
 
-        /*
-          First row = headings
-        */
-
-        const headers =
+        const header =
           rows[0].map(
-            h =>
-              String(
-                h || ""
-              )
-                .trim()
-                .toLowerCase()
+            x =>
+            String(x)
+              .trim()
+              .toLowerCase()
           );
 
 
@@ -2790,73 +3226,26 @@ function importExcel(event) {
 
         let nameIndex = -1;
 
-        let srIndex = -1;
 
+        header.forEach(
+          (h,i) => {
 
-        headers.forEach(
-          (h, i) => {
+            if(
+              h.includes("रोल") ||
+              h.includes("roll")
+            ){
 
-            /*
-              Roll Number headings
-            */
-
-            if (
-              h.includes("वर्ग क्रमांक") ||
-              h.includes("क्रमांक") ||
-              h.includes("roll") ||
-              h.includes("roll no") ||
-              h.includes("roll number") ||
-              h.includes("रोल")
-            ) {
-
-              if (
-                rollIndex === -1
-              ) {
-
-                rollIndex = i;
-
-              }
+              rollIndex = i;
 
             }
 
 
-            /*
-              Name headings
-            */
-
-            if (
-              h.includes("विद्यार्थी") ||
-              h.includes("विद्यार्थियों") ||
+            if(
               h.includes("नाम") ||
-              h.includes("name") ||
-              h.includes("student")
-            ) {
+              h.includes("name")
+            ){
 
-              if (
-                nameIndex === -1
-              ) {
-
-                nameIndex = i;
-
-              }
-
-            }
-
-
-            /*
-              Serial number
-            */
-
-            if (
-              h.includes("क्रम संख्या") ||
-              h.includes("क्रम सं") ||
-              h === "s.no" ||
-              h === "sno" ||
-              h === "sr no" ||
-              h === "serial"
-            ) {
-
-              srIndex = i;
+              nameIndex = i;
 
             }
 
@@ -2865,69 +3254,27 @@ function importExcel(event) {
 
 
         /*
-          If headings are not recognised,
-          assume:
-
-          Column A = S.No.
+          Fallback:
+          Expected format is:
+          Column A = S.No
           Column B = Roll
           Column C = Name
         */
 
-        if (
+        if(
           rollIndex === -1
-        ) {
+        ){
 
-          if (
-            headers.length >= 3
-          ) {
-
-            rollIndex = 1;
-
-          }
-
-          else if (
-            headers.length === 2
-          ) {
-
-            rollIndex = 0;
-
-          }
+          rollIndex = 1;
 
         }
 
 
-        if (
+        if(
           nameIndex === -1
-        ) {
+        ){
 
-          if (
-            headers.length >= 3
-          ) {
-
-            nameIndex = 2;
-
-          }
-
-          else if (
-            headers.length === 2
-          ) {
-
-            nameIndex = 1;
-
-          }
-
-        }
-
-
-        if (
-          nameIndex === -1
-        ) {
-
-          alert(
-            "Excel में विद्यार्थी के नाम वाला column नहीं मिला।"
-          );
-
-          return;
+          nameIndex = 2;
 
         }
 
@@ -2935,48 +3282,38 @@ function importExcel(event) {
         const imported = [];
 
 
-        /*
-          Start from row 2
-        */
-
-        for (
-          let r = 1;
-          r < rows.length;
-          r++
-        ) {
+        for(
+          let i = 1;
+          i < rows.length;
+          i++
+        ){
 
           const row =
-            rows[r];
+            rows[i] || [];
 
 
-          if (
-            !row ||
-            row.length === 0
-          ) continue;
+          const roll =
+            String(
+              row[rollIndex] ??
+              ""
+            ).trim();
 
 
           const name =
             String(
-              row[nameIndex] || ""
+              row[nameIndex] ??
+              ""
             ).trim();
 
 
-          const roll =
-            rollIndex >= 0
-              ? String(
-                  row[rollIndex] || ""
-                ).trim()
-              : "";
-
-
           /*
-            Empty row skip
+            Ignore completely blank rows.
           */
 
-          if (
-            !name &&
-            !roll
-          ) {
+          if(
+            roll === "" &&
+            name === ""
+          ){
 
             continue;
 
@@ -2985,9 +3322,9 @@ function importExcel(event) {
 
           imported.push({
 
-            roll: roll,
+            roll,
 
-            name: name,
+            name,
 
             marks:
               new Array(
@@ -2999,12 +3336,12 @@ function importExcel(event) {
         }
 
 
-        if (
+        if(
           imported.length === 0
-        ) {
+        ){
 
           alert(
-            "Excel से कोई विद्यार्थी प्राप्त नहीं हुआ।"
+            "Excel में कोई विद्यार्थी नहीं मिला।"
           );
 
           return;
@@ -3012,100 +3349,57 @@ function importExcel(event) {
         }
 
 
-        /*
-          Ask whether replace or append
-        */
+        if(
+          students.length > 0
+        ){
 
-        let mode =
-          confirm(
-            "Excel से " +
-            imported.length +
-            " विद्यार्थी मिले हैं।\n\n" +
-            "OK = वर्तमान सूची को Excel सूची से बदलें\n" +
-            "Cancel = विद्यार्थियों को वर्तमान सूची में जोड़ें"
-          );
+          const hasData =
+            students.some(
+              st =>
+              String(
+                st.name || ""
+              ).trim() !== "" ||
+              String(
+                st.roll || ""
+              ).trim() !== ""
+            );
 
 
-        if (mode) {
+          if(hasData){
+
+            const replace =
+              confirm(
+                "क्या Excel के विद्यार्थियों से वर्तमान विद्यार्थी सूची को replace करना चाहते हैं?\n\nOK = Replace\nCancel = Excel विद्यार्थियों को अंत में जोड़ें"
+              );
+
+
+            if(replace){
+
+              students =
+                imported;
+
+            }else{
+
+              students =
+                students.concat(
+                  imported
+                );
+
+            }
+
+          }else{
+
+            students =
+              imported;
+
+          }
+
+        }else{
 
           students =
             imported;
 
         }
-
-        else {
-
-          students =
-            students.concat(
-              imported
-            );
-
-        }
-
-
-        /*
-          Arrange ascending by roll
-        */
-
-        students.sort(
-          (a, b) => {
-
-            const ra =
-              parseInt(
-                String(
-                  a.roll || ""
-                ).replace(
-                  /\D/g,
-                  ""
-                ),
-                10
-              );
-
-
-            const rb =
-              parseInt(
-                String(
-                  b.roll || ""
-                ).replace(
-                  /\D/g,
-                  ""
-                ),
-                10
-              );
-
-
-            if (
-              isNaN(ra) &&
-              isNaN(rb)
-            ) {
-
-              return 0;
-
-            }
-
-
-            if (
-              isNaN(ra)
-            ) {
-
-              return 1;
-
-            }
-
-
-            if (
-              isNaN(rb)
-            ) {
-
-              return -1;
-
-            }
-
-
-            return ra - rb;
-
-          }
-        );
 
 
         selectedStudent = 0;
@@ -3121,30 +3415,17 @@ function importExcel(event) {
 
 
         alert(
-          "✓ Excel Import सफल!\n\n" +
-          imported.length +
-          " विद्यार्थी जोड़े गए हैं।"
+          `✓ ${imported.length} विद्यार्थी Excel से सफलतापूर्वक import किए गए।`
         );
 
-      }
 
-      catch (error) {
+      }catch(err){
 
-        console.error(
-          error
-        );
-
+        console.error(err);
 
         alert(
-          "Excel file पढ़ने में समस्या हुई।\nकृपया सही Excel file चुनें।"
+          "Excel file पढ़ने में समस्या हुई। कृपया Desired Format में file तैयार करके फिर प्रयास करें।"
         );
-
-      }
-
-      finally {
-
-        event.target.value =
-          "";
 
       }
 
@@ -3155,20 +3436,34 @@ function importExcel(event) {
     file
   );
 
+
+  /*
+    Same file again can be selected.
+  */
+
+  document.getElementById(
+    "excelFile"
+  ).value = "";
+
 }
 
 
-/* ==========================================================
-   DOWNLOAD PDF
-   ========================================================== */
+/* =========================================================
+   PDF DOWNLOAD
+========================================================= */
 
-function downloadPDF() {
+function downloadPDF(){
 
   const element =
     document.getElementById(
       "pagesWrap"
     );
 
+
+  /*
+    Temporarily remove horizontal
+    positioning issues during PDF creation.
+  */
 
   const opt = {
 
@@ -3194,7 +3489,9 @@ function downloadPDF() {
 
       useCORS: true,
 
-      scrollY: 0
+      scrollY: 0,
+
+      scrollX: 0
 
     },
 
@@ -3221,16 +3518,58 @@ function downloadPDF() {
 
 
   html2pdf()
+
     .set(opt)
+
     .from(element)
+
     .save();
 
 }
 
 
-/* ==========================================================
-   INITIAL LOAD
-   ========================================================== */
+/* =========================================================
+   MOBILE SCROLL HELP
+========================================================= */
+
+const paperContainer =
+  document.getElementById(
+    "paperContainer"
+  );
+
+
+/*
+  Prevent accidental browser back/forward
+  navigation while horizontal swiping
+  over the paper.
+*/
+
+paperContainer.addEventListener(
+  "wheel",
+  function(e){
+
+    if(
+      Math.abs(e.deltaX) >
+      Math.abs(e.deltaY)
+    ){
+
+      e.preventDefault();
+
+      this.scrollLeft +=
+        e.deltaX;
+
+    }
+
+  },
+  {
+    passive: false
+  }
+);
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
 
 loadData();
 
