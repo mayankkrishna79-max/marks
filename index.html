@@ -73,11 +73,6 @@ button:active{
   transform:scale(.98);
 }
 
-button:disabled{
-  opacity:.45;
-  cursor:not-allowed;
-}
-
 .primary{background:#0d6efd;color:#fff}
 .green{background:#198754;color:#fff}
 .gray{background:#6c757d;color:#fff}
@@ -533,6 +528,11 @@ td.result{
   font-weight:800 !important;
 }
 
+.blank-result{
+  font-weight:700;
+  color:#111;
+}
+
 tfoot td.note-cell{
   border:0 !important;
   text-align:left;
@@ -735,7 +735,7 @@ tfoot td.note-cell{
 
 <button class="warning" onclick="downloadPDF()">📥 PDF</button>
 
-<button class="gray" onclick="printFolio()">🖨 Print</button>
+<button class="gray" onclick="window.print()">🖨 Print</button>
 
 <button class="share-btn" onclick="shareApp()">🔗 Share</button>
 
@@ -888,8 +888,6 @@ oninput="syncHeaderInputs('className',this.value)">
 </div>
 
 
-<!-- परीक्षा -->
-
 <div>
 
 <label>परीक्षा</label>
@@ -914,8 +912,6 @@ onchange="syncHeaderInputs('exam',this.value)">
 
 </div>
 
-
-<!-- शैक्षणिक वर्ष -->
 
 <div>
 
@@ -1012,7 +1008,7 @@ onclick="downloadExcelTemplate()">
 <button
 class="green"
 onclick="document.getElementById('excelFile').click()">
-📤 Excel Import
+📤 e-Shikshakosh Student Data Excel Upload
 </button>
 
 <input
@@ -1020,7 +1016,7 @@ type="file"
 id="excelFile"
 accept=".xlsx,.xls,.csv"
 style="display:none"
-onchange="importExcel(event)">
+onchange="importEshikshakoshExcel(event)">
 
 <button
 class="warning"
@@ -1309,6 +1305,33 @@ return subjects.reduce(
 
 
 /* =========================================================
+   CHECK MARK ENTRY
+========================================================= */
+
+/*
+  यदि किसी विद्यार्थी के किसी भी विषय में
+  वास्तविक marks/ABSENT entry नहीं है,
+  तो उसका result blank रहेगा।
+*/
+
+function hasAnyMarkEntry(student){
+
+if(!student || !Array.isArray(student.marks))
+return false;
+
+return student.marks.some(value=>{
+
+const v=
+String(value ?? "").trim();
+
+return v!=="";
+
+});
+
+}
+
+
+/* =========================================================
    GRADE
 ========================================================= */
 
@@ -1329,29 +1352,43 @@ return "E";
 
 /* =========================================================
    RESULT
-   IMPORTANT:
-   ABSENT = 0 MARKS
 ========================================================= */
 
 function calculateResult(student){
 
-let total=0;
+/*
+  कोई भी marks entry नहीं है तो
+  Total / Grade / Percentage blank
+*/
 
-let hasEntry=false;
+if(!hasAnyMarkEntry(student)){
+
+return{
+
+total:"",
+
+percentage:"",
+
+grade:"",
+
+hasAbsent:false,
+
+hasEntry:false
+
+};
+
+}
+
+let total=0;
 
 let hasAbsent=false;
 
 subjects.forEach((subject,i)=>{
 
-let value=
+let value =
 String(
 (student.marks && student.marks[i]) || ""
 ).trim();
-
-
-/* -----------------------------------------
-   ABSENT को 0 अंक माना जाएगा
------------------------------------------ */
 
 if(
 value.toUpperCase()==="ABSENT" ||
@@ -1360,34 +1397,17 @@ value.toUpperCase()==="AB"
 
 hasAbsent=true;
 
-hasEntry=true;
-
-/*
-  कोई अंक Total में add नहीं होगा।
-  इसलिए Absent = 0
-*/
-
 return;
 
 }
 
-
-/* -----------------------------------------
-   Numeric Marks
------------------------------------------ */
-
-if(value!==""){
+if(value){
 
 let n=Number(value);
 
-if(
-!isNaN(n) &&
-n>=0
-){
+if(!isNaN(n) && n>=0){
 
 total+=n;
-
-hasEntry=true;
 
 }
 
@@ -1395,49 +1415,18 @@ hasEntry=true;
 
 });
 
+let max=calculateMaxMarks();
 
-/* -----------------------------------------
-   कोई entry नहीं
------------------------------------------ */
-
-if(!hasEntry){
-
-return{
-
-total:"",
-percentage:"",
-grade:"",
-hasAbsent:false,
-hasEntry:false
-
-};
-
-}
-
-
-/* -----------------------------------------
-   Percentage
-   सभी subjects के full marks के आधार पर
------------------------------------------ */
-
-let max=
-calculateMaxMarks();
-
-let percentage=
-max
+let percentage=max
 ?(total/max)*100
 :0;
 
-
 return{
 
-total:total,
-
-percentage:percentage,
-
+total,
+percentage,
 grade:getGrade(percentage),
-
-hasAbsent:hasAbsent,
+hasAbsent,
 
 hasEntry:true
 
@@ -1589,7 +1578,6 @@ id="entryStatus${i}"
 onchange="entryStatusChange(${i},this.value)">
 
 <option value="PRESENT">Present</option>
-
 <option value="ABSENT">Absent</option>
 
 </select>
@@ -1621,23 +1609,10 @@ function entryStatusChange(index,value){
 const student=
 students[selectedStudent];
 
-if(!student)
-return;
-
-if(!Array.isArray(student.marks))
-student.marks=[];
-
-while(
-student.marks.length<subjects.length
-){
-
-student.marks.push("");
-
-}
+if(!student) return;
 
 const input=
 document.getElementById("m"+index);
-
 
 if(value==="ABSENT"){
 
@@ -1665,7 +1640,6 @@ input.classList.remove("absent-input");
 
 }
 
-
 renderPages();
 
 autoSave();
@@ -1682,21 +1656,7 @@ function entryMarkChange(index,value){
 const student=
 students[selectedStudent];
 
-if(!student)
-return;
-
-if(!Array.isArray(student.marks))
-student.marks=[];
-
-
-while(
-student.marks.length<subjects.length
-){
-
-student.marks.push("");
-
-}
-
+if(!student) return;
 
 if(
 String(value).toUpperCase()==="ABSENT" ||
@@ -1711,10 +1671,8 @@ student.marks[index]=value;
 
 }
 
-
 const input=
 document.getElementById("m"+index);
-
 
 if(input){
 
@@ -1732,7 +1690,6 @@ input.classList.remove("absent-input");
 
 }
 
-
 renderPages();
 
 autoSave();
@@ -1747,8 +1704,7 @@ autoSave();
 function updateSubjectName(index,value){
 
 subjects[index].name=
-value.trim() ||
-`विषय ${index+1}`;
+value.trim() || `विषय ${index+1}`;
 
 renderSubjectOrder();
 
@@ -1767,13 +1723,8 @@ function updateSubjectFull(index,value){
 
 let n=Number(value);
 
-if(
-isNaN(n) ||
-n<0
-){
-
+if(isNaN(n) || n<0){
 n=0;
-
 }
 
 subjects[index].full=n;
@@ -1860,7 +1811,6 @@ return;
 
 }
 
-
 const temp=
 subjects[index];
 
@@ -1870,7 +1820,6 @@ subjects[newIndex];
 subjects[newIndex]=
 temp;
 
-
 students.forEach(student=>{
 
 if(!Array.isArray(student.marks))
@@ -1878,14 +1827,10 @@ student.marks=[];
 
 while(
 student.marks.length<subjects.length
-){
-
+)
 student.marks.push("");
 
-}
-
 });
-
 
 reorderAllMarks(index,newIndex);
 
@@ -1910,8 +1855,7 @@ students.forEach(student=>{
 
 if(
 Array.isArray(student.marks) &&
-student.marks.length>
-Math.max(from,to)
+student.marks.length>Math.max(from,to)
 ){
 
 const temp=
@@ -1942,19 +1886,14 @@ prompt(
 `विषय ${subjects.length+1}`
 );
 
-if(
-!name ||
-!name.trim()
-)
+if(!name || !name.trim())
 return;
-
 
 const full=
 prompt(
 "इस विषय का पूर्णांक:",
 "50"
 );
-
 
 let fullMarks=
 Number(full);
@@ -1967,7 +1906,6 @@ fullMarks<0
 fullMarks=50;
 
 }
-
 
 subjects.push({
 
@@ -1986,7 +1924,6 @@ student.marks=[];
 student.marks.push("");
 
 });
-
 
 renderSubjectControls();
 
@@ -2015,12 +1952,10 @@ return;
 
 }
 
-
 const select=
 document.getElementById(
 "delSubSelect"
 );
-
 
 select.innerHTML=
 subjects.map(
@@ -2029,7 +1964,6 @@ subjects.map(
 ${i+1}. ${esc(s.name)}
 </option>`
 ).join("");
-
 
 document
 .getElementById("subModal")
@@ -2056,13 +1990,10 @@ document.getElementById(
 ).value
 );
 
-
 if(isNaN(index))
 return;
 
-
 subjects.splice(index,1);
-
 
 students.forEach(student=>{
 
@@ -2073,7 +2004,6 @@ student.marks.splice(index,1);
 }
 
 });
-
 
 closeSubjectModal();
 
@@ -2096,49 +2026,34 @@ function syncHeaderInputs(key,value){
 
 details[key]=value;
 
-
 const map={
 
 center:"formCenter",
-
 district:"formDistrict",
-
 school:"formSchool",
-
 udise:"formUdise",
-
 block:"formBlock",
-
 className:"formClass",
-
 board:"formBoard",
-
 exam:"formExam",
-
 year:"formYear"
 
 };
 
-
 const id=map[key];
-
 
 if(id){
 
 const el=
 document.getElementById(id);
 
-if(
-el &&
-el.value!==value
-){
+if(el && el.value!==value){
 
 el.value=value;
 
 }
 
 }
-
 
 renderPages();
 
@@ -2156,11 +2071,7 @@ function renderPages(){
 const wrap=
 document.getElementById("pagesWrap");
 
-if(!wrap)
-return;
-
 wrap.innerHTML="";
-
 
 const totalPages=
 Math.max(
@@ -2170,7 +2081,6 @@ students.length/
 ROWS_PER_PAGE
 )
 );
-
 
 const totalCols=
 3+
@@ -2189,7 +2099,6 @@ document.createElement("section");
 
 pageDiv.className="paper";
 
-
 const start=
 page*ROWS_PER_PAGE;
 
@@ -2202,18 +2111,14 @@ r<ROWS_PER_PAGE;
 r++
 ){
 
-const i=
-start+r;
-
+const i=start+r;
 
 if(i<students.length){
 
 const student=
 students[i];
 
-
 let subCells="";
-
 
 subjects.forEach((subject,s)=>{
 
@@ -2221,11 +2126,9 @@ const mark=
 (student.marks &&
 student.marks[s]) || "";
 
-
 const isAbsent=
 String(mark).toUpperCase()==="ABSENT" ||
 String(mark).toUpperCase()==="AB";
-
 
 subCells+=`
 
@@ -2247,6 +2150,25 @@ const result=
 calculateResult(student);
 
 
+/*
+  Screen पर blank रहेगा।
+  Print/PDF में blank result को "-"
+  JavaScript द्वारा replace किया जाएगा।
+*/
+
+let totalDisplay=
+result.hasEntry
+?result.total
+:"";
+
+let resultDisplay=
+result.hasEntry
+?(result.hasAbsent
+?`<span class="absent-cell">ABSENT</span>`
+:`${result.grade}<br>${result.percentage.toFixed(1)}%`)
+:"";
+
+
 rows+=`
 
 <tr>
@@ -2254,7 +2176,6 @@ rows+=`
 <td class="col-sr">
 ${i+1}
 </td>
-
 
 <td class="col-roll">
 
@@ -2264,7 +2185,6 @@ oninput="cellInfoChanged(${i},'roll',this.value)">
 
 </td>
 
-
 <td class="col-name name">
 
 <input
@@ -2273,32 +2193,27 @@ oninput="cellInfoChanged(${i},'name',this.value)">
 
 </td>
 
-
 ${subCells}
 
+<td class="col-total total"
+data-print-blank="${result.hasEntry?"0":"1"}">
 
-<td class="col-total total">
-${result.hasEntry ? result.total : ""}
-</td>
-
-
-<td class="col-result result">
-
-${
-result.hasEntry
-?`${result.grade}<br>${result.percentage.toFixed(1)}%`
-:""
-}
+${totalDisplay}
 
 </td>
 
+<td class="col-result result"
+data-print-blank="${result.hasEntry?"0":"1"}">
+
+${resultDisplay}
+
+</td>
 
 </tr>
 
 `;
 
 }else{
-
 
 rows+=`
 
@@ -2343,16 +2258,13 @@ pageDiv.innerHTML=`
 ${boardTitle}
 </div>
 
-
 <div class="exam-title">
 ${esc(details.exam || "त्रैमासिक परीक्षा")}
 </div>
 
-
 <div class="exam-year">
 शैक्षणिक वर्ष : ${esc(details.year || "2026-27")}
 </div>
-
 
 <div class="h2">
 
@@ -2371,7 +2283,6 @@ totalPages>1
 
 <div class="info">
 
-
 <div class="info-row">
 
 <label>
@@ -2381,7 +2292,6 @@ totalPages>1
 <input
 value="${esc(details.center)}"
 oninput="syncHeaderInputs('center',this.value)">
-
 
 <label>
 जिला :-
@@ -2417,7 +2327,6 @@ oninput="syncHeaderInputs('school',this.value)">
 value="${esc(details.udise)}"
 oninput="syncHeaderInputs('udise',this.value)">
 
-
 <label>
 प्रखंड का नाम :-
 </label>
@@ -2438,7 +2347,6 @@ oninput="syncHeaderInputs('block',this.value)">
 <input
 value="${esc(details.className)}"
 oninput="syncHeaderInputs('className',this.value)">
-
 
 <label>
 कुल पूर्णांक :-
@@ -2466,11 +2374,9 @@ readonly>
 क्र०<br>सं०
 </th>
 
-
 <th class="col-roll">
 वर्ग<br>क्रमांक
 </th>
-
 
 <th class="col-name">
 विद्यार्थी का नाम
@@ -2482,11 +2388,9 @@ subjects.map(
 s=>
 `<th class="col-sub">
 ${esc(s.name)}<br>
-
 <span style="font-size:8.5px">
 (${s.full})
 </span>
-
 </th>`
 ).join("")
 }
@@ -2495,7 +2399,6 @@ ${esc(s.name)}<br>
 <th class="col-total">
 कुल
 </th>
-
 
 <th class="col-result">
 ग्रेड / प्रतिशत
@@ -2522,9 +2425,8 @@ colspan="${totalCols}"
 class="note-cell">
 
 ※ प्रत्येक विषय का पूर्णांक Entry Panel में निर्धारित किया जा सकता है।
-खाली अंक को 0 माना जाएगा। किसी विषय में अनुपस्थित विद्यार्थी के लिए
-Absent चुनें। Absent विषय के अंक 0 माने जाएंगे तथा कुल अंक,
-प्रतिशत एवं ग्रेड स्वतः निकलेगा।
+खाली अंक को 0 माना जाएगा। अनुपस्थित विद्यार्थी के लिए Absent चुनें।
+कुल अंक एवं प्रतिशत स्वतः निकलेगा।
 
 </td>
 
@@ -2544,12 +2446,10 @@ Absent चुनें। Absent विषय के अंक 0 माने �
 तिथि सहित
 </div>
 
-
 <div class="sig">
 प्रधान परीक्षक का नाम एवं<br>
 हस्ताक्षर तिथि सहित
 </div>
-
 
 <div class="sig">
 मूल्यांकन निदेशक का<br>
@@ -2559,7 +2459,6 @@ Absent चुनें। Absent विषय के अंक 0 माने �
 </div>
 
 `;
-
 
 wrap.appendChild(pageDiv);
 
@@ -2572,11 +2471,7 @@ wrap.appendChild(pageDiv);
    CELL CHANGE
 ========================================================= */
 
-function cellChanged(
-studentIndex,
-subjectIndex,
-value
-){
+function cellChanged(studentIndex,subjectIndex,value){
 
 if(
 !students[studentIndex].marks
@@ -2587,7 +2482,6 @@ new Array(subjects.length)
 .fill("");
 
 }
-
 
 if(
 String(value).toUpperCase()==="ABSENT" ||
@@ -2604,7 +2498,6 @@ students[studentIndex]
 
 }
 
-
 if(
 studentIndex===selectedStudent
 ){
@@ -2614,17 +2507,13 @@ document.getElementById(
 "m"+subjectIndex
 );
 
-
 if(input){
 
 input.value=
-students[studentIndex]
-.marks[subjectIndex];
-
+students[studentIndex].marks[subjectIndex];
 
 if(
-students[studentIndex]
-.marks[subjectIndex]==="ABSENT"
+students[studentIndex].marks[subjectIndex]==="ABSENT"
 ){
 
 input.classList.add("absent-input");
@@ -2639,7 +2528,6 @@ input.classList.remove("absent-input");
 
 }
 
-
 renderPages();
 
 autoSave();
@@ -2651,36 +2539,19 @@ autoSave();
    STUDENT INFO
 ========================================================= */
 
-function cellInfoChanged(
-index,
-key,
-value
-){
+function cellInfoChanged(index,key,value){
 
 students[index][key]=value;
 
-
 if(index===selectedStudent){
 
-if(key==="name"){
+if(key==="name")
+document.getElementById("formName").value=value;
 
-document.getElementById(
-"formName"
-).value=value;
-
-}
-
-
-if(key==="roll"){
-
-document.getElementById(
-"formRoll"
-).value=value;
+if(key==="roll")
+document.getElementById("formRoll").value=value;
 
 }
-
-}
-
 
 syncFormOptions();
 
@@ -2698,30 +2569,21 @@ autoSave();
 function syncFormOptions(){
 
 const select=
-document.getElementById(
-"studentSelect"
-);
-
-if(!select)
-return;
+document.getElementById("studentSelect");
 
 select.innerHTML="";
 
 
-students.forEach(
-(student,index)=>{
+students.forEach((student,index)=>{
 
 const option=
-document.createElement(
-"option"
-);
+document.createElement("option");
 
 option.value=index;
 
 option.textContent=
 `${index+1}. ${
-student.name ||
-"नया विद्यार्थी"
+student.name || "नया विद्यार्थी"
 }`;
 
 select.appendChild(option);
@@ -2732,12 +2594,8 @@ select.appendChild(option);
 selectedStudent=
 Math.min(
 selectedStudent,
-Math.max(
-0,
-students.length-1
-)
+Math.max(0,students.length-1)
 );
-
 
 select.value=
 selectedStudent;
@@ -2758,82 +2616,59 @@ document.getElementById(
 ).value
 )||0;
 
-
 const student=
 students[selectedStudent];
-
 
 if(!student)
 return;
 
-
-document.getElementById(
-"formRoll"
-).value=
+document.getElementById("formRoll").value=
 student.roll||"";
 
-
-document.getElementById(
-"formName"
-).value=
+document.getElementById("formName").value=
 student.name||"";
 
 
-subjects.forEach(
-(subject,i)=>{
+subjects.forEach((subject,i)=>{
 
 const input=
-document.getElementById(
-"m"+i
-);
-
+document.getElementById("m"+i);
 
 const status=
 document.getElementById(
 "entryStatus"+i
 );
 
-
 const value=
 (student.marks &&
 student.marks[i])||"";
 
-
 if(input){
 
 input.value=
-value==="ABSENT"
-?"ABSENT"
-:value;
-
+value==="ABSENT"?"":value;
 
 if(
 String(value).toUpperCase()==="ABSENT"
 ){
 
-input.classList.add(
-"absent-input"
-);
+input.value="ABSENT";
+
+input.classList.add("absent-input");
 
 }else{
 
-input.classList.remove(
-"absent-input"
-);
+input.classList.remove("absent-input");
 
 }
 
 }
 
-
-if(status){
-
+if(status)
 status.value=
 String(value).toUpperCase()==="ABSENT"
 ?"ABSENT"
 :"PRESENT";
-
-}
 
 });
 
@@ -2849,16 +2684,13 @@ function formChanged(){
 const student=
 students[selectedStudent];
 
-
 if(!student)
 return;
-
 
 student.roll=
 document.getElementById(
 "formRoll"
 ).value;
-
 
 student.name=
 document.getElementById(
@@ -2866,32 +2698,15 @@ document.getElementById(
 ).value;
 
 
-if(!Array.isArray(student.marks))
-student.marks=[];
-
-
-while(
-student.marks.length<subjects.length
-){
-
-student.marks.push("");
-
-}
-
-
-subjects.forEach(
-(s,i)=>{
+subjects.forEach((s,i)=>{
 
 const input=
-document.getElementById(
-"m"+i
-);
+document.getElementById("m"+i);
 
 const status=
 document.getElementById(
 "entryStatus"+i
 );
-
 
 if(
 status &&
@@ -2903,25 +2718,20 @@ student.marks[i]="ABSENT";
 }else{
 
 student.marks[i]=
-input
-?input.value
-:"";
+input?input.value:"";
 
 }
 
 });
 
-
 renderPages();
 
 syncFormOptions();
-
 
 document.getElementById(
 "studentSelect"
 ).value=
 selectedStudent;
-
 
 autoSave();
 
@@ -2937,19 +2747,15 @@ function addStudent(){
 students.push({
 
 roll:"",
-
 name:"",
-
 marks:
 new Array(subjects.length)
 .fill("")
 
 });
 
-
 selectedStudent=
 students.length-1;
-
 
 renderPages();
 
@@ -2978,7 +2784,6 @@ return;
 
 }
 
-
 if(
 !confirm(
 "क्या अंतिम विद्यार्थी को हटाना चाहते हैं?"
@@ -2986,16 +2791,13 @@ if(
 )
 return;
 
-
 students.pop();
-
 
 selectedStudent=
 Math.min(
 selectedStudent,
 students.length-1
 );
-
 
 renderPages();
 
@@ -3029,15 +2831,12 @@ return;
 
 }
 
-
 document.getElementById(
 "studentSelect"
 ).value=
 selectedStudent;
 
-
 selectStudent();
-
 
 window.scrollTo({
 
@@ -3058,7 +2857,7 @@ function autoSave(){
 
 localStorage.setItem(
 
-"deoMarksFolio_Final_v11",
+"deoMarksFolio_Final_v12",
 
 JSON.stringify({
 
@@ -3070,12 +2869,10 @@ students
 
 );
 
-
 const status=
 document.getElementById(
 "saveStatus"
 );
-
 
 if(status){
 
@@ -3112,12 +2909,14 @@ function loadData(){
 
 const raw=
 localStorage.getItem(
+"deoMarksFolio_Final_v12"
+) ||
+localStorage.getItem(
 "deoMarksFolio_Final_v11"
 ) ||
 localStorage.getItem(
 "deoMarksFolio_Final_v10"
 );
-
 
 if(raw){
 
@@ -3133,31 +2932,21 @@ data.subjects.length
 ){
 
 subjects=
-data.subjects.map(
-s=>{
+data.subjects.map(s=>{
 
-if(
-typeof s==="string"
-){
+if(typeof s==="string"){
 
 return{
-
 name:s,
-
 full:50
-
 };
 
 }
 
-
 return{
 
 name:s.name||"विषय",
-
-full:Number(
-s.full??50
-)
+full:Number(s.full??50)
 
 };
 
@@ -3181,8 +2970,7 @@ if(
 Array.isArray(data.students)
 ){
 
-students=
-data.students;
+students=data.students;
 
 }
 
@@ -3195,10 +2983,6 @@ console.log(e);
 }
 
 
-/* -----------------------------------------
-   Default 30 students
------------------------------------------ */
-
 if(students.length===0){
 
 for(
@@ -3210,9 +2994,7 @@ i++
 students.push({
 
 roll:"",
-
 name:"",
-
 marks:
 new Array(subjects.length)
 .fill("")
@@ -3224,16 +3006,15 @@ new Array(subjects.length)
 }
 
 
-/* -----------------------------------------
-   Marks array repair
------------------------------------------ */
+/*
+ सभी विद्यार्थियों के marks array को
+ वर्तमान subjects के अनुसार ठीक करें
+*/
 
-students.forEach(
-student=>{
+students.forEach(student=>{
 
 if(!Array.isArray(student.marks))
 student.marks=[];
-
 
 while(
 student.marks.length<
@@ -3243,7 +3024,6 @@ subjects.length
 student.marks.push("");
 
 }
-
 
 if(
 student.marks.length>
@@ -3274,64 +3054,32 @@ selectedStudent=0;
 selectStudent();
 
 
-/* -----------------------------------------
-   School form
------------------------------------------ */
-
-document.getElementById(
-"formBoard"
-).value=
+document.getElementById("formBoard").value=
 details.board||"SCERT";
 
-
-document.getElementById(
-"formCenter"
-).value=
+document.getElementById("formCenter").value=
 details.center||"";
 
-
-document.getElementById(
-"formDistrict"
-).value=
+document.getElementById("formDistrict").value=
 details.district||"";
 
-
-document.getElementById(
-"formSchool"
-).value=
+document.getElementById("formSchool").value=
 details.school||"";
 
-
-document.getElementById(
-"formUdise"
-).value=
+document.getElementById("formUdise").value=
 details.udise||"";
 
-
-document.getElementById(
-"formBlock"
-).value=
+document.getElementById("formBlock").value=
 details.block||"";
 
-
-document.getElementById(
-"formClass"
-).value=
+document.getElementById("formClass").value=
 details.className||"";
 
+document.getElementById("formExam").value=
+details.exam||"त्रैमासिक परीक्षा";
 
-document.getElementById(
-"formExam"
-).value=
-details.exam||
-"त्रैमासिक परीक्षा";
-
-
-document.getElementById(
-"formYear"
-).value=
-details.year||
-"2026-27";
+document.getElementById("formYear").value=
+details.year||"2026-27";
 
 }
 
@@ -3347,6 +3095,10 @@ confirm(
 "क्या आप पूरा डेटा रीसेट करना चाहते हैं?"
 )
 ){
+
+localStorage.removeItem(
+"deoMarksFolio_Final_v12"
+);
 
 localStorage.removeItem(
 "deoMarksFolio_Final_v11"
@@ -3372,9 +3124,7 @@ function sortRollNumbers(){
 const selected=
 students[selectedStudent];
 
-
-students.sort(
-(a,b)=>{
+students.sort((a,b)=>{
 
 const aRoll=
 parseInt(
@@ -3382,28 +3132,20 @@ String(a.roll||"")
 .replace(/\D/g,"")
 );
 
-
 const bRoll=
 parseInt(
 String(b.roll||"")
 .replace(/\D/g,"")
 );
 
-
-if(
-isNaN(aRoll) &&
-isNaN(bRoll)
-)
+if(isNaN(aRoll)&&isNaN(bRoll))
 return 0;
-
 
 if(isNaN(aRoll))
 return 1;
 
-
 if(isNaN(bRoll))
 return -1;
-
 
 return aRoll-bRoll;
 
@@ -3413,10 +3155,8 @@ return aRoll-bRoll;
 selectedStudent=
 students.indexOf(selected);
 
-
 if(selectedStudent<0)
 selectedStudent=0;
-
 
 renderPages();
 
@@ -3425,7 +3165,6 @@ syncFormOptions();
 selectStudent();
 
 autoSave();
-
 
 alert(
 "✓ Roll Number ascending order में व्यवस्थित हो गया।"
@@ -3441,35 +3180,21 @@ alert(
 function downloadExcelTemplate(){
 
 const headers=[
-
 "वर्ग क्रमांक",
-
 "विद्यार्थी का नाम",
-
-...subjects.map(
-s=>s.name
-)
-
+...subjects.map(s=>s.name)
 ];
 
 
 const rows=[];
 
-
-for(
-let i=1;
-i<=30;
-i++
-){
+for(let i=1;i<=30;i++){
 
 const row={};
 
-
-headers.forEach(
-h=>{
+headers.forEach(h=>{
 row[h]="";
 });
-
 
 row["वर्ग क्रमांक"]=i;
 
@@ -3481,40 +3206,24 @@ rows.push(row);
 const worksheet=
 XLSX.utils.json_to_sheet(
 rows,
-{
-header:headers
-}
+{header:headers}
 );
 
 
 worksheet["!cols"]=[
-
-{
-wch:15
-},
-
-{
-wch:30
-},
-
-...subjects.map(
-s=>({
-
+{wch:15},
+{wch:30},
+...subjects.map(s=>({
 wch:Math.max(
 12,
 String(s.name).length+3
 )
-
-})
-
-)
-
+}))
 ];
 
 
 const workbook=
 XLSX.utils.book_new();
-
 
 XLSX.utils.book_append_sheet(
 workbook,
@@ -3524,36 +3233,99 @@ worksheet,
 
 
 XLSX.writeFile(
-
 workbook,
-
 "DEO_Office_Marks_Folio_Excel_Format.xlsx"
-
 );
 
 }
 
 
 /* =========================================================
-   EXCEL IMPORT
+   e-SHIKSHAKOSH EXCEL IMPORT
 ========================================================= */
 
-function importExcel(event){
+/*
+  e-Shikshakosh की Excel में केवल
+  विद्यार्थी का नाम और Roll Number लिया जाएगा।
+
+  बाकी सभी columns पूरी तरह IGNORE होंगे।
+
+  अलग-अलग e-Shikshakosh Excel formats में
+  column headings अलग हो सकती हैं।
+*/
+
+function findColumn(row,possibleNames){
+
+const keys=
+Object.keys(row);
+
+for(const wanted of possibleNames){
+
+const exact=
+keys.find(key=>
+String(key)
+.trim()
+.toLowerCase() ===
+String(wanted)
+.trim()
+.toLowerCase()
+);
+
+if(exact)
+return exact;
+
+}
+
+for(const wanted of possibleNames){
+
+const found=
+keys.find(key=>
+String(key)
+.toLowerCase()
+.includes(
+String(wanted).toLowerCase()
+)
+);
+
+if(found)
+return found;
+
+}
+
+return null;
+
+}
+
+
+function cleanExcelValue(value){
+
+if(
+value===undefined ||
+value===null
+){
+
+return "";
+
+}
+
+return String(value).trim();
+
+}
+
+
+function importEshikshakoshExcel(event){
 
 const file=
 event.target.files[0];
 
-
 if(!file)
 return;
-
 
 const reader=
 new FileReader();
 
 
-reader.onload=
-function(e){
+reader.onload=function(e){
 
 try{
 
@@ -3562,7 +3334,6 @@ new Uint8Array(
 e.target.result
 );
 
-
 const workbook=
 XLSX.read(
 data,
@@ -3570,6 +3341,19 @@ data,
 type:"array"
 }
 );
+
+
+if(
+!workbook.SheetNames.length
+){
+
+alert(
+"Excel sheet नहीं मिली।"
+);
+
+return;
+
+}
 
 
 const sheet=
@@ -3582,7 +3366,8 @@ const rows=
 XLSX.utils.sheet_to_json(
 sheet,
 {
-defval:""
+defval:"",
+raw:false
 }
 );
 
@@ -3598,79 +3383,153 @@ return;
 }
 
 
-students=
-rows.map(
-row=>{
+/*
+ संभावित Roll Number column names
+*/
 
-const student={
-
-roll:
-row["वर्ग क्रमांक"] ??
-row["Roll Number"] ??
-row["Roll No"] ??
-"",
-
-name:
-row["विद्यार्थी का नाम"] ??
-row["Student Name"] ??
-row["Name"] ??
-"",
-
-marks:[]
-
-};
-
-
-subjects.forEach(
-subject=>{
-
-let value=
-row[subject.name];
+const rollColumn=
+findColumn(
+rows[0],
+[
+"वर्ग क्रमांक",
+"वर्ग क्रमांक.",
+"क्रमांक",
+"अनुक्रमांक",
+"अनुक्रमांक.",
+"छात्र क्रमांक",
+"छात्र का क्रमांक",
+"Student Roll Number",
+"Student Roll No",
+"Roll Number",
+"Roll No",
+"Roll",
+"Admission No",
+"Admission Number"
+]
+);
 
 
-if(
-value===undefined ||
-value===null
-){
+/*
+ संभावित Student Name column names
+*/
 
-value="";
+const nameColumn=
+findColumn(
+rows[0],
+[
+"विद्यार्थी का नाम",
+"विद्यार्थी का नाम.",
+"छात्र का नाम",
+"छात्र का नाम.",
+"छात्र/छात्रा का नाम",
+"Student Name",
+"Student Name.",
+"Student",
+"Name",
+"Student_Name",
+"StudentName"
+]
+);
+
+
+if(!rollColumn || !nameColumn){
+
+alert(
+"❌ Excel में विद्यार्थी का नाम या Roll Number वाला column नहीं मिला।\n\n"+
+"कृपया e-Shikshakosh से डाउनलोड की गई Student Data Excel फाइल अपलोड करें।"
+);
+
+return;
 
 }
 
 
 /*
- Excel में AB / ABSENT भी
- automatically ABSENT माना जाएगा
+  केवल Roll + Name import
 */
 
-if(
-String(value)
-.toUpperCase()
-==="AB" ||
-String(value)
-.toUpperCase()
-==="ABSENT"
-){
+const importedStudents=[];
 
-value="ABSENT";
+
+rows.forEach(row=>{
+
+const roll=
+cleanExcelValue(
+row[rollColumn]
+);
+
+const name=
+cleanExcelValue(
+row[nameColumn]
+);
+
+
+/*
+  पूरी तरह खाली row को ignore करें
+*/
+
+if(!roll && !name)
+return;
+
+
+/*
+  Marks हमेशा blank रहेंगे
+*/
+
+importedStudents.push({
+
+roll:roll,
+
+name:name,
+
+marks:
+new Array(subjects.length)
+.fill("")
+
+});
+
+});
+
+
+if(!importedStudents.length){
+
+alert(
+"❌ Excel से कोई विद्यार्थी रिकॉर्ड नहीं मिला।"
+);
+
+return;
 
 }
 
 
-student.marks.push(
-String(value)
+/*
+  Import के समय existing student data replace होगा।
+*/
+
+if(students.length>0){
+
+const confirmImport=
+confirm(
+`e-Shikshakosh Excel से ${importedStudents.length} विद्यार्थी मिले हैं।\n\n`+
+"पुराना विद्यार्थी डेटा हटाकर नया Student Name + Roll Number Import किया जाएगा।\n\n"+
+"क्या आप जारी रखना चाहते हैं?"
 );
 
-});
+if(!confirmImport)
+return;
+
+}
 
 
-return student;
-
-});
-
+students=
+importedStudents;
 
 selectedStudent=0;
 
+
+/*
+  Render
+*/
 
 renderPages();
 
@@ -3682,23 +3541,27 @@ autoSave();
 
 
 alert(
-`✓ ${students.length} विद्यार्थियों का डेटा Import हो गया।`
+`✓ e-Shikshakosh Student Data सफलतापूर्वक Import हुआ।\n\n`+
+`कुल विद्यार्थी: ${students.length}\n\n`+
+"केवल Student Name और Roll Number लिया गया है।"
 );
+
+
+event.target.value="";
 
 
 }catch(error){
 
 console.error(error);
 
-
 alert(
-"Excel Import में समस्या आई। कृपया Download किए गए Excel Format का उपयोग करें।"
+"❌ e-Shikshakosh Excel Import में समस्या आई।\n\n"+
+"कृपया e-Shikshakosh से प्राप्त मूल Excel फाइल का उपयोग करें।"
 );
 
-}
-
-
 event.target.value="";
+
+}
 
 };
 
@@ -3709,102 +3572,44 @@ reader.readAsArrayBuffer(file);
 
 
 /* =========================================================
-   PREPARE PRINT
-   Blank cells → "-"
-========================================================= */
-
-function preparePrintMarks(){
-
-document
-.querySelectorAll(
-"#pagesWrap td input"
-)
-.forEach(
-input=>{
-
-if(
-input.value.trim()===""
-){
-
-input.dataset.printBlank="1";
-
-input.value="-";
-
-}
-
-});
-
-}
-
-
-/* =========================================================
-   RESTORE AFTER PRINT/PDF
-========================================================= */
-
-function restorePrintMarks(){
-
-document
-.querySelectorAll(
-"#pagesWrap td input[data-print-blank='1']"
-)
-.forEach(
-input=>{
-
-input.value="";
-
-delete input.dataset.printBlank;
-
-});
-
-}
-
-
-/* =========================================================
-   PRINT
-========================================================= */
-
-function printFolio(){
-
-preparePrintMarks();
-
-
-setTimeout(
-()=>{
-
-window.print();
-
-},
-100
-);
-
-}
-
-
-/* =========================================================
-   AFTER PRINT
-========================================================= */
-
-window.onafterprint=
-function(){
-
-restorePrintMarks();
-
-renderPages();
-
-};
-
-
-/* =========================================================
    PDF
 ========================================================= */
 
 function downloadPDF(){
 
+/*
+  PDF बनाने से पहले जिन विद्यार्थियों का
+  result blank है, उनके Total/Result में "-"
+  लगाया जाएगा।
+*/
+
+const blankCells=
+document.querySelectorAll(
+'[data-print-blank="1"]'
+);
+
+const oldValues=[];
+
+
+blankCells.forEach(cell=>{
+
+oldValues.push({
+
+cell:cell,
+
+html:cell.innerHTML
+
+});
+
+cell.innerHTML="-";
+
+});
+
+
 const element=
 document.getElementById(
 "pagesWrap"
 );
-
 
 const filename=
 "Marks_Folio_"+
@@ -3812,20 +3617,15 @@ const filename=
 details.exam||
 "Report"
 )+
-"_"+
-(
+"_"+(
 details.year||
 "2026-27"
-)+
-"_"+
+)+"_"+
 (
 details.className||
 "Class"
 )
-.replace(
-/[\\/:*?"<>|]/g,
-"_"
-)+
+.replace(/[\\/:*?"<>|]/g,"_")+
 ".pdf";
 
 
@@ -3836,11 +3636,8 @@ margin:0,
 filename,
 
 image:{
-
 type:"jpeg",
-
 quality:.98
-
 },
 
 html2canvas:{
@@ -3867,50 +3664,96 @@ orientation:"portrait"
 
 pagebreak:{
 
-mode:[
-"css",
-"legacy"
-]
+mode:["css","legacy"]
 
 }
 
 };
 
 
-/* -----------------------------------------
-   Blank cells → "-"
------------------------------------------ */
-
-preparePrintMarks();
-
-
 html2pdf()
-
 .set(options)
-
 .from(element)
-
 .save()
+.then(()=>{
 
-.then(
-()=>{
+/*
+  PDF बनने के बाद screen पर
+  वापस blank कर दें।
+*/
 
-restorePrintMarks();
+oldValues.forEach(item=>{
 
-renderPages();
+item.cell.innerHTML=
+item.html;
+
+});
 
 })
+.catch(()=>{
 
-.catch(
-()=>{
+oldValues.forEach(item=>{
 
-restorePrintMarks();
+item.cell.innerHTML=
+item.html;
 
-renderPages();
+});
 
 });
 
 }
+
+
+/* =========================================================
+   PRINT
+========================================================= */
+
+window.addEventListener(
+"beforeprint",
+function(){
+
+const blankCells=
+document.querySelectorAll(
+'[data-print-blank="1"]'
+);
+
+blankCells.forEach(cell=>{
+
+cell.dataset.originalPrintHtml=
+cell.innerHTML;
+
+cell.innerHTML="-";
+
+});
+
+});
+
+
+window.addEventListener(
+"afterprint",
+function(){
+
+const blankCells=
+document.querySelectorAll(
+'[data-print-blank="1"]'
+);
+
+blankCells.forEach(cell=>{
+
+if(
+cell.dataset.originalPrintHtml!==undefined
+){
+
+cell.innerHTML=
+cell.dataset.originalPrintHtml;
+
+delete cell.dataset.originalPrintHtml;
+
+}
+
+});
+
+});
 
 
 /* =========================================================
@@ -3923,33 +3766,23 @@ fetch(
 "https://api.counterapi.dev/v1/deo_marks_folio_bihar/views/up"
 )
 
-.then(
-res=>res.json()
-)
+.then(res=>res.json())
 
-.then(
-data=>{
+.then(data=>{
 
-if(
-data &&
-data.count
-){
+if(data&&data.count){
 
 document.getElementById(
 "viewCount"
 ).textContent=
-Number(
-data.count
-).toLocaleString(
-"hi-IN"
-);
+Number(data.count)
+.toLocaleString("hi-IN");
 
 }
 
 })
 
-.catch(
-()=>{
+.catch(()=>{
 
 const views=
 Number(
@@ -3958,19 +3791,15 @@ localStorage.getItem(
 )||1054
 )+1;
 
-
 localStorage.setItem(
 "deo_local_views",
 views
 );
 
-
 document.getElementById(
 "viewCount"
 ).textContent=
-views.toLocaleString(
-"hi-IN"
-);
+views.toLocaleString("hi-IN");
 
 });
 
