@@ -730,7 +730,7 @@ tfoot td.note-cell{
 
 <button class="warning" onclick="downloadPDF()">📥 PDF</button>
 
-<button class="gray" onclick="window.print()">🖨 Print</button>
+<button class="gray" onclick="printFolio()">🖨 Print</button>
 
 <button class="share-btn" onclick="shareApp()">🔗 Share</button>
 
@@ -1223,8 +1223,6 @@ udise:"",
 block:"",
 className:"",
 
-/* नई परीक्षा जानकारी */
-
 exam:"त्रैमासिक परीक्षा",
 
 year:"2026-27"
@@ -1334,6 +1332,8 @@ let total=0;
 
 let hasAbsent=false;
 
+let hasEntry=false;
+
 subjects.forEach((subject,i)=>{
 
 let value =
@@ -1341,16 +1341,23 @@ String(
 (student.marks && student.marks[i]) || ""
 ).trim();
 
+
+/* Absent भी entry माना जाएगा */
+
 if(
 value.toUpperCase()==="ABSENT" ||
 value.toUpperCase()==="AB"
 ){
 
 hasAbsent=true;
+hasEntry=true;
 
 return;
 
 }
+
+
+/* Numeric marks */
 
 if(value){
 
@@ -1359,12 +1366,31 @@ let n=Number(value);
 if(!isNaN(n) && n>=0){
 
 total+=n;
+hasEntry=true;
 
 }
 
 }
 
 });
+
+
+/* कोई marks entry नहीं है */
+
+if(!hasEntry){
+
+return{
+
+total:"",
+percentage:"",
+grade:"",
+hasAbsent:false,
+hasEntry:false
+
+};
+
+}
+
 
 let max=calculateMaxMarks();
 
@@ -1377,7 +1403,8 @@ return{
 total,
 percentage,
 grade:getGrade(percentage),
-hasAbsent
+hasAbsent,
+hasEntry:true
 
 };
 
@@ -1558,7 +1585,8 @@ function entryStatusChange(index,value){
 const student=
 students[selectedStudent];
 
-if(!student) return;
+if(!student)
+return;
 
 const input=
 document.getElementById("m"+index);
@@ -1605,7 +1633,8 @@ function entryMarkChange(index,value){
 const student=
 students[selectedStudent];
 
-if(!student) return;
+if(!student)
+return;
 
 if(
 value.toUpperCase()==="ABSENT" ||
@@ -2126,14 +2155,18 @@ oninput="cellInfoChanged(${i},'name',this.value)">
 ${subCells}
 
 <td class="col-total total">
-${result.total}
+${result.hasEntry ? result.total : ""}
 </td>
 
 <td class="col-result result">
 
-${result.hasAbsent
+${
+result.hasAbsent
 ?`<span class="absent-cell">ABSENT</span>`
-:`${result.grade}<br>${result.percentage.toFixed(1)}%`
+:
+result.hasEntry
+?`${result.grade}<br>${result.percentage.toFixed(1)}%`
+:""
 }
 
 </td>
@@ -3300,6 +3333,87 @@ reader.readAsArrayBuffer(file);
 
 
 /* =========================================================
+   PREPARE PRINT
+   Blank cells → "-"
+========================================================= */
+
+function preparePrintMarks(){
+
+/*
+  केवल table के editable input fields को
+  print के समय "-" में बदलेंगे।
+*/
+
+document
+.querySelectorAll("#pagesWrap td input")
+.forEach(input=>{
+
+if(input.value.trim()===""){
+
+input.dataset.printBlank="1";
+
+input.value="-";
+
+}
+
+});
+
+}
+
+
+/* =========================================================
+   RESTORE AFTER PRINT/PDF
+   "-" जो हमने डाला था उसे वापस blank करें
+========================================================= */
+
+function restorePrintMarks(){
+
+document
+.querySelectorAll(
+"#pagesWrap td input[data-print-blank='1']"
+)
+.forEach(input=>{
+
+input.value="";
+
+delete input.dataset.printBlank;
+
+});
+
+}
+
+
+/* =========================================================
+   PRINT
+========================================================= */
+
+function printFolio(){
+
+preparePrintMarks();
+
+setTimeout(()=>{
+
+window.print();
+
+},100);
+
+}
+
+
+/* =========================================================
+   AFTER PRINT
+========================================================= */
+
+window.onafterprint=function(){
+
+restorePrintMarks();
+
+renderPages();
+
+};
+
+
+/* =========================================================
    PDF
 ========================================================= */
 
@@ -3370,10 +3484,37 @@ mode:["css","legacy"]
 };
 
 
+/*
+ PDF generate होने से पहले
+ सभी blank editable cells में "-"
+*/
+
+preparePrintMarks();
+
+
 html2pdf()
 .set(options)
 .from(element)
-.save();
+.save()
+.then(()=>{
+
+/*
+ PDF बन जाने के बाद
+ screen को original blank state में वापस करें
+*/
+
+restorePrintMarks();
+
+renderPages();
+
+})
+.catch(()=>{
+
+restorePrintMarks();
+
+renderPages();
+
+});
 
 }
 
