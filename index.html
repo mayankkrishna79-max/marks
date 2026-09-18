@@ -87,6 +87,16 @@ button:disabled{
 .info-btn{background:#0dcaf0;color:#000}
 .esikosh-btn{background:#198754;color:#fff}
 
+.class-save-btn{
+  background:#6610f2;
+  color:#fff;
+}
+
+.class-load-btn{
+  background:#20c997;
+  color:#fff;
+}
+
 .view-badge{
   background:#e9ecef;
   color:#333;
@@ -330,6 +340,22 @@ button:disabled{
   margin-top:6px;
 }
 
+/* ================= CLASS SAVE INFO ================= */
+
+.class-save-info{
+  margin-top:7px;
+  background:#f3e8ff;
+  border:1px solid #c084fc;
+  border-radius:6px;
+  padding:7px;
+  font-size:11px;
+  line-height:1.5;
+}
+
+.class-save-info strong{
+  color:#6610f2;
+}
+
 /* ================= PAPER ================= */
 
 .paper-container{
@@ -545,11 +571,6 @@ tfoot td.note-cell{
 
 /* ================= PRINT DASH ================= */
 
-/*
-  Screen पर dash hidden रहेगा.
-  Print/PDF mode में blank input की जगह "-" दिखाई देगा.
-*/
-
 .print-dash{
   display:none;
   font-weight:700;
@@ -563,7 +584,6 @@ tfoot td.note-cell{
   display:inline !important;
 }
 
-/* PDF के लिए */
 .pdf-mode .screen-value{
   display:none !important;
 }
@@ -609,6 +629,8 @@ tfoot td.note-cell{
   padding:15px;
   width:90%;
   max-width:350px;
+  max-height:85vh;
+  overflow:auto;
   box-shadow:0 4px 15px #0005;
 }
 
@@ -618,6 +640,43 @@ tfoot td.note-cell{
   border:1px solid #ccc;
   border-radius:5px;
   margin-bottom:10px;
+}
+
+/* ================= SAVED CLASS MODAL ================= */
+
+.saved-class-list{
+  margin-top:10px;
+  max-height:45vh;
+  overflow-y:auto;
+}
+
+.saved-class-item{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  border:1px solid #ddd;
+  border-radius:7px;
+  padding:7px;
+  margin-bottom:6px;
+  background:#f8f9fa;
+}
+
+.saved-class-name{
+  flex:1;
+  font-size:13px;
+  font-weight:800;
+}
+
+.saved-class-date{
+  font-size:9px;
+  color:#777;
+  margin-top:2px;
+}
+
+.saved-class-item button{
+  min-height:30px;
+  padding:5px 8px;
+  font-size:11px;
 }
 
 /* ================= FOLLOW ================= */
@@ -710,6 +769,14 @@ tfoot td.note-cell{
     flex:1 1 100%;
   }
 
+  .saved-class-item{
+    flex-wrap:wrap;
+  }
+
+  .saved-class-name{
+    min-width:150px;
+  }
+
 }
 
 /* ================= PRINT ================= */
@@ -797,6 +864,14 @@ tfoot td.note-cell{
 
 <button class="green" onclick="saveData()">
 💾 Save
+</button>
+
+<button class="class-save-btn" onclick="saveClassWiseData()">
+💾 Class Save
+</button>
+
+<button class="class-load-btn" onclick="openSavedClasses()">
+📂 Saved Classes
 </button>
 
 <button class="gray" onclick="loadData()">
@@ -1081,8 +1156,6 @@ style="display:none"
 onchange="importExcel(event)">
 
 
-<!-- NEW ESHAKOSHK BUTTON -->
-
 <button
 class="esikosh-btn"
 onclick="document.getElementById('esikoshExcelFile').click()">
@@ -1114,6 +1187,19 @@ eShikshakosh की Excel फाइल में
 <strong>J15 से Roll Number</strong> पढ़ा जाएगा।
 इससे केवल विद्यार्थी का नाम और वर्ग क्रमांक import होगा।
 Marks data import नहीं किया जाएगा।
+
+</div>
+
+
+<!-- ================= CLASS SAVE INFO ================= -->
+
+<div class="class-save-info">
+
+<strong>💾 Class-wise Data Save:</strong><br>
+
+कक्षा / वर्ग का नाम भरकर <strong>Class Save</strong> दबाएँ।
+हर कक्षा का पूरा Marks Data अलग-अलग आपके मोबाइल के Browser में सुरक्षित रहेगा।
+बाद में <strong>Saved Classes</strong> से किसी भी कक्षा का Data Load कर सकते हैं।
 
 </div>
 
@@ -1214,6 +1300,50 @@ onclick="confirmRemoveSubject()">
 </div>
 
 
+<!-- ================= SAVED CLASSES MODAL ================= -->
+
+<div
+class="dialog-bg"
+id="savedClassModal">
+
+<div class="dialog-box">
+
+<h3 style="margin-top:0;color:#6610f2">
+📂 Saved Classes
+</h3>
+
+<div style="font-size:11px;color:#666;margin-bottom:8px">
+यह Data आपके मोबाइल के Browser में सुरक्षित है।
+</div>
+
+<div
+class="saved-class-list"
+id="savedClassList">
+</div>
+
+<div style="display:flex;gap:6px;margin-top:10px">
+
+<button
+class="gray"
+style="flex:1"
+onclick="closeSavedClasses()">
+बंद करें
+</button>
+
+<button
+class="danger"
+style="flex:1"
+onclick="deleteSelectedClass()">
+🗑️ Delete Class
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
 <!-- ================= FOLLOW ================= -->
 
 <div
@@ -1257,6 +1387,9 @@ const CHANNEL_LINK =
 "https://whatsapp.com/channel/0029VaIhMoY35fM4YK5xrz3P";
 
 const ROWS_PER_PAGE = 30;
+
+const CLASS_SAVE_KEY =
+"deoMarksFolio_ClassWise_v1";
 
 
 /* =========================================================
@@ -1399,12 +1532,6 @@ return subjects.reduce(
    CHECK MARK ENTRY
 ========================================================= */
 
-/*
-  किसी विद्यार्थी के किसी भी विषय में
-  marks entry नहीं है तो total/grade blank रहेगा.
-  Absent को entry माना जाएगा और उसका value 0 होगा.
-*/
-
 function hasAnyMarksEntry(student){
 
 if(!student || !Array.isArray(student.marks))
@@ -1447,11 +1574,6 @@ return "E";
 
 function calculateResult(student){
 
-/*
-  अगर किसी भी subject में entry नहीं है
-  तो पूरा result blank रहेगा.
-*/
-
 if(!hasAnyMarksEntry(student)){
 
 return{
@@ -1484,10 +1606,6 @@ String(
 ).trim();
 
 
-/*
-  ABSENT = 0
-*/
-
 if(
 value.toUpperCase()==="ABSENT" ||
 value.toUpperCase()==="AB"
@@ -1495,7 +1613,6 @@ value.toUpperCase()==="AB"
 
 hasAbsent=true;
 
-/* Absent को 0 माना जाएगा */
 return;
 
 }
@@ -1934,19 +2051,6 @@ subjects[newIndex]=
 temp;
 
 
-students.forEach(student=>{
-
-if(!Array.isArray(student.marks))
-student.marks=[];
-
-while(
-student.marks.length<subjects.length
-)
-student.marks.push("");
-
-});
-
-
 reorderAllMarks(index,newIndex);
 
 renderSubjectControls();
@@ -1968,10 +2072,14 @@ function reorderAllMarks(from,to){
 
 students.forEach(student=>{
 
-if(
-Array.isArray(student.marks) &&
-student.marks.length>Math.max(from,to)
-){
+if(!Array.isArray(student.marks))
+student.marks=[];
+
+while(
+student.marks.length<subjects.length
+)
+student.marks.push("");
+
 
 const temp=
 student.marks[from];
@@ -1981,8 +2089,6 @@ student.marks[to];
 
 student.marks[to]=
 temp;
-
-}
 
 });
 
@@ -2292,11 +2398,6 @@ const isAbsent=
 String(mark).toUpperCase()==="ABSENT" ||
 String(mark).toUpperCase()==="AB";
 
-
-/*
-  Screen पर input.
-  Print/PDF में value या "-"।
-*/
 
 subCells+=`
 
@@ -2657,8 +2758,6 @@ ${rows}
 <td
 colspan="${totalCols}"
 class="note-cell">
-
-
 
 </td>
 
@@ -3152,22 +3251,731 @@ new Date()
 
 
 /* =========================================================
-   SAVE
+   NORMAL SAVE
 ========================================================= */
 
 function saveData(){
 
 autoSave();
 
+
+/*
+  अगर Class Name मौजूद है तो
+  सामान्य Save के साथ Class-wise Save भी करें
+*/
+
+if(
+String(details.className || "").trim()
+){
+
+saveClassWiseData(true);
+
+}else{
+
 alert(
-"डेटा सुरक्षित कर दिया गया है।"
+"✓ डेटा सुरक्षित कर दिया गया है।"
+);
+
+}
+
+}
+
+
+/* =========================================================
+   CLASS-WISE DATA STORAGE
+========================================================= */
+
+function getClassWiseData(){
+
+try{
+
+return JSON.parse(
+
+localStorage.getItem(
+CLASS_SAVE_KEY
+)
+
+) || {};
+
+}catch(e){
+
+console.error(e);
+
+return {};
+
+}
+
+}
+
+
+/* =========================================================
+   SAVE CLASS-WISE DATA
+========================================================= */
+
+function saveClassWiseData(silent=false){
+
+let className=
+String(
+details.className || ""
+).trim();
+
+
+if(!className){
+
+className=
+prompt(
+"कक्षा / वर्ग का नाम दर्ज करें:",
+""
+);
+
+
+if(
+!className ||
+!className.trim()
+){
+
+alert(
+"कृपया कक्षा / वर्ग का नाम दर्ज करें।"
+);
+
+return;
+
+}
+
+
+className=
+className.trim();
+
+
+details.className=
+className;
+
+
+const formClass=
+document.getElementById(
+"formClass"
+);
+
+
+if(formClass){
+
+formClass.value=
+className;
+
+}
+
+}
+
+
+/*
+  Existing saved classes
+*/
+
+const allClasses=
+getClassWiseData();
+
+
+/*
+  Complete copy
+*/
+
+allClasses[className]={
+
+subjects:
+JSON.parse(
+JSON.stringify(subjects)
+),
+
+details:
+JSON.parse(
+JSON.stringify(details)
+),
+
+students:
+JSON.parse(
+JSON.stringify(students)
+),
+
+savedAt:
+new Date().toISOString()
+
+};
+
+
+localStorage.setItem(
+
+CLASS_SAVE_KEY,
+
+JSON.stringify(allClasses)
+
+);
+
+
+/*
+  Also keep current data
+*/
+
+localStorage.setItem(
+
+"deoMarksFolio_Final_v12",
+
+JSON.stringify({
+
+subjects,
+details,
+students
+
+})
+
+);
+
+
+updateSaveStatus(
+`✓ ${className} का Data सुरक्षित है`
+);
+
+
+if(!silent){
+
+alert(
+`✓ ${className} का पूरा Marks Folio सुरक्षित कर दिया गया है।`
+);
+
+}
+
+}
+
+
+/* =========================================================
+   OPEN SAVED CLASSES
+========================================================= */
+
+function openSavedClasses(){
+
+const modal=
+document.getElementById(
+"savedClassModal"
+);
+
+const list=
+document.getElementById(
+"savedClassList"
+);
+
+
+const allClasses=
+getClassWiseData();
+
+
+const names=
+Object.keys(allClasses);
+
+
+list.innerHTML="";
+
+
+if(!names.length){
+
+list.innerHTML=`
+
+<div style="
+text-align:center;
+padding:20px 8px;
+color:#777;
+font-size:12px;
+">
+
+📂 अभी कोई Class-wise Data Save नहीं है।<br><br>
+
+पहले कक्षा / वर्ग का नाम भरें और<br>
+💾 Class Save दबाएँ।
+
+</div>
+
+`;
+
+modal.style.display="flex";
+
+return;
+
+}
+
+
+names.forEach(name=>{
+
+const data=
+allClasses[name];
+
+
+const item=
+document.createElement("div");
+
+item.className=
+"saved-class-item";
+
+
+let dateText="";
+
+
+if(data.savedAt){
+
+try{
+
+dateText=
+new Date(
+data.savedAt
+).toLocaleString(
+"hi-IN"
+);
+
+}catch(e){}
+
+}
+
+
+item.innerHTML=`
+
+<div class="saved-class-name">
+
+<div>
+📚 ${esc(name)}
+</div>
+
+<div class="saved-class-date">
+
+${dateText
+?`Last Saved: ${esc(dateText)}`
+:""}
+
+</div>
+
+</div>
+
+
+<button
+class="class-load-btn"
+onclick='loadClassWiseData(${JSON.stringify(name)})'>
+
+↻ Load
+
+</button>
+
+
+<button
+class="danger"
+onclick='deleteClassWiseData(${JSON.stringify(name)})'>
+
+🗑️
+
+</button>
+
+`;
+
+
+list.appendChild(item);
+
+});
+
+
+modal.style.display="flex";
+
+}
+
+
+/* =========================================================
+   CLOSE SAVED CLASSES
+========================================================= */
+
+function closeSavedClasses(){
+
+document
+.getElementById(
+"savedClassModal"
+)
+.style.display="none";
+
+}
+
+
+/* =========================================================
+   LOAD CLASS-WISE DATA
+========================================================= */
+
+function loadClassWiseData(className){
+
+const allClasses=
+getClassWiseData();
+
+
+const data=
+allClasses[className];
+
+
+if(!data){
+
+alert(
+"इस कक्षा का Saved Data नहीं मिला।"
+);
+
+return;
+
+}
+
+
+if(
+!confirm(
+`क्या "${className}" का Saved Data Load करना चाहते हैं?\n\nवर्तमान स्क्रीन का Data बदल जाएगा।`
+)
+){
+
+return;
+
+}
+
+
+/*
+  Subjects
+*/
+
+if(
+Array.isArray(data.subjects) &&
+data.subjects.length
+){
+
+subjects=
+data.subjects.map(s=>({
+
+name:
+s.name || "विषय",
+
+full:
+Number(
+s.full ?? 50
+)
+
+}));
+
+}
+
+
+/*
+  Details
+*/
+
+if(data.details){
+
+details=
+Object.assign(
+{},
+details,
+data.details
+);
+
+}
+
+
+/*
+  Students
+*/
+
+if(
+Array.isArray(data.students)
+){
+
+students=
+data.students;
+
+}
+
+
+if(!students.length){
+
+students=[{
+
+roll:"",
+name:"",
+marks:
+new Array(subjects.length)
+.fill("")
+
+}];
+
+}
+
+
+/*
+  Fix marks arrays
+*/
+
+students.forEach(student=>{
+
+if(!Array.isArray(student.marks)){
+
+student.marks=[];
+
+}
+
+
+while(
+student.marks.length<
+subjects.length
+){
+
+student.marks.push("");
+
+}
+
+
+if(
+student.marks.length>
+subjects.length
+){
+
+student.marks=
+student.marks.slice(
+0,
+subjects.length
+);
+
+}
+
+});
+
+
+selectedStudent=0;
+
+
+/*
+  Update forms
+*/
+
+populateYears();
+
+
+document.getElementById(
+"formBoard"
+).value=
+details.board||"SCERT";
+
+
+document.getElementById(
+"formCenter"
+).value=
+details.center||"";
+
+
+document.getElementById(
+"formDistrict"
+).value=
+details.district||"";
+
+
+document.getElementById(
+"formSchool"
+).value=
+details.school||"";
+
+
+document.getElementById(
+"formUdise"
+).value=
+details.udise||"";
+
+
+document.getElementById(
+"formBlock"
+).value=
+details.block||"";
+
+
+document.getElementById(
+"formClass"
+).value=
+details.className||className;
+
+
+document.getElementById(
+"formExam"
+).value=
+details.exam||
+"त्रैमासिक परीक्षा";
+
+
+document.getElementById(
+"formYear"
+).value=
+details.year||
+"2026-27";
+
+
+renderSubjectControls();
+
+renderPages();
+
+syncFormOptions();
+
+selectStudent();
+
+
+/*
+  Current loaded data भी
+  normal storage में रख दें
+*/
+
+localStorage.setItem(
+
+"deoMarksFolio_Final_v12",
+
+JSON.stringify({
+
+subjects,
+details,
+students
+
+})
+
+);
+
+
+updateSaveStatus(
+`✓ ${className} का Data Load हो गया`
+);
+
+
+closeSavedClasses();
+
+
+alert(
+`✓ ${className} का Saved Data सफलतापूर्वक Load हो गया।`
 );
 
 }
 
 
 /* =========================================================
-   LOAD
+   DELETE CLASS-WISE DATA
+========================================================= */
+
+function deleteClassWiseData(className){
+
+const allClasses=
+getClassWiseData();
+
+
+if(!allClasses[className]){
+
+alert(
+"यह Class Saved List में नहीं है।"
+);
+
+return;
+
+}
+
+
+if(
+!confirm(
+`क्या "${className}" का Saved Data Delete करना चाहते हैं?\n\nयह केवल Saved Class Data हटाएगा।`
+)
+){
+
+return;
+
+}
+
+
+delete allClasses[className];
+
+
+localStorage.setItem(
+
+CLASS_SAVE_KEY,
+
+JSON.stringify(allClasses)
+
+);
+
+
+openSavedClasses();
+
+
+}
+
+
+/* =========================================================
+   DELETE SELECTED CLASS
+========================================================= */
+
+function deleteSelectedClass(){
+
+const allClasses=
+getClassWiseData();
+
+
+const names=
+Object.keys(allClasses);
+
+
+if(!names.length){
+
+alert(
+"कोई Saved Class उपलब्ध नहीं है।"
+);
+
+return;
+
+}
+
+
+const current=
+String(
+details.className || ""
+).trim();
+
+
+if(
+current &&
+allClasses[current]
+){
+
+deleteClassWiseData(current);
+
+return;
+
+}
+
+
+alert(
+"Delete करने के लिए Saved Classes में से किसी Class के सामने 🗑️ बटन दबाएँ।"
+);
+
+}
+
+
+/* =========================================================
+   SAVE STATUS
+========================================================= */
+
+function updateSaveStatus(message){
+
+const status=
+document.getElementById(
+"saveStatus"
+);
+
+
+if(status){
+
+status.textContent=
+message;
+
+}
+
+}
+
+
+/* =========================================================
+   NORMAL LOAD
 ========================================================= */
 
 function loadData(){
@@ -3274,8 +4082,7 @@ new Array(subjects.length)
 
 
 /*
- सभी विद्यार्थियों के marks array को
- वर्तमान subjects के अनुसार ठीक करें
+  Marks arrays fix
 */
 
 students.forEach(student=>{
@@ -3324,7 +4131,7 @@ selectStudent();
 
 
 /*
- School form
+  School form
 */
 
 document.getElementById("formBoard").value=
@@ -3365,7 +4172,7 @@ function clearData(){
 
 if(
 confirm(
-"क्या आप पूरा डेटा रीसेट करना चाहते हैं?"
+"क्या आप वर्तमान Marks Folio का पूरा डेटा रीसेट करना चाहते हैं?\n\nClass-wise Saved Data Delete नहीं होगा।"
 )
 ){
 
@@ -3679,24 +4486,6 @@ reader.readAsArrayBuffer(file);
    eSHIKSHAKOSH EXCEL IMPORT
 ========================================================= */
 
-/*
-  eShikshakosh Excel:
-
-  B15 = Student Name
-  J15 = Roll Number
-
-  यानी:
-  Column B -> index 1
-  Column J -> index 9
-
-  Row 15 -> Excel array index 14
-
-  इसके बाद हर अगली row से
-  Name + Roll पढ़े जाएंगे।
-
-  Marks import नहीं किए जाएंगे।
-*/
-
 function importEshikshakoshExcel(event){
 
 const file=
@@ -3748,10 +4537,6 @@ return;
 }
 
 
-/*
-  Header: 0 based row/column array
-*/
-
 const rows=
 XLSX.utils.sheet_to_json(
 sheet,
@@ -3762,11 +4547,6 @@ raw:false
 }
 );
 
-
-/*
-  B15 = row index 14, column index 1
-  J15 = row index 14, column index 9
-*/
 
 const START_ROW=14;
 
@@ -3800,23 +4580,6 @@ row[ROLL_COL] ?? ""
 ).trim();
 
 
-/*
-  पूरी तरह blank row को skip करें.
-*/
-
-if(!name && !roll){
-
-continue;
-
-}
-
-
-/*
-  अगर row में केवल कोई irrelevant data है
-  लेकिन name और roll दोनों नहीं हैं,
-  तो skip.
-*/
-
 if(!name && !roll){
 
 continue;
@@ -3839,10 +4602,6 @@ new Array(subjects.length)
 }
 
 
-/*
-  कोई data नहीं मिला
-*/
-
 if(!importedStudents.length){
 
 alert(
@@ -3853,10 +4612,6 @@ return;
 
 }
 
-
-/*
-  पुराने students को replace करें
-*/
 
 students=
 importedStudents;
@@ -3916,28 +4671,38 @@ document.getElementById(
 );
 
 
-const filename=
-"Marks_Folio_"+
-(
+const safeClass=
+String(
+details.className||
+"Class"
+)
+.replace(
+/[\\/:*?"<>|]/g,
+"_"
+);
+
+
+const safeExam=
+String(
 details.exam||
 "Report"
-)+
+)
+.replace(
+/[\\/:*?"<>|]/g,
+"_"
+);
+
+
+const filename=
+"Marks_Folio_"+
+safeExam+
 "_"+(
 details.year||
 "2026-27"
 )+"_"+
-(
-details.className||
-"Class"
-)
-.replace(/[\\/:*?"<>|]/g,"_")+
+safeClass+
 ".pdf";
 
-
-/*
-  PDF में blank को "-"
-  दिखाने के लिए pdf-mode.
-*/
 
 element.classList.add("pdf-mode");
 
@@ -4001,10 +4766,6 @@ alert(
 
 }
 
-
-/*
-  PDF बनने के बाद screen mode वापस.
-*/
 
 element.classList.remove("pdf-mode");
 
