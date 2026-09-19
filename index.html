@@ -1,8 +1,12 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
 <meta name="theme-color" content="#0d6efd">
 
 <title>DEO Office - Marks Folio</title>
@@ -219,10 +223,11 @@ button:disabled{
   width:100%;
   border:1px solid #bbb;
   border-radius:4px;
-  padding:4px;
+  padding:5px;
   margin-top:3px;
   text-align:center;
-  font-size:11px;
+  font-size:12px;
+  background:#fff;
 }
 
 .subject-box select{
@@ -243,11 +248,17 @@ button:disabled{
   text-align:center;
   font-size:13px;
   margin-top:3px;
+  background:#fff;
 }
 
 .absent-input{
   color:#dc3545 !important;
   font-weight:800 !important;
+}
+
+.invalid-mark{
+  border-color:#dc3545 !important;
+  background:#fff0f0 !important;
 }
 
 /* ================= ACTIONS ================= */
@@ -569,41 +580,43 @@ tfoot td.note-cell{
   line-height:1.15;
 }
 
-/* ================= PRINT / PDF FIX ================= */
-
-/*
-  स्क्रीन पर input दिखाई देगा।
-  Print और PDF में input छिपाकर केवल print-dash दिखाई देगा।
-  इससे Name और Roll Number दो बार दिखाई नहीं देंगे।
-*/
+/* ================= PRINT / PDF ================= */
 
 .print-dash{
   display:none;
   font-weight:700;
 }
 
-.print-mode .screen-value{
-  display:none !important;
-}
-
-.print-mode .print-dash{
-  display:inline !important;
-}
-
-.print-mode td input{
-  display:none !important;
-}
-
+.print-mode .screen-value,
 .pdf-mode .screen-value{
   display:none !important;
 }
 
+.print-mode .print-dash,
 .pdf-mode .print-dash{
   display:inline !important;
 }
 
+/*
+  IMPORTANT:
+  Screen पर inputs दिखाई देंगे।
+  Print/PDF में inputs hide होंगे,
+  इसलिए Name/Roll/Marks दो बार नहीं आएंगे।
+*/
+
+.print-mode td input,
 .pdf-mode td input{
   display:none !important;
+}
+
+.print-mode .info input,
+.pdf-mode .info input{
+  display:none !important;
+}
+
+.print-mode .info .print-dash,
+.pdf-mode .info .print-dash{
+  display:inline !important;
 }
 
 /* ================= SIGNATURE ================= */
@@ -771,10 +784,6 @@ tfoot td.note-cell{
     align-items:flex-start;
   }
 
-  .paper{
-    transform:none;
-  }
-
   .entry-grid{
     grid-template-columns:1fr 1fr;
   }
@@ -825,6 +834,10 @@ tfoot td.note-cell{
     height:297mm !important;
     box-shadow:none !important;
     padding:3mm 6mm 2.5mm !important;
+  }
+
+  td input{
+    display:none !important;
   }
 
 }
@@ -971,7 +984,6 @@ onchange="syncHeaderInputs('board',this.value)">
 
 </div>
 
-
 <div>
 
 <label>मूल्यांकन केंद्र का नाम</label>
@@ -981,7 +993,6 @@ id="formCenter"
 oninput="syncHeaderInputs('center',this.value)">
 
 </div>
-
 
 <div>
 
@@ -993,7 +1004,6 @@ oninput="syncHeaderInputs('district',this.value)">
 
 </div>
 
-
 <div>
 
 <label>प्रखंड का नाम</label>
@@ -1004,7 +1014,6 @@ oninput="syncHeaderInputs('block',this.value)">
 
 </div>
 
-
 <div style="grid-column:1/-1">
 
 <label>विद्यालय का नाम</label>
@@ -1014,7 +1023,6 @@ id="formSchool"
 oninput="syncHeaderInputs('school',this.value)">
 
 </div>
-
 
 <div>
 
@@ -1027,7 +1035,6 @@ oninput="syncHeaderInputs('udise',this.value)">
 
 </div>
 
-
 <div>
 
 <label>वर्ग / उप वर्ग</label>
@@ -1037,7 +1044,6 @@ id="formClass"
 oninput="syncHeaderInputs('className',this.value)">
 
 </div>
-
 
 <div>
 
@@ -1062,7 +1068,6 @@ onchange="syncHeaderInputs('exam',this.value)">
 </select>
 
 </div>
-
 
 <div>
 
@@ -1095,7 +1100,6 @@ onchange="selectStudent()">
 
 </div>
 
-
 <div>
 
 <label>वर्ग क्रमांक</label>
@@ -1106,7 +1110,6 @@ inputmode="numeric"
 oninput="formChanged()">
 
 </div>
-
 
 <div style="grid-column:1/-1">
 
@@ -1205,8 +1208,6 @@ Marks data import नहीं किया जाएगा।
 </div>
 
 
-<!-- ================= CLASS SAVE INFO ================= -->
-
 <div class="class-save-info">
 
 <strong>💾 Class-wise Data Save:</strong><br>
@@ -1217,8 +1218,6 @@ Marks data import नहीं किया जाएगा।
 
 </div>
 
-
-<!-- ================= SUBJECT ORDER ================= -->
 
 <div
 class="collapse-head"
@@ -1238,8 +1237,6 @@ id="subjectOrderBox">
 
 </div>
 
-
-<!-- ================= TUTORIAL ================= -->
 
 <div class="tutorial-box">
 
@@ -1405,6 +1402,9 @@ const ROWS_PER_PAGE = 30;
 const CLASS_SAVE_KEY =
 "deoMarksFolio_ClassWise_v1";
 
+const MAIN_SAVE_KEY =
+"deoMarksFolio_Final_v12";
+
 
 /* =========================================================
    SUBJECTS
@@ -1543,58 +1543,6 @@ return subjects.reduce(
 
 
 /* =========================================================
-   MARK VALIDATION
-========================================================= */
-
-/*
-  किसी भी विषय के Full Marks से अधिक अंक
-  स्वीकार नहीं किए जाएंगे।
-*/
-
-function validateMark(index,value){
-
-let text=
-String(value ?? "").trim();
-
-if(text==="")
-return "";
-
-if(
-text.toUpperCase()==="ABSENT" ||
-text.toUpperCase()==="AB"
-){
-
-return "ABSENT";
-
-}
-
-let num=Number(text);
-
-if(isNaN(num))
-return "";
-
-if(num<0)
-num=0;
-
-const max=
-Number(subjects[index]?.full || 0);
-
-if(num>max){
-
-alert(
-`⚠️ ${subjects[index]?.name || "इस विषय"} का पूर्णांक ${max} है।\n\nअधिकतम ${max} अंक ही दर्ज किए जा सकते हैं।`
-);
-
-num=max;
-
-}
-
-return String(num);
-
-}
-
-
-/* =========================================================
    CHECK MARK ENTRY
 ========================================================= */
 
@@ -1622,11 +1570,8 @@ return v!=="";
 function getGrade(p){
 
 if(p>=81) return "A";
-
 if(p>=61) return "B";
-
 if(p>=41) return "C";
-
 if(p>=33) return "D";
 
 return "E";
@@ -1645,13 +1590,9 @@ if(!hasAnyMarksEntry(student)){
 return{
 
 total:"",
-
 percentage:"",
-
 grade:"",
-
 hasAbsent:false,
-
 hasEntry:false
 
 };
@@ -1690,10 +1631,18 @@ let n=Number(value);
 
 if(!isNaN(n) && n>=0){
 
-const max=
-Number(subject.full || 0);
+/*
+  Extra safety:
+  कभी भी Full Marks से ज्यादा total calculation में
+  नहीं जाएगा।
+*/
 
-total+=Math.min(n,max);
+n=Math.min(
+n,
+Number(subject.full||0)
+);
+
+total+=n;
 
 }
 
@@ -1723,7 +1672,7 @@ hasEntry:true
 
 
 /* =========================================================
-   COLLAPSE SCHOOL DETAILS
+   COLLAPSE
 ========================================================= */
 
 function toggleSchoolDetails(){
@@ -1740,10 +1689,6 @@ head.classList.toggle("open");
 
 }
 
-
-/* =========================================================
-   COLLAPSE SUBJECT ORDER
-========================================================= */
 
 function toggleSubjectOrder(){
 
@@ -1827,7 +1772,7 @@ document
 
 
 /* =========================================================
-   SUBJECT ENTRY
+   SUBJECT ENTRY CONTROLS
 ========================================================= */
 
 function renderSubjectControls(){
@@ -1852,11 +1797,18 @@ class="sub-name"
 value="${esc(subject.name)}"
 oninput="updateSubjectName(${i},this.value)">
 
+<!--
+  IMPORTANT:
+  type=text + inputmode=numeric
+  मोबाइल keypad को stable रखता है।
+-->
 <input
 class="sub-full"
-type="number"
-min="0"
-value="${subject.full}"
+type="text"
+inputmode="numeric"
+pattern="[0-9]*"
+autocomplete="off"
+value="${esc(subject.full)}"
 title="पूर्णांक"
 oninput="updateSubjectFull(${i},this.value)">
 
@@ -1872,8 +1824,9 @@ onchange="entryStatusChange(${i},this.value)">
 <input
 class="sub-marks"
 id="m${i}"
+type="text"
 inputmode="decimal"
-max="${subject.full}"
+autocomplete="off"
 placeholder="अंक"
 oninput="entryMarkChange(${i},this.value)">
 
@@ -1884,6 +1837,102 @@ grid.appendChild(box);
 });
 
 renderSubjectOrder();
+
+selectStudent();
+
+}
+
+
+/* =========================================================
+   FULL MARK UPDATE
+   KEYBOARD/F​​OCUS SAFE
+========================================================= */
+
+function updateSubjectFull(index,value){
+
+/*
+  केवल numbers allow करें
+*/
+
+let clean=
+String(value ?? "")
+.replace(/[^\d]/g,"");
+
+
+/*
+  खाली होने पर temporary 0 नहीं डालेंगे।
+  इससे user 500 को edit करते समय keypad/focus नहीं खोएगा।
+*/
+
+if(clean===""){
+
+subjects[index].full=0;
+
+renderPages();
+
+autoSave();
+
+return;
+
+}
+
+
+let full=
+parseInt(clean,10);
+
+if(isNaN(full) || full<0){
+
+full=0;
+
+}
+
+
+/*
+  Full Marks update करें।
+  Subject controls को re-render नहीं करेंगे।
+  इसलिए mobile keyboard/focus बना रहेगा।
+*/
+
+subjects[index].full=full;
+
+
+/*
+  अगर पहले से entered marks
+  नए Full Marks से अधिक हैं,
+  तो उन्हें तुरंत limit करें।
+*/
+
+students.forEach(student=>{
+
+if(!Array.isArray(student.marks))
+return;
+
+let value=
+String(student.marks[index] ?? "").trim();
+
+if(
+value &&
+value.toUpperCase()!=="ABSENT"
+){
+
+let mark=
+Number(value);
+
+if(!isNaN(mark) && mark>full){
+
+student.marks[index]=
+String(full);
+
+}
+
+}
+
+});
+
+
+renderPages();
+
+autoSave();
 
 }
 
@@ -1940,6 +1989,85 @@ autoSave();
 
 
 /* =========================================================
+   MARK VALIDATION
+========================================================= */
+
+function sanitizeMark(index,value){
+
+let raw=
+String(value ?? "").trim();
+
+
+if(
+raw.toUpperCase()==="ABSENT" ||
+raw.toUpperCase()==="AB"
+){
+
+return "ABSENT";
+
+}
+
+
+/*
+  केवल number और decimal
+*/
+
+raw=
+raw.replace(/[^\d.]/g,"");
+
+
+/*
+  केवल एक decimal point
+*/
+
+const parts=
+raw.split(".");
+
+if(parts.length>2){
+
+raw=
+parts[0]+"."+parts.slice(1).join("");
+
+}
+
+
+if(raw==="")
+return "";
+
+
+let number=
+Number(raw);
+
+if(isNaN(number))
+return "";
+
+
+if(number<0)
+number=0;
+
+
+const full=
+Number(subjects[index]?.full || 0);
+
+
+/*
+  सबसे महत्वपूर्ण:
+  Marks <= Full Marks
+*/
+
+if(number>full){
+
+number=full;
+
+}
+
+
+return String(number);
+
+}
+
+
+/* =========================================================
    MARK CHANGE
 ========================================================= */
 
@@ -1952,24 +2080,55 @@ if(!student)
 return;
 
 
-const validated=
-validateMark(index,value);
-
-student.marks[index]=
-validated;
-
-
 const input=
 document.getElementById("m"+index);
 
 
-if(input){
+const original=
+String(value ?? "");
 
-input.value=validated;
+
+const result=
+sanitizeMark(index,original);
+
+
+student.marks[index]=result;
+
+
+/*
+  अगर user ने Full Marks से अधिक डाला,
+  तो उसी समय input को Full Marks पर रोक दें।
+*/
 
 if(
-validated==="ABSENT"
+result!=="ABSENT" &&
+result!==original
 ){
+
+if(input){
+
+input.value=result;
+
+input.classList.add("invalid-mark");
+
+setTimeout(()=>{
+
+input.classList.remove("invalid-mark");
+
+},350);
+
+}
+
+}else if(input){
+
+input.classList.remove("invalid-mark");
+
+}
+
+
+if(input){
+
+if(result==="ABSENT"){
 
 input.classList.add("absent-input");
 
@@ -1982,7 +2141,13 @@ input.classList.remove("absent-input");
 }
 
 
-renderPages();
+/*
+  Paper update होगा,
+  लेकिन entry input को re-render नहीं किया जाएगा।
+  इससे keypad/focus बना रहेगा।
+*/
+
+updatePaperOnly();
 
 autoSave();
 
@@ -2001,68 +2166,6 @@ value.trim() || `विषय ${index+1}`;
 renderSubjectOrder();
 
 renderPages();
-
-autoSave();
-
-}
-
-
-/* =========================================================
-   SUBJECT FULL MARK
-========================================================= */
-
-function updateSubjectFull(index,value){
-
-let n=Number(value);
-
-if(isNaN(n) || n<0){
-
-n=0;
-
-}
-
-subjects[index].full=n;
-
-
-/*
-  Full Marks कम करने पर पुराने marks भी
-  नए Full Marks से अधिक नहीं रहेंगे।
-*/
-
-students.forEach(student=>{
-
-if(!Array.isArray(student.marks))
-student.marks=[];
-
-
-const old=
-String(student.marks[index] ?? "").trim();
-
-
-if(
-old &&
-old.toUpperCase()!=="ABSENT"
-){
-
-const oldNum=
-Number(old);
-
-if(!isNaN(oldNum) && oldNum>n){
-
-student.marks[index]=String(n);
-
-}
-
-}
-
-});
-
-
-renderSubjectControls();
-
-renderPages();
-
-selectStudent();
 
 autoSave();
 
@@ -2402,7 +2505,7 @@ autoSave();
 
 
 /* =========================================================
-   PRINT VALUE HELPER
+   PRINT VALUE
 ========================================================= */
 
 function printValue(value){
@@ -2508,9 +2611,8 @@ subCells+=`
 <td class="col-sub ${isAbsent?"absent-cell":""}">
 
 <input
-class="${isAbsent?"absent-input":""}"
+type="text"
 value="${esc(mark)}"
-max="${subject.full}"
 oninput="cellChanged(${i},${s},this.value)">
 
 <span class="print-dash">
@@ -2520,7 +2622,6 @@ ${mark ? esc(mark) : "-"}
 </td>
 
 `;
-
 
 });
 
@@ -2576,15 +2677,13 @@ rows+=`
 <tr>
 
 <td class="col-sr">
-
 ${i+1}
-
 </td>
-
 
 <td class="col-roll">
 
 <input
+type="text"
 value="${esc(student.roll)}"
 oninput="cellInfoChanged(${i},'roll',this.value)">
 
@@ -2594,10 +2693,10 @@ ${student.roll ? esc(student.roll) : "-"}
 
 </td>
 
-
 <td class="col-name name">
 
 <input
+type="text"
 value="${esc(student.name)}"
 oninput="cellInfoChanged(${i},'name',this.value)">
 
@@ -2607,16 +2706,13 @@ ${student.name ? esc(student.name) : "-"}
 
 </td>
 
-
 ${subCells}
-
 
 <td class="col-total total">
 
 ${totalHTML}
 
 </td>
-
 
 <td class="col-result result">
 
@@ -2635,45 +2731,33 @@ rows+=`
 <tr>
 
 <td class="col-sr">
-
 ${i+1}
-
 </td>
 
 <td class="col-roll">
-
 <span class="print-dash">-</span>
-
 </td>
 
 <td class="col-name">
-
 <span class="print-dash">-</span>
-
 </td>
 
 ${subjects.map(
 ()=>`
 
 <td class="col-sub">
-
 <span class="print-dash">-</span>
-
 </td>
 
 `
 ).join("")}
 
 <td class="col-total">
-
 <span class="print-dash">-</span>
-
 </td>
 
 <td class="col-result">
-
 <span class="print-dash">-</span>
-
 </td>
 
 </tr>
@@ -2823,7 +2907,6 @@ readonly>
 विद्यार्थी का नाम
 </th>
 
-
 ${
 subjects.map(
 s=>
@@ -2835,7 +2918,6 @@ ${esc(s.name)}<br>
 </th>`
 ).join("")
 }
-
 
 <th class="col-total">
 कुल
@@ -2864,7 +2946,6 @@ ${rows}
 <td
 colspan="${totalCols}"
 class="note-cell">
-
 </td>
 
 </tr>
@@ -2906,6 +2987,24 @@ wrap.appendChild(pageDiv);
 
 
 /* =========================================================
+   PAPER ONLY UPDATE
+========================================================= */
+
+function updatePaperOnly(){
+
+/*
+  Marks entry के दौरान पूरा Entry Panel
+  re-render नहीं होगा।
+  Paper update जरूरी है, लेकिन keypad
+  वाले input को destroy नहीं किया जाएगा।
+*/
+
+renderPages();
+
+}
+
+
+/* =========================================================
    CELL CHANGE
 ========================================================= */
 
@@ -2922,13 +3021,12 @@ new Array(subjects.length)
 }
 
 
-const validated=
-validateMark(subjectIndex,value);
+const result=
+sanitizeMark(subjectIndex,value);
 
 
 students[studentIndex]
-.marks[subjectIndex]=
-validated;
+.marks[subjectIndex]=result;
 
 
 if(
@@ -2943,13 +3041,10 @@ document.getElementById(
 
 if(input){
 
-input.value=
-validated;
+input.value=result;
 
 
-if(
-validated==="ABSENT"
-){
+if(result==="ABSENT"){
 
 input.classList.add("absent-input");
 
@@ -3092,8 +3187,6 @@ if(input){
 
 input.value=value;
 
-input.max=subject.full;
-
 
 if(
 String(value).toUpperCase()==="ABSENT"
@@ -3169,9 +3262,7 @@ student.marks[i]="ABSENT";
 }else{
 
 student.marks[i]=
-input
-?validateMark(i,input.value)
-:"";
+input?sanitizeMark(i,input.value):"";
 
 if(input){
 
@@ -3329,7 +3420,7 @@ function autoSave(){
 
 localStorage.setItem(
 
-"deoMarksFolio_Final_v12",
+MAIN_SAVE_KEY,
 
 JSON.stringify({
 
@@ -3510,7 +3601,7 @@ JSON.stringify(allClasses)
 
 localStorage.setItem(
 
-"deoMarksFolio_Final_v12",
+MAIN_SAVE_KEY,
 
 JSON.stringify({
 
@@ -3816,42 +3907,6 @@ subjects.length
 
 }
 
-
-/*
-  Loaded data में भी Full Marks validation
-*/
-
-subjects.forEach((subject,index)=>{
-
-const value=
-String(
-student.marks[index] ?? ""
-).trim();
-
-
-if(
-value &&
-value.toUpperCase()!=="ABSENT"
-){
-
-const n=Number(value);
-
-if(!isNaN(n)){
-
-student.marks[index]=
-String(
-Math.min(
-Math.max(0,n),
-Number(subject.full||0)
-)
-);
-
-}
-
-}
-
-});
-
 });
 
 
@@ -3859,6 +3914,7 @@ selectedStudent=0;
 
 
 populateYears();
+
 
 document.getElementById(
 "formBoard"
@@ -3919,7 +3975,7 @@ selectStudent();
 
 localStorage.setItem(
 
-"deoMarksFolio_Final_v12",
+MAIN_SAVE_KEY,
 
 JSON.stringify({
 
@@ -3948,7 +4004,7 @@ alert(
 
 
 /* =========================================================
-   DELETE CLASS-WISE DATA
+   DELETE CLASS
 ========================================================= */
 
 function deleteClassWiseData(className){
@@ -4075,15 +4131,9 @@ message;
 function loadData(){
 
 const raw=
-localStorage.getItem(
-"deoMarksFolio_Final_v12"
-) ||
-localStorage.getItem(
-"deoMarksFolio_Final_v11"
-) ||
-localStorage.getItem(
-"deoMarksFolio_Final_v10"
-);
+localStorage.getItem(MAIN_SAVE_KEY) ||
+localStorage.getItem("deoMarksFolio_Final_v11") ||
+localStorage.getItem("deoMarksFolio_Final_v10");
 
 
 if(raw){
@@ -4175,10 +4225,6 @@ new Array(subjects.length)
 }
 
 
-/*
-  Marks arrays fix + Full Marks validation
-*/
-
 students.forEach(student=>{
 
 if(!Array.isArray(student.marks))
@@ -4209,12 +4255,15 @@ subjects.length
 }
 
 
-subjects.forEach((subject,index)=>{
+/*
+  Existing data में भी
+  Full Marks से ज्यादा marks को fix करें।
+*/
 
-const value=
-String(
-student.marks[index] ?? ""
-).trim();
+subjects.forEach((subject,i)=>{
+
+let value=
+String(student.marks[i] ?? "").trim();
 
 
 if(
@@ -4222,17 +4271,16 @@ value &&
 value.toUpperCase()!=="ABSENT"
 ){
 
-const n=Number(value);
+let number=
+Number(value);
 
-if(!isNaN(n)){
+if(
+!isNaN(number) &&
+number>Number(subject.full||0)
+){
 
-student.marks[index]=
-String(
-Math.min(
-Math.max(0,n),
-Number(subject.full||0)
-)
-);
+student.marks[i]=
+String(subject.full);
 
 }
 
@@ -4299,7 +4347,7 @@ confirm(
 ){
 
 localStorage.removeItem(
-"deoMarksFolio_Final_v12"
+MAIN_SAVE_KEY
 );
 
 localStorage.removeItem(
@@ -4346,10 +4394,8 @@ String(b.roll||"")
 if(isNaN(aRoll)&&isNaN(bRoll))
 return 0;
 
-
 if(isNaN(aRoll))
 return 1;
-
 
 if(isNaN(bRoll))
 return -1;
@@ -4385,7 +4431,7 @@ alert(
 
 
 /* =========================================================
-   NORMAL EXCEL TEMPLATE
+   EXCEL TEMPLATE
 ========================================================= */
 
 function downloadExcelTemplate(){
@@ -4457,7 +4503,7 @@ workbook,
 
 
 /* =========================================================
-   NORMAL EXCEL IMPORT
+   EXCEL IMPORT
 ========================================================= */
 
 function importExcel(event){
@@ -4537,7 +4583,7 @@ marks:[]
 };
 
 
-subjects.forEach((subject,index)=>{
+subjects.forEach(subject=>{
 
 let value=
 row[subject.name];
@@ -4554,7 +4600,10 @@ value="";
 
 
 student.marks.push(
-validateMark(index,String(value))
+sanitizeMark(
+subjects.indexOf(subject),
+String(value)
+)
 );
 
 });
@@ -4605,7 +4654,7 @@ reader.readAsArrayBuffer(file);
 
 
 /* =========================================================
-   eSHIKSHAKOSH EXCEL IMPORT
+   eSHIKSHAKOSH IMPORT
 ========================================================= */
 
 function importEshikshakoshExcel(event){
