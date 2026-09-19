@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
 <meta name="theme-color" content="#0d6efd">
 
 <title>DEO Office - Marks Folio</title>
@@ -11,6 +16,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
 <style>
+
+/* =========================================================
+   PAGE
+========================================================= */
 
 @page{
   size:A4 portrait;
@@ -41,7 +50,10 @@ body{
   margin:auto;
 }
 
-/* ================= TOOLBAR ================= */
+
+/* =========================================================
+   TOOLBAR
+========================================================= */
 
 .toolbar{
   background:#fff;
@@ -78,14 +90,45 @@ button:disabled{
   cursor:not-allowed;
 }
 
-.primary{background:#0d6efd;color:#fff}
-.green{background:#198754;color:#fff}
-.gray{background:#6c757d;color:#fff}
-.danger{background:#dc3545;color:#fff}
-.warning{background:#fd7e14;color:#fff}
-.share-btn{background:#6f42c1;color:#fff}
-.info-btn{background:#0dcaf0;color:#000}
-.esikosh-btn{background:#198754;color:#fff}
+.primary{
+  background:#0d6efd;
+  color:#fff;
+}
+
+.green{
+  background:#198754;
+  color:#fff;
+}
+
+.gray{
+  background:#6c757d;
+  color:#fff;
+}
+
+.danger{
+  background:#dc3545;
+  color:#fff;
+}
+
+.warning{
+  background:#fd7e14;
+  color:#fff;
+}
+
+.share-btn{
+  background:#6f42c1;
+  color:#fff;
+}
+
+.info-btn{
+  background:#0dcaf0;
+  color:#000;
+}
+
+.esikosh-btn{
+  background:#198754;
+  color:#fff;
+}
 
 .class-save-btn{
   background:#6610f2;
@@ -107,7 +150,10 @@ button:disabled{
   margin-left:auto;
 }
 
-/* ================= PANELS ================= */
+
+/* =========================================================
+   PANELS
+========================================================= */
 
 .entry-panel{
   background:#fff;
@@ -154,7 +200,10 @@ button:disabled{
   background:#fff;
 }
 
-/* ================= COLLAPSE ================= */
+
+/* =========================================================
+   COLLAPSE
+========================================================= */
 
 .collapse-head{
   margin-top:8px;
@@ -188,7 +237,10 @@ button:disabled{
   display:block;
 }
 
-/* ================= SUBJECT ENTRY ================= */
+
+/* =========================================================
+   SUBJECT ENTRY
+========================================================= */
 
 .subject-grid{
   display:grid;
@@ -250,7 +302,10 @@ button:disabled{
   font-weight:800 !important;
 }
 
-/* ================= ACTIONS ================= */
+
+/* =========================================================
+   ACTIONS
+========================================================= */
 
 .form-actions{
   display:flex;
@@ -274,7 +329,10 @@ button:disabled{
   min-width:130px;
 }
 
-/* ================= SUBJECT ORDER ================= */
+
+/* =========================================================
+   SUBJECT ORDER
+========================================================= */
 
 .subject-order-box{
   margin-top:7px;
@@ -316,7 +374,10 @@ button:disabled{
   font-size:12px;
 }
 
-/* ================= TUTORIAL ================= */
+
+/* =========================================================
+   TUTORIAL
+========================================================= */
 
 .tutorial-box{
   margin-top:7px;
@@ -340,7 +401,10 @@ button:disabled{
   margin-top:6px;
 }
 
-/* ================= CLASS SAVE INFO ================= */
+
+/* =========================================================
+   CLASS SAVE INFO
+========================================================= */
 
 .class-save-info{
   margin-top:7px;
@@ -356,7 +420,10 @@ button:disabled{
   color:#6610f2;
 }
 
-/* ================= PAPER ================= */
+
+/* =========================================================
+   PAPER
+========================================================= */
 
 .paper-container{
   width:100%;
@@ -392,7 +459,10 @@ button:disabled{
   break-after:page;
 }
 
-/* ================= HEADER ================= */
+
+/* =========================================================
+   HEADER
+========================================================= */
 
 .header{
   text-align:center;
@@ -426,7 +496,10 @@ button:disabled{
   margin-top:1px;
 }
 
-/* ================= INFO ================= */
+
+/* =========================================================
+   INFO
+========================================================= */
 
 .info{
   font-size:11px;
@@ -466,7 +539,10 @@ button:disabled{
   font-weight:700;
 }
 
-/* ================= TABLE ================= */
+
+/* =========================================================
+   TABLE
+========================================================= */
 
 .table-wrap{
   flex-shrink:0;
@@ -569,7 +645,10 @@ tfoot td.note-cell{
   line-height:1.15;
 }
 
-/* ================= PRINT DASH ================= */
+
+/* =========================================================
+   SCREEN / PRINT VALUE
+========================================================= */
 
 .print-dash{
   display:none;
@@ -592,7 +671,32 @@ tfoot td.note-cell{
   display:inline !important;
 }
 
-/* ================= SIGNATURE ================= */
+
+/* =========================================================
+   IMPORTANT PDF / PRINT FIX
+   Table inputs hide होंगे लेकिन Header inputs नहीं
+========================================================= */
+
+.print-mode td input,
+.pdf-mode td input{
+  display:none !important;
+}
+
+
+/* =========================================================
+   LAST PAGE FIX
+   Extra blank page रोकने के लिए
+========================================================= */
+
+.paper:last-child{
+  page-break-after:auto !important;
+  break-after:auto !important;
+}
+
+
+/* =========================================================
+   SIGNATURE
+========================================================= */
 
 .signatures{
   margin-top:auto;
@@ -610,7 +714,10 @@ tfoot td.note-cell{
   padding-top:9mm;
 }
 
-/* ================= MODAL ================= */
+
+/* =========================================================
+   MODAL
+========================================================= */
 
 .dialog-bg{
   position:fixed;
@@ -642,7 +749,10 @@ tfoot td.note-cell{
   margin-bottom:10px;
 }
 
-/* ================= SAVED CLASS MODAL ================= */
+
+/* =========================================================
+   SAVED CLASS MODAL
+========================================================= */
 
 .saved-class-list{
   margin-top:10px;
@@ -679,7 +789,10 @@ tfoot td.note-cell{
   font-size:11px;
 }
 
-/* ================= FOLLOW ================= */
+
+/* =========================================================
+   FOLLOW
+========================================================= */
 
 .popup-bg{
   position:fixed;
@@ -721,7 +834,10 @@ tfoot td.note-cell{
   font-size:15px;
 }
 
-/* ================= MOBILE ================= */
+
+/* =========================================================
+   MOBILE
+========================================================= */
 
 @media(max-width:600px){
 
@@ -779,7 +895,10 @@ tfoot td.note-cell{
 
 }
 
-/* ================= PRINT ================= */
+
+/* =========================================================
+   PRINT
+========================================================= */
 
 @media print{
 
@@ -813,9 +932,17 @@ tfoot td.note-cell{
     padding:3mm 6mm 2.5mm !important;
   }
 
+  .paper:last-child{
+    page-break-after:auto !important;
+    break-after:auto !important;
+  }
+
 }
 
-/* ================= ESHAKOSHK INFO ================= */
+
+/* =========================================================
+   ESHAKOSH INFO
+========================================================= */
 
 .esikosh-info{
   margin-top:7px;
@@ -834,11 +961,15 @@ tfoot td.note-cell{
 </style>
 </head>
 
+
 <body>
 
 <div class="app">
 
-<!-- ================= TOOLBAR ================= -->
+
+<!-- =========================================================
+     TOOLBAR
+========================================================= -->
 
 <div class="toolbar">
 
@@ -883,19 +1014,24 @@ Clear
 </button>
 
 <div class="view-badge">
-👁️ Views: <span id="viewCount">...</span>
+👁️ Views:
+<span id="viewCount">...</span>
 </div>
 
 </div>
 
 
-<!-- ================= ENTRY PANEL ================= -->
+<!-- =========================================================
+     ENTRY PANEL
+========================================================= -->
 
 <div class="entry-panel">
 
 <div class="entry-title">
 
-<span>📝 Marks Folio Entry Panel</span>
+<span>
+📝 Marks Folio Entry Panel
+</span>
 
 <div>
 
@@ -918,18 +1054,23 @@ onclick="openSubjectModal()">
 </div>
 
 
-<!-- ================= SCHOOL DETAILS ================= -->
+<!-- SCHOOL DETAILS -->
 
 <div
 class="collapse-head"
 id="schoolHead"
 onclick="toggleSchoolDetails()">
 
-<span>🏫 विद्यालय की जानकारी</span>
+<span>
+🏫 विद्यालय की जानकारी
+</span>
 
-<span>▼</span>
+<span>
+▼
+</span>
 
 </div>
+
 
 <div
 class="collapse-content"
@@ -937,9 +1078,12 @@ id="schoolDetails">
 
 <div class="entry-grid">
 
+
 <div>
 
-<label>संस्था / बोर्ड</label>
+<label>
+संस्था / बोर्ड
+</label>
 
 <select
 id="formBoard"
@@ -960,7 +1104,9 @@ onchange="syncHeaderInputs('board',this.value)">
 
 <div>
 
-<label>मूल्यांकन केंद्र का नाम</label>
+<label>
+मूल्यांकन केंद्र का नाम
+</label>
 
 <input
 id="formCenter"
@@ -971,7 +1117,9 @@ oninput="syncHeaderInputs('center',this.value)">
 
 <div>
 
-<label>जिला</label>
+<label>
+जिला
+</label>
 
 <input
 id="formDistrict"
@@ -982,7 +1130,9 @@ oninput="syncHeaderInputs('district',this.value)">
 
 <div>
 
-<label>प्रखंड का नाम</label>
+<label>
+प्रखंड का नाम
+</label>
 
 <input
 id="formBlock"
@@ -993,7 +1143,9 @@ oninput="syncHeaderInputs('block',this.value)">
 
 <div style="grid-column:1/-1">
 
-<label>विद्यालय का नाम</label>
+<label>
+विद्यालय का नाम
+</label>
 
 <input
 id="formSchool"
@@ -1004,7 +1156,9 @@ oninput="syncHeaderInputs('school',this.value)">
 
 <div>
 
-<label>यू-डायस कोड</label>
+<label>
+यू-डायस कोड
+</label>
 
 <input
 id="formUdise"
@@ -1016,7 +1170,9 @@ oninput="syncHeaderInputs('udise',this.value)">
 
 <div>
 
-<label>वर्ग / उप वर्ग</label>
+<label>
+वर्ग / उप वर्ग
+</label>
 
 <input
 id="formClass"
@@ -1027,7 +1183,9 @@ oninput="syncHeaderInputs('className',this.value)">
 
 <div>
 
-<label>परीक्षा</label>
+<label>
+परीक्षा
+</label>
 
 <select
 id="formExam"
@@ -1052,7 +1210,9 @@ onchange="syncHeaderInputs('exam',this.value)">
 
 <div>
 
-<label>शैक्षणिक वर्ष</label>
+<label>
+शैक्षणिक वर्ष
+</label>
 
 <select
 id="formYear"
@@ -1066,13 +1226,16 @@ onchange="syncHeaderInputs('year',this.value)">
 </div>
 
 
-<!-- ================= STUDENT ================= -->
+<!-- STUDENT ENTRY -->
 
 <div class="entry-grid">
 
+
 <div>
 
-<label>विद्यार्थी चुनें</label>
+<label>
+विद्यार्थी चुनें
+</label>
 
 <select
 id="studentSelect"
@@ -1084,7 +1247,9 @@ onchange="selectStudent()">
 
 <div>
 
-<label>वर्ग क्रमांक</label>
+<label>
+वर्ग क्रमांक
+</label>
 
 <input
 id="formRoll"
@@ -1096,7 +1261,9 @@ oninput="formChanged()">
 
 <div style="grid-column:1/-1">
 
-<label>विद्यार्थी का नाम</label>
+<label>
+विद्यार्थी का नाम
+</label>
 
 <input
 id="formName"
@@ -1107,13 +1274,15 @@ oninput="formChanged()">
 </div>
 
 
-<!-- ================= SUBJECT MARKS ================= -->
+<!-- SUBJECT MARKS -->
 
 <div
 class="subject-grid"
 id="subjectGrid">
 </div>
 
+
+<!-- ACTIONS -->
 
 <div class="form-actions">
 
@@ -1132,7 +1301,7 @@ onclick="saveData()">
 </div>
 
 
-<!-- ================= UTILITIES ================= -->
+<!-- UTILITIES -->
 
 <div class="utility-row">
 
@@ -1142,11 +1311,13 @@ onclick="downloadExcelTemplate()">
 📊 Excel Format
 </button>
 
+
 <button
 class="green"
 onclick="document.getElementById('excelFile').click()">
 📤 Excel Import
 </button>
+
 
 <input
 type="file"
@@ -1162,12 +1333,14 @@ onclick="document.getElementById('esikoshExcelFile').click()">
 📥 eShikshakosh Student Data Excel Upload
 </button>
 
+
 <input
 type="file"
 id="esikoshExcelFile"
 accept=".xlsx,.xls"
 style="display:none"
 onchange="importEshikshakoshExcel(event)">
+
 
 <button
 class="warning"
@@ -1178,63 +1351,93 @@ onclick="sortRollNumbers()">
 </div>
 
 
+<!-- ESHAKOSHK INFO -->
+
 <div class="esikosh-info">
 
-<strong>📥 eShikshakosh Excel Upload:</strong><br>
+<strong>
+📥 eShikshakosh Excel Upload:
+</strong>
+
+<br>
 
 eShikshakosh की Excel फाइल में
-<strong>B15 से विद्यार्थी का नाम</strong> और
-<strong>J15 से Roll Number</strong> पढ़ा जाएगा।
+<strong>B15 से विद्यार्थी का नाम</strong>
+और
+<strong>J15 से Roll Number</strong>
+पढ़ा जाएगा।
+
 इससे केवल विद्यार्थी का नाम और वर्ग क्रमांक import होगा।
 Marks data import नहीं किया जाएगा।
 
 </div>
 
 
-<!-- ================= CLASS SAVE INFO ================= -->
+<!-- CLASS SAVE INFO -->
 
 <div class="class-save-info">
 
-<strong>💾 Class-wise Data Save:</strong><br>
+<strong>
+💾 Class-wise Data Save:
+</strong>
 
-कक्षा / वर्ग का नाम भरकर <strong>Class Save</strong> दबाएँ।
+<br>
+
+कक्षा / वर्ग का नाम भरकर
+<strong>Class Save</strong>
+दबाएँ।
+
 हर कक्षा का पूरा Marks Data अलग-अलग आपके मोबाइल के Browser में सुरक्षित रहेगा।
-बाद में <strong>Saved Classes</strong> से किसी भी कक्षा का Data Load कर सकते हैं।
+
+बाद में
+<strong>Saved Classes</strong>
+से किसी भी कक्षा का Data Load कर सकते हैं।
 
 </div>
 
 
-<!-- ================= SUBJECT ORDER ================= -->
+<!-- SUBJECT ORDER -->
 
 <div
 class="collapse-head"
 onclick="toggleSubjectOrder()">
 
-<span>⚙️ विषय व्यवस्था</span>
+<span>
+⚙️ विषय व्यवस्था
+</span>
 
-<span>▼</span>
+<span>
+▼
+</span>
 
 </div>
+
 
 <div
 class="subject-order-box"
 id="subjectOrderBox">
 
-<div id="subjectOrderList"></div>
+<div id="subjectOrderList">
+</div>
 
 </div>
 
 
-<!-- ================= TUTORIAL ================= -->
+<!-- TUTORIAL -->
 
 <div class="tutorial-box">
 
-📘 <strong>Marks Folio Tutorial:</strong>
+📘
+<strong>
+Marks Folio Tutorial:
+</strong>
 
 <a
 href="https://drive.google.com/file/d/1jWrdFfTXNhfeVXqA5CAAHWWoIughRjzO/view?usp=drivesdk"
 target="_blank">
+
 Tutorial देखें
+
 </a>
 
 </div>
@@ -1243,13 +1446,17 @@ Tutorial देखें
 <div
 class="status"
 id="saveStatus">
+
 ✓ Auto-save चालू है
-</div>
 
 </div>
 
+</div>
 
-<!-- ================= PAPER ================= -->
+
+<!-- =========================================================
+     PAPER
+========================================================= -->
 
 <div
 class="paper-container"
@@ -1265,7 +1472,9 @@ id="pagesWrap">
 </div>
 
 
-<!-- ================= SUBJECT DELETE MODAL ================= -->
+<!-- =========================================================
+     SUBJECT DELETE MODAL
+========================================================= -->
 
 <div
 class="dialog-bg"
@@ -1277,9 +1486,11 @@ id="subModal">
 कौन सा विषय हटाना चाहते हैं?
 </h4>
 
-<select id="delSubSelect"></select>
+<select id="delSubSelect">
+</select>
 
-<div style="display:flex;gap:6px;justify-content:flex-end">
+<div
+style="display:flex;gap:6px;justify-content:flex-end">
 
 <button
 class="gray"
@@ -1300,7 +1511,9 @@ onclick="confirmRemoveSubject()">
 </div>
 
 
-<!-- ================= SAVED CLASSES MODAL ================= -->
+<!-- =========================================================
+     SAVED CLASS MODAL
+========================================================= -->
 
 <div
 class="dialog-bg"
@@ -1308,12 +1521,18 @@ id="savedClassModal">
 
 <div class="dialog-box">
 
-<h3 style="margin-top:0;color:#6610f2">
+<h3
+style="margin-top:0;color:#6610f2">
+
 📂 Saved Classes
+
 </h3>
 
-<div style="font-size:11px;color:#666;margin-bottom:8px">
+<div
+style="font-size:11px;color:#666;margin-bottom:8px">
+
 यह Data आपके मोबाइल के Browser में सुरक्षित है।
+
 </div>
 
 <div
@@ -1321,20 +1540,25 @@ class="saved-class-list"
 id="savedClassList">
 </div>
 
-<div style="display:flex;gap:6px;margin-top:10px">
+<div
+style="display:flex;gap:6px;margin-top:10px">
 
 <button
 class="gray"
 style="flex:1"
 onclick="closeSavedClasses()">
+
 बंद करें
+
 </button>
 
 <button
 class="danger"
 style="flex:1"
 onclick="deleteSelectedClass()">
+
 🗑️ Delete Class
+
 </button>
 
 </div>
@@ -1344,7 +1568,9 @@ onclick="deleteSelectedClass()">
 </div>
 
 
-<!-- ================= FOLLOW ================= -->
+<!-- =========================================================
+     FOLLOW POPUP
+========================================================= -->
 
 <div
 class="popup-bg"
@@ -1352,12 +1578,16 @@ id="followPopup">
 
 <div class="popup">
 
-<h3>📢 DEO Office से जुड़ें</h3>
+<h3>
+📢 DEO Office से जुड़ें
+</h3>
 
 <p>
+
 बिहार शिक्षा विभाग से जुड़े जरूरी प्रपत्र,
 अंक पत्रक और ताजा अपडेट पाने के लिए हमारे
 WhatsApp चैनल को Follow करें।
+
 </p>
 
 <button
@@ -1368,8 +1598,11 @@ Follow DEO Office
 
 </button>
 
-<div style="font-size:11px;color:#888;margin-top:10px">
+<div
+style="font-size:11px;color:#888;margin-top:10px">
+
 आगे बढ़ने के लिए Follow करना अनिवार्य है।
+
 </div>
 
 </div>
@@ -1378,6 +1611,7 @@ Follow DEO Office
 
 
 <script>
+
 
 /* =========================================================
    SETTINGS
@@ -1435,17 +1669,22 @@ full:50
    DATA
 ========================================================= */
 
-let students=[];
+let students = [];
 
-let details={
+let details = {
 
 board:"SCERT",
 
 center:"",
+
 district:"",
+
 school:"",
+
 udise:"",
+
 block:"",
+
 className:"",
 
 exam:"त्रैमासिक परीक्षा",
@@ -1454,7 +1693,7 @@ year:"2026-27"
 
 };
 
-let selectedStudent=0;
+let selectedStudent = 0;
 
 
 /* =========================================================
@@ -1478,15 +1717,15 @@ return String(s ?? "")
 
 function populateYears(){
 
-const select=
+const select =
 document.getElementById("formYear");
 
 if(!select)
 return;
 
-select.innerHTML="";
+select.innerHTML = "";
 
-const currentYear=
+const currentYear =
 new Date().getFullYear();
 
 for(
@@ -1495,20 +1734,20 @@ y<=currentYear+3;
 y++
 ){
 
-const option=
+const option =
 document.createElement("option");
 
-option.value=
+option.value =
 `${y}-${String(y+1).slice(-2)}`;
 
-option.textContent=
+option.textContent =
 `${y}-${String(y+1).slice(-2)}`;
 
 select.appendChild(option);
 
 }
 
-select.value=
+select.value =
 details.year || "2026-27";
 
 }
@@ -1534,15 +1773,18 @@ return subjects.reduce(
 
 function hasAnyMarksEntry(student){
 
-if(!student || !Array.isArray(student.marks))
+if(
+!student ||
+!Array.isArray(student.marks)
+)
 return false;
 
 return student.marks.some(value=>{
 
-const v=
+const v =
 String(value ?? "").trim();
 
-return v!=="";
+return v !== "";
 
 });
 
@@ -1555,13 +1797,17 @@ return v!=="";
 
 function getGrade(p){
 
-if(p>=81) return "A";
+if(p>=81)
+return "A";
 
-if(p>=61) return "B";
+if(p>=61)
+return "B";
 
-if(p>=41) return "C";
+if(p>=41)
+return "C";
 
-if(p>=33) return "D";
+if(p>=33)
+return "D";
 
 return "E";
 
@@ -1576,7 +1822,7 @@ function calculateResult(student){
 
 if(!hasAnyMarksEntry(student)){
 
-return{
+return {
 
 total:"",
 
@@ -1592,10 +1838,9 @@ hasEntry:false
 
 }
 
+let total = 0;
 
-let total=0;
-
-let hasAbsent=false;
+let hasAbsent = false;
 
 
 subjects.forEach((subject,i)=>{
@@ -1611,7 +1856,7 @@ value.toUpperCase()==="ABSENT" ||
 value.toUpperCase()==="AB"
 ){
 
-hasAbsent=true;
+hasAbsent = true;
 
 return;
 
@@ -1620,11 +1865,11 @@ return;
 
 if(value){
 
-let n=Number(value);
+let n = Number(value);
 
 if(!isNaN(n) && n>=0){
 
-total+=n;
+total += n;
 
 }
 
@@ -1633,19 +1878,25 @@ total+=n;
 });
 
 
-let max=calculateMaxMarks();
+let max =
+calculateMaxMarks();
 
-let percentage=max
+let percentage =
+max
 ?(total/max)*100
 :0;
 
 
-return{
+return {
 
 total,
+
 percentage,
+
 grade:getGrade(percentage),
+
 hasAbsent,
+
 hasEntry:true
 
 };
@@ -1691,7 +1942,7 @@ document
 
 function shareApp(){
 
-const data={
+const data = {
 
 title:"DEO Office - Marks Folio",
 
@@ -1700,6 +1951,7 @@ text:"बिहार विद्यालय अंक पत्रक ऑन�
 url:window.location.href
 
 };
+
 
 if(navigator.share){
 
@@ -1763,20 +2015,21 @@ document
 
 function renderSubjectControls(){
 
-const grid=
+const grid =
 document.getElementById("subjectGrid");
 
-grid.innerHTML="";
+grid.innerHTML = "";
 
 
 subjects.forEach((subject,i)=>{
 
-const box=
+const box =
 document.createElement("div");
 
-box.className="subject-box";
+box.className =
+"subject-box";
 
-box.innerHTML=`
+box.innerHTML = `
 
 <input
 class="sub-name"
@@ -1795,8 +2048,13 @@ oninput="updateSubjectFull(${i},this.value)">
 id="entryStatus${i}"
 onchange="entryStatusChange(${i},this.value)">
 
-<option value="PRESENT">Present</option>
-<option value="ABSENT">Absent</option>
+<option value="PRESENT">
+Present
+</option>
+
+<option value="ABSENT">
+Absent
+</option>
 
 </select>
 
@@ -1824,38 +2082,44 @@ renderSubjectOrder();
 
 function entryStatusChange(index,value){
 
-const student=
+const student =
 students[selectedStudent];
 
 if(!student)
 return;
 
 
-const input=
+const input =
 document.getElementById("m"+index);
 
 
 if(value==="ABSENT"){
 
-student.marks[index]="ABSENT";
+student.marks[index] =
+"ABSENT";
 
 if(input){
 
-input.value="ABSENT";
+input.value =
+"ABSENT";
 
-input.classList.add("absent-input");
+input.classList.add(
+"absent-input"
+);
 
 }
 
 }else{
 
-student.marks[index]="";
+student.marks[index] = "";
 
 if(input){
 
-input.value="";
+input.value = "";
 
-input.classList.remove("absent-input");
+input.classList.remove(
+"absent-input"
+);
 
 }
 
@@ -1875,7 +2139,7 @@ autoSave();
 
 function entryMarkChange(index,value){
 
-const student=
+const student =
 students[selectedStudent];
 
 if(!student)
@@ -1887,16 +2151,18 @@ String(value).toUpperCase()==="ABSENT" ||
 String(value).toUpperCase()==="AB"
 ){
 
-student.marks[index]="ABSENT";
+student.marks[index] =
+"ABSENT";
 
 }else{
 
-student.marks[index]=value;
+student.marks[index] =
+value;
 
 }
 
 
-const input=
+const input =
 document.getElementById("m"+index);
 
 
@@ -1906,11 +2172,15 @@ if(
 student.marks[index]==="ABSENT"
 ){
 
-input.classList.add("absent-input");
+input.classList.add(
+"absent-input"
+);
 
 }else{
 
-input.classList.remove("absent-input");
+input.classList.remove(
+"absent-input"
+);
 
 }
 
@@ -1930,8 +2200,9 @@ autoSave();
 
 function updateSubjectName(index,value){
 
-subjects[index].name=
-value.trim() || `विषय ${index+1}`;
+subjects[index].name =
+value.trim() ||
+`विषय ${index+1}`;
 
 renderSubjectOrder();
 
@@ -1948,15 +2219,20 @@ autoSave();
 
 function updateSubjectFull(index,value){
 
-let n=Number(value);
+let n =
+Number(value);
 
-if(isNaN(n) || n<0){
+if(
+isNaN(n) ||
+n<0
+){
 
 n=0;
 
 }
 
-subjects[index].full=n;
+subjects[index].full =
+n;
 
 renderPages();
 
@@ -1971,30 +2247,33 @@ autoSave();
 
 function renderSubjectOrder(){
 
-const list=
+const list =
 document.getElementById(
 "subjectOrderList"
 );
 
-list.innerHTML="";
+list.innerHTML = "";
 
 
 subjects.forEach((subject,index)=>{
 
-const item=
+const item =
 document.createElement("div");
 
-item.className=
+item.className =
 "subject-order-item";
 
-item.innerHTML=`
+item.innerHTML = `
 
 <div class="subject-order-name">
 
 ${index+1}. ${esc(subject.name)}
 
-<span style="font-size:10px;color:#777">
+<span
+style="font-size:10px;color:#777">
+
 (${subject.full})
+
 </span>
 
 </div>
@@ -2003,14 +2282,18 @@ ${index+1}. ${esc(subject.name)}
 class="gray"
 onclick="moveSubject(${index},-1)"
 ${index===0?"disabled":""}>
+
 ↑
+
 </button>
 
 <button
 class="gray"
 onclick="moveSubject(${index},1)"
 ${index===subjects.length-1?"disabled":""}>
+
 ↓
+
 </button>
 
 `;
@@ -2028,7 +2311,7 @@ list.appendChild(item);
 
 function moveSubject(index,direction){
 
-const newIndex=
+const newIndex =
 index+direction;
 
 if(
@@ -2041,17 +2324,21 @@ return;
 }
 
 
-const temp=
+const temp =
 subjects[index];
 
-subjects[index]=
+subjects[index] =
 subjects[newIndex];
 
-subjects[newIndex]=
+subjects[newIndex] =
 temp;
 
 
-reorderAllMarks(index,newIndex);
+reorderAllMarks(
+index,
+newIndex
+);
+
 
 renderSubjectControls();
 
@@ -2075,19 +2362,24 @@ students.forEach(student=>{
 if(!Array.isArray(student.marks))
 student.marks=[];
 
+
 while(
-student.marks.length<subjects.length
-)
+student.marks.length<
+subjects.length
+){
+
 student.marks.push("");
 
+}
 
-const temp=
+
+const temp =
 student.marks[from];
 
-student.marks[from]=
+student.marks[from] =
 student.marks[to];
 
-student.marks[to]=
+student.marks[to] =
 temp;
 
 });
@@ -2101,23 +2393,26 @@ temp;
 
 function addSubject(){
 
-const name=
+const name =
 prompt(
 "नए विषय का नाम दर्ज करें:",
 `विषय ${subjects.length+1}`
 );
 
-if(!name || !name.trim())
+if(
+!name ||
+!name.trim()
+)
 return;
 
 
-const full=
+const full =
 prompt(
 "इस विषय का पूर्णांक:",
 "50"
 );
 
-let fullMarks=
+let fullMarks =
 Number(full);
 
 if(
@@ -2177,13 +2472,13 @@ return;
 }
 
 
-const select=
+const select =
 document.getElementById(
 "delSubSelect"
 );
 
 
-select.innerHTML=
+select.innerHTML =
 subjects.map(
 (s,i)=>
 `<option value="${i}">
@@ -2210,7 +2505,7 @@ document
 
 function confirmRemoveSubject(){
 
-const index=
+const index =
 Number(
 document.getElementById(
 "delSubSelect"
@@ -2222,14 +2517,20 @@ if(isNaN(index))
 return;
 
 
-subjects.splice(index,1);
+subjects.splice(
+index,
+1
+);
 
 
 students.forEach(student=>{
 
 if(Array.isArray(student.marks)){
 
-student.marks.splice(index,1);
+student.marks.splice(
+index,
+1
+);
 
 }
 
@@ -2255,35 +2556,49 @@ autoSave();
 
 function syncHeaderInputs(key,value){
 
-details[key]=value;
+details[key] =
+value;
 
 
-const map={
+const map = {
 
 center:"formCenter",
+
 district:"formDistrict",
+
 school:"formSchool",
+
 udise:"formUdise",
+
 block:"formBlock",
+
 className:"formClass",
+
 board:"formBoard",
+
 exam:"formExam",
+
 year:"formYear"
 
 };
 
 
-const id=map[key];
+const id =
+map[key];
 
 
 if(id){
 
-const el=
+const el =
 document.getElementById(id);
 
-if(el && el.value!==value){
+if(
+el &&
+el.value!==value
+){
 
-el.value=value;
+el.value =
+value;
 
 }
 
@@ -2303,7 +2618,7 @@ autoSave();
 
 function printValue(value){
 
-const v=
+const v =
 String(value ?? "").trim();
 
 if(v===""){
@@ -2329,13 +2644,15 @@ return `
 
 function renderPages(){
 
-const wrap=
-document.getElementById("pagesWrap");
+const wrap =
+document.getElementById(
+"pagesWrap"
+);
 
-wrap.innerHTML="";
+wrap.innerHTML = "";
 
 
-const totalPages=
+const totalPages =
 Math.max(
 1,
 Math.ceil(
@@ -2345,7 +2662,7 @@ ROWS_PER_PAGE
 );
 
 
-const totalCols=
+const totalCols =
 3+
 subjects.length+
 2;
@@ -2357,16 +2674,17 @@ page<totalPages;
 page++
 ){
 
-const pageDiv=
+const pageDiv =
 document.createElement("section");
 
-pageDiv.className="paper";
+pageDiv.className =
+"paper";
 
 
-const start=
+const start =
 page*ROWS_PER_PAGE;
 
-let rows="";
+let rows = "";
 
 
 for(
@@ -2375,33 +2693,34 @@ r<ROWS_PER_PAGE;
 r++
 ){
 
-const i=start+r;
+const i =
+start+r;
 
 
 if(i<students.length){
 
-const student=
+const student =
 students[i];
 
-
-let subCells="";
+let subCells = "";
 
 
 subjects.forEach((subject,s)=>{
 
-const mark=
+const mark =
 (student.marks &&
 student.marks[s]) || "";
 
 
-const isAbsent=
+const isAbsent =
 String(mark).toUpperCase()==="ABSENT" ||
 String(mark).toUpperCase()==="AB";
 
 
-subCells+=`
+subCells += `
 
-<td class="col-sub ${isAbsent?"absent-cell":""}">
+<td
+class="col-sub ${isAbsent?"absent-cell":""}">
 
 <input
 class="${isAbsent?"absent-input":""}"
@@ -2419,60 +2738,84 @@ ${mark ? esc(mark) : "-"}
 });
 
 
-const result=
+const result =
 calculateResult(student);
 
 
-let totalHTML="";
-let resultHTML="";
+let totalHTML = "";
+
+let resultHTML = "";
 
 
 if(result.hasEntry){
 
-totalHTML=`
+totalHTML = `
+
 <span class="screen-value">
 ${result.total}
 </span>
+
 <span class="print-dash">
 ${result.total}
 </span>
+
 `;
 
-resultHTML=`
+
+resultHTML = `
 
 <span class="screen-value">
-${result.grade}<br>${result.percentage.toFixed(1)}%
+
+${result.grade}
+<br>
+${result.percentage.toFixed(1)}%
+
 </span>
 
 <span class="print-dash">
-${result.grade}<br>${result.percentage.toFixed(1)}%
+
+${result.grade}
+<br>
+${result.percentage.toFixed(1)}%
+
 </span>
 
 `;
 
 }else{
 
-totalHTML=`
-<span class="screen-value"></span>
-<span class="print-dash">-</span>
+totalHTML = `
+
+<span class="screen-value">
+</span>
+
+<span class="print-dash">
+-
+</span>
+
 `;
 
-resultHTML=`
-<span class="screen-value"></span>
-<span class="print-dash">-</span>
+
+resultHTML = `
+
+<span class="screen-value">
+</span>
+
+<span class="print-dash">
+-
+</span>
+
 `;
 
 }
 
 
-rows+=`
+rows += `
 
 <tr>
 
 <td class="col-sr">
-
 ${i+1}
-
 </td>
 
 
@@ -2483,7 +2826,11 @@ value="${esc(student.roll)}"
 oninput="cellInfoChanged(${i},'roll',this.value)">
 
 <span class="print-dash">
-${student.roll ? esc(student.roll) : "-"}
+
+${student.roll
+?esc(student.roll)
+:"-"}
+
 </span>
 
 </td>
@@ -2496,7 +2843,11 @@ value="${esc(student.name)}"
 oninput="cellInfoChanged(${i},'name',this.value)">
 
 <span class="print-dash">
-${student.name ? esc(student.name) : "-"}
+
+${student.name
+?esc(student.name)
+:"-"}
+
 </span>
 
 </td>
@@ -2524,25 +2875,27 @@ ${resultHTML}
 
 }else{
 
-rows+=`
+rows += `
 
 <tr>
 
 <td class="col-sr">
-
 ${i+1}
-
 </td>
 
 <td class="col-roll">
 
-<span class="print-dash">-</span>
+<span class="print-dash">
+-
+</span>
 
 </td>
 
 <td class="col-name">
 
-<span class="print-dash">-</span>
+<span class="print-dash">
+-
+</span>
 
 </td>
 
@@ -2551,7 +2904,9 @@ ${subjects.map(
 
 <td class="col-sub">
 
-<span class="print-dash">-</span>
+<span class="print-dash">
+-
+</span>
 
 </td>
 
@@ -2560,13 +2915,17 @@ ${subjects.map(
 
 <td class="col-total">
 
-<span class="print-dash">-</span>
+<span class="print-dash">
+-
+</span>
 
 </td>
 
 <td class="col-result">
 
-<span class="print-dash">-</span>
+<span class="print-dash">
+-
+</span>
 
 </td>
 
@@ -2579,27 +2938,45 @@ ${subjects.map(
 }
 
 
-const boardTitle=
+const boardTitle =
 details.board==="BSEB"
+
 ?"बिहार विद्यालय परीक्षा समिति, पटना"
+
 :"राज्य शिक्षा शोध एवं प्रशिक्षण परिषद, बिहार, पटना";
 
 
-pageDiv.innerHTML=`
+pageDiv.innerHTML = `
 
 <div class="header">
 
 <div class="h1">
+
 ${boardTitle}
+
 </div>
+
 
 <div class="exam-title">
-${esc(details.exam || "त्रैमासिक परीक्षा")}
+
+${esc(
+details.exam ||
+"त्रैमासिक परीक्षा"
+)}
+
 </div>
 
+
 <div class="exam-year">
-शैक्षणिक वर्ष : ${esc(details.year || "2026-27")}
+
+शैक्षणिक वर्ष :
+${esc(
+details.year ||
+"2026-27"
+)}
+
 </div>
+
 
 <div class="h2">
 
@@ -2618,6 +2995,7 @@ totalPages>1
 
 <div class="info">
 
+
 <div class="info-row">
 
 <label>
@@ -2627,6 +3005,7 @@ totalPages>1
 <input
 value="${esc(details.center)}"
 oninput="syncHeaderInputs('center',this.value)">
+
 
 <label>
 जिला :-
@@ -2662,6 +3041,7 @@ oninput="syncHeaderInputs('school',this.value)">
 value="${esc(details.udise)}"
 oninput="syncHeaderInputs('udise',this.value)">
 
+
 <label>
 प्रखंड का नाम :-
 </label>
@@ -2682,6 +3062,7 @@ oninput="syncHeaderInputs('block',this.value)">
 <input
 value="${esc(details.className)}"
 oninput="syncHeaderInputs('className',this.value)">
+
 
 <label>
 कुल पूर्णांक :-
@@ -2706,37 +3087,65 @@ readonly>
 <tr>
 
 <th class="col-sr">
-क्र०<br>सं०
+
+क्र०
+<br>
+सं०
+
 </th>
+
 
 <th class="col-roll">
-वर्ग<br>क्रमांक
+
+वर्ग
+<br>
+क्रमांक
+
 </th>
 
+
 <th class="col-name">
+
 विद्यार्थी का नाम
+
 </th>
 
 
 ${
 subjects.map(
 s=>
-`<th class="col-sub">
-${esc(s.name)}<br>
+`
+
+<th class="col-sub">
+
+${esc(s.name)}
+
+<br>
+
 <span style="font-size:8.5px">
+
 (${s.full})
+
 </span>
-</th>`
+
+</th>
+
+`
 ).join("")
 }
 
 
 <th class="col-total">
+
 कुल
+
 </th>
 
+
 <th class="col-result">
+
 ग्रेड / प्रतिशत
+
 </th>
 
 </tr>
@@ -2773,18 +3182,29 @@ class="note-cell">
 <div class="signatures">
 
 <div class="sig">
-परीक्षक का नाम एवं हस्ताक्षर<br>
+
+परीक्षक का नाम एवं हस्ताक्षर
+<br>
 तिथि सहित
+
 </div>
 
+
 <div class="sig">
-प्रधान परीक्षक का नाम एवं<br>
+
+प्रधान परीक्षक का नाम एवं
+<br>
 हस्ताक्षर तिथि सहित
+
 </div>
 
+
 <div class="sig">
-मूल्यांकन निदेशक का<br>
+
+मूल्यांकन निदेशक का
+<br>
 हस्ताक्षर एवं मुहर
+
 </div>
 
 </div>
@@ -2803,13 +3223,17 @@ wrap.appendChild(pageDiv);
    CELL CHANGE
 ========================================================= */
 
-function cellChanged(studentIndex,subjectIndex,value){
+function cellChanged(
+studentIndex,
+subjectIndex,
+value
+){
 
 if(
 !students[studentIndex].marks
 ){
 
-students[studentIndex].marks=
+students[studentIndex].marks =
 new Array(subjects.length)
 .fill("");
 
@@ -2822,12 +3246,14 @@ String(value).toUpperCase()==="AB"
 ){
 
 students[studentIndex]
-.marks[subjectIndex]="ABSENT";
+.marks[subjectIndex] =
+"ABSENT";
 
 }else{
 
 students[studentIndex]
-.marks[subjectIndex]=value;
+.marks[subjectIndex] =
+value;
 
 }
 
@@ -2836,7 +3262,7 @@ if(
 studentIndex===selectedStudent
 ){
 
-const input=
+const input =
 document.getElementById(
 "m"+subjectIndex
 );
@@ -2844,19 +3270,25 @@ document.getElementById(
 
 if(input){
 
-input.value=
-students[studentIndex].marks[subjectIndex];
+input.value =
+students[studentIndex]
+.marks[subjectIndex];
 
 
 if(
-students[studentIndex].marks[subjectIndex]==="ABSENT"
+students[studentIndex]
+.marks[subjectIndex]==="ABSENT"
 ){
 
-input.classList.add("absent-input");
+input.classList.add(
+"absent-input"
+);
 
 }else{
 
-input.classList.remove("absent-input");
+input.classList.remove(
+"absent-input"
+);
 
 }
 
@@ -2876,18 +3308,27 @@ autoSave();
    STUDENT INFO
 ========================================================= */
 
-function cellInfoChanged(index,key,value){
+function cellInfoChanged(
+index,
+key,
+value
+){
 
-students[index][key]=value;
+students[index][key] =
+value;
 
 
 if(index===selectedStudent){
 
 if(key==="name")
-document.getElementById("formName").value=value;
+document.getElementById(
+"formName"
+).value=value;
 
 if(key==="roll")
-document.getElementById("formRoll").value=value;
+document.getElementById(
+"formRoll"
+).value=value;
 
 }
 
@@ -2907,22 +3348,29 @@ autoSave();
 
 function syncFormOptions(){
 
-const select=
-document.getElementById("studentSelect");
+const select =
+document.getElementById(
+"studentSelect"
+);
 
-select.innerHTML="";
+select.innerHTML = "";
 
 
-students.forEach((student,index)=>{
+students.forEach(
+(student,index)=>{
 
-const option=
-document.createElement("option");
+const option =
+document.createElement(
+"option"
+);
 
-option.value=index;
+option.value =
+index;
 
-option.textContent=
+option.textContent =
 `${index+1}. ${
-student.name || "नया विद्यार्थी"
+student.name ||
+"नया विद्यार्थी"
 }`;
 
 select.appendChild(option);
@@ -2930,14 +3378,17 @@ select.appendChild(option);
 });
 
 
-selectedStudent=
+selectedStudent =
 Math.min(
 selectedStudent,
-Math.max(0,students.length-1)
+Math.max(
+0,
+students.length-1
+)
 );
 
 
-select.value=
+select.value =
 selectedStudent;
 
 }
@@ -2949,7 +3400,7 @@ selectedStudent;
 
 function selectStudent(){
 
-selectedStudent=
+selectedStudent =
 Number(
 document.getElementById(
 "studentSelect"
@@ -2957,7 +3408,7 @@ document.getElementById(
 )||0;
 
 
-const student=
+const student =
 students[selectedStudent];
 
 
@@ -2965,44 +3416,57 @@ if(!student)
 return;
 
 
-document.getElementById("formRoll").value=
+document.getElementById(
+"formRoll"
+).value =
 student.roll||"";
 
-document.getElementById("formName").value=
+
+document.getElementById(
+"formName"
+).value =
 student.name||"";
 
 
-subjects.forEach((subject,i)=>{
+subjects.forEach(
+(subject,i)=>{
 
-const input=
-document.getElementById("m"+i);
+const input =
+document.getElementById(
+"m"+i
+);
 
 
-const status=
+const status =
 document.getElementById(
 "entryStatus"+i
 );
 
 
-const value=
+const value =
 (student.marks &&
 student.marks[i])||"";
 
 
 if(input){
 
-input.value=value;
+input.value =
+value;
 
 
 if(
 String(value).toUpperCase()==="ABSENT"
 ){
 
-input.classList.add("absent-input");
+input.classList.add(
+"absent-input"
+);
 
 }else{
 
-input.classList.remove("absent-input");
+input.classList.remove(
+"absent-input"
+);
 
 }
 
@@ -3010,7 +3474,7 @@ input.classList.remove("absent-input");
 
 
 if(status)
-status.value=
+status.value =
 String(value).toUpperCase()==="ABSENT"
 ?"ABSENT"
 :"PRESENT";
@@ -3026,33 +3490,35 @@ String(value).toUpperCase()==="ABSENT"
 
 function formChanged(){
 
-const student=
+const student =
 students[selectedStudent];
-
 
 if(!student)
 return;
 
 
-student.roll=
+student.roll =
 document.getElementById(
 "formRoll"
 ).value;
 
 
-student.name=
+student.name =
 document.getElementById(
 "formName"
 ).value;
 
 
-subjects.forEach((s,i)=>{
+subjects.forEach(
+(s,i)=>{
 
-const input=
-document.getElementById("m"+i);
+const input =
+document.getElementById(
+"m"+i
+);
 
 
-const status=
+const status =
 document.getElementById(
 "entryStatus"+i
 );
@@ -3063,12 +3529,15 @@ status &&
 status.value==="ABSENT"
 ){
 
-student.marks[i]="ABSENT";
+student.marks[i] =
+"ABSENT";
 
 }else{
 
-student.marks[i]=
-input?input.value:"";
+student.marks[i] =
+input
+?input.value
+:"";
 
 }
 
@@ -3082,7 +3551,7 @@ syncFormOptions();
 
 document.getElementById(
 "studentSelect"
-).value=
+).value =
 selectedStudent;
 
 
@@ -3100,7 +3569,9 @@ function addStudent(){
 students.push({
 
 roll:"",
+
 name:"",
+
 marks:
 new Array(subjects.length)
 .fill("")
@@ -3108,7 +3579,7 @@ new Array(subjects.length)
 });
 
 
-selectedStudent=
+selectedStudent =
 students.length-1;
 
 
@@ -3151,7 +3622,7 @@ return;
 students.pop();
 
 
-selectedStudent=
+selectedStudent =
 Math.min(
 selectedStudent,
 students.length-1
@@ -3193,7 +3664,7 @@ return;
 
 document.getElementById(
 "studentSelect"
-).value=
+).value =
 selectedStudent;
 
 
@@ -3224,7 +3695,9 @@ localStorage.setItem(
 JSON.stringify({
 
 subjects,
+
 details,
+
 students
 
 })
@@ -3232,7 +3705,7 @@ students
 );
 
 
-const status=
+const status =
 document.getElementById(
 "saveStatus"
 );
@@ -3240,10 +3713,12 @@ document.getElementById(
 
 if(status){
 
-status.textContent=
+status.textContent =
 "✓ Auto-saved • "+
 new Date()
-.toLocaleTimeString("hi-IN");
+.toLocaleTimeString(
+"hi-IN"
+);
 
 }
 
@@ -3259,13 +3734,10 @@ function saveData(){
 autoSave();
 
 
-/*
-  अगर Class Name मौजूद है तो
-  सामान्य Save के साथ Class-wise Save भी करें
-*/
-
 if(
-String(details.className || "").trim()
+String(
+details.className || ""
+).trim()
 ){
 
 saveClassWiseData(true);
@@ -3312,9 +3784,11 @@ return {};
    SAVE CLASS-WISE DATA
 ========================================================= */
 
-function saveClassWiseData(silent=false){
+function saveClassWiseData(
+silent=false
+){
 
-let className=
+let className =
 String(
 details.className || ""
 ).trim();
@@ -3322,7 +3796,7 @@ details.className || ""
 
 if(!className){
 
-className=
+className =
 prompt(
 "कक्षा / वर्ग का नाम दर्ज करें:",
 ""
@@ -3343,15 +3817,15 @@ return;
 }
 
 
-className=
+className =
 className.trim();
 
 
-details.className=
+details.className =
 className;
 
 
-const formClass=
+const formClass =
 document.getElementById(
 "formClass"
 );
@@ -3359,7 +3833,7 @@ document.getElementById(
 
 if(formClass){
 
-formClass.value=
+formClass.value =
 className;
 
 }
@@ -3367,19 +3841,11 @@ className;
 }
 
 
-/*
-  Existing saved classes
-*/
-
-const allClasses=
+const allClasses =
 getClassWiseData();
 
 
-/*
-  Complete copy
-*/
-
-allClasses[className]={
+allClasses[className] = {
 
 subjects:
 JSON.parse(
@@ -3406,14 +3872,12 @@ localStorage.setItem(
 
 CLASS_SAVE_KEY,
 
-JSON.stringify(allClasses)
+JSON.stringify(
+allClasses
+)
 
 );
 
-
-/*
-  Also keep current data
-*/
 
 localStorage.setItem(
 
@@ -3422,7 +3886,9 @@ localStorage.setItem(
 JSON.stringify({
 
 subjects,
+
 details,
+
 students
 
 })
@@ -3452,49 +3918,56 @@ alert(
 
 function openSavedClasses(){
 
-const modal=
+const modal =
 document.getElementById(
 "savedClassModal"
 );
 
-const list=
+const list =
 document.getElementById(
 "savedClassList"
 );
 
 
-const allClasses=
+const allClasses =
 getClassWiseData();
 
 
-const names=
+const names =
 Object.keys(allClasses);
 
 
-list.innerHTML="";
+list.innerHTML = "";
 
 
 if(!names.length){
 
-list.innerHTML=`
+list.innerHTML = `
 
-<div style="
+<div
+style="
 text-align:center;
 padding:20px 8px;
 color:#777;
 font-size:12px;
 ">
 
-📂 अभी कोई Class-wise Data Save नहीं है।<br><br>
+📂 अभी कोई Class-wise Data Save नहीं है।
 
-पहले कक्षा / वर्ग का नाम भरें और<br>
+<br><br>
+
+पहले कक्षा / वर्ग का नाम भरें और
+
+<br>
+
 💾 Class Save दबाएँ।
 
 </div>
 
 `;
 
-modal.style.display="flex";
+modal.style.display =
+"flex";
 
 return;
 
@@ -3503,25 +3976,27 @@ return;
 
 names.forEach(name=>{
 
-const data=
+const data =
 allClasses[name];
 
 
-const item=
-document.createElement("div");
+const item =
+document.createElement(
+"div"
+);
 
-item.className=
+item.className =
 "saved-class-item";
 
 
-let dateText="";
+let dateText = "";
 
 
 if(data.savedAt){
 
 try{
 
-dateText=
+dateText =
 new Date(
 data.savedAt
 ).toLocaleString(
@@ -3533,7 +4008,7 @@ data.savedAt
 }
 
 
-item.innerHTML=`
+item.innerHTML = `
 
 <div class="saved-class-name">
 
@@ -3543,9 +4018,11 @@ item.innerHTML=`
 
 <div class="saved-class-date">
 
-${dateText
+${
+dateText
 ?`Last Saved: ${esc(dateText)}`
-:""}
+:""
+}
 
 </div>
 
@@ -3577,7 +4054,8 @@ list.appendChild(item);
 });
 
 
-modal.style.display="flex";
+modal.style.display =
+"flex";
 
 }
 
@@ -3592,7 +4070,8 @@ document
 .getElementById(
 "savedClassModal"
 )
-.style.display="none";
+.style.display =
+"none";
 
 }
 
@@ -3601,13 +4080,15 @@ document
    LOAD CLASS-WISE DATA
 ========================================================= */
 
-function loadClassWiseData(className){
+function loadClassWiseData(
+className
+){
 
-const allClasses=
+const allClasses =
 getClassWiseData();
 
 
-const data=
+const data =
 allClasses[className];
 
 
@@ -3633,17 +4114,14 @@ return;
 }
 
 
-/*
-  Subjects
-*/
-
 if(
 Array.isArray(data.subjects) &&
 data.subjects.length
 ){
 
-subjects=
-data.subjects.map(s=>({
+subjects =
+data.subjects.map(
+s=>({
 
 name:
 s.name || "विषय",
@@ -3653,18 +4131,15 @@ Number(
 s.full ?? 50
 )
 
-}));
+})
+);
 
 }
 
 
-/*
-  Details
-*/
-
 if(data.details){
 
-details=
+details =
 Object.assign(
 {},
 details,
@@ -3674,15 +4149,11 @@ data.details
 }
 
 
-/*
-  Students
-*/
-
 if(
 Array.isArray(data.students)
 ){
 
-students=
+students =
 data.students;
 
 }
@@ -3690,10 +4161,12 @@ data.students;
 
 if(!students.length){
 
-students=[{
+students = [{
 
 roll:"",
+
 name:"",
+
 marks:
 new Array(subjects.length)
 .fill("")
@@ -3703,15 +4176,14 @@ new Array(subjects.length)
 }
 
 
-/*
-  Fix marks arrays
-*/
+students.forEach(
+student=>{
 
-students.forEach(student=>{
+if(
+!Array.isArray(student.marks)
+){
 
-if(!Array.isArray(student.marks)){
-
-student.marks=[];
+student.marks = [];
 
 }
 
@@ -3731,7 +4203,7 @@ student.marks.length>
 subjects.length
 ){
 
-student.marks=
+student.marks =
 student.marks.slice(
 0,
 subjects.length
@@ -3742,69 +4214,72 @@ subjects.length
 });
 
 
-selectedStudent=0;
+selectedStudent = 0;
 
-
-/*
-  Update forms
-*/
 
 populateYears();
 
 
 document.getElementById(
 "formBoard"
-).value=
-details.board||"SCERT";
+).value =
+details.board ||
+"SCERT";
 
 
 document.getElementById(
 "formCenter"
-).value=
-details.center||"";
+).value =
+details.center ||
+"";
 
 
 document.getElementById(
 "formDistrict"
-).value=
-details.district||"";
+).value =
+details.district ||
+"";
 
 
 document.getElementById(
 "formSchool"
-).value=
-details.school||"";
+).value =
+details.school ||
+"";
 
 
 document.getElementById(
 "formUdise"
-).value=
-details.udise||"";
+).value =
+details.udise ||
+"";
 
 
 document.getElementById(
 "formBlock"
-).value=
-details.block||"";
+).value =
+details.block ||
+"";
 
 
 document.getElementById(
 "formClass"
-).value=
-details.className||className;
+).value =
+details.className ||
+className;
 
 
 document.getElementById(
 "formExam"
-).value=
-details.exam||
+).value =
+details.exam ||
 "त्रैमासिक परीक्षा";
 
 
 document.getElementById(
 "formYear"
-).value=
-details.year||
+).value =
+details.year ||
 "2026-27";
 
 
@@ -3817,11 +4292,6 @@ syncFormOptions();
 selectStudent();
 
 
-/*
-  Current loaded data भी
-  normal storage में रख दें
-*/
-
 localStorage.setItem(
 
 "deoMarksFolio_Final_v12",
@@ -3829,7 +4299,9 @@ localStorage.setItem(
 JSON.stringify({
 
 subjects,
+
 details,
+
 students
 
 })
@@ -3856,9 +4328,11 @@ alert(
    DELETE CLASS-WISE DATA
 ========================================================= */
 
-function deleteClassWiseData(className){
+function deleteClassWiseData(
+className
+){
 
-const allClasses=
+const allClasses =
 getClassWiseData();
 
 
@@ -3891,13 +4365,14 @@ localStorage.setItem(
 
 CLASS_SAVE_KEY,
 
-JSON.stringify(allClasses)
+JSON.stringify(
+allClasses
+)
 
 );
 
 
 openSavedClasses();
-
 
 }
 
@@ -3908,11 +4383,11 @@ openSavedClasses();
 
 function deleteSelectedClass(){
 
-const allClasses=
+const allClasses =
 getClassWiseData();
 
 
-const names=
+const names =
 Object.keys(allClasses);
 
 
@@ -3927,7 +4402,7 @@ return;
 }
 
 
-const current=
+const current =
 String(
 details.className || ""
 ).trim();
@@ -3938,7 +4413,9 @@ current &&
 allClasses[current]
 ){
 
-deleteClassWiseData(current);
+deleteClassWiseData(
+current
+);
 
 return;
 
@@ -3956,9 +4433,11 @@ alert(
    SAVE STATUS
 ========================================================= */
 
-function updateSaveStatus(message){
+function updateSaveStatus(
+message
+){
 
-const status=
+const status =
 document.getElementById(
 "saveStatus"
 );
@@ -3966,7 +4445,7 @@ document.getElementById(
 
 if(status){
 
-status.textContent=
+status.textContent =
 message;
 
 }
@@ -3980,13 +4459,15 @@ message;
 
 function loadData(){
 
-const raw=
+const raw =
 localStorage.getItem(
 "deoMarksFolio_Final_v12"
 ) ||
+
 localStorage.getItem(
 "deoMarksFolio_Final_v11"
 ) ||
+
 localStorage.getItem(
 "deoMarksFolio_Final_v10"
 );
@@ -3996,7 +4477,7 @@ if(raw){
 
 try{
 
-const data=
+const data =
 JSON.parse(raw);
 
 
@@ -4005,23 +4486,35 @@ Array.isArray(data.subjects) &&
 data.subjects.length
 ){
 
-subjects=
-data.subjects.map(s=>{
+subjects =
+data.subjects.map(
+s=>{
 
-if(typeof s==="string"){
+if(
+typeof s==="string"
+){
 
-return{
+return {
+
 name:s,
+
 full:50
+
 };
 
 }
 
 
-return{
+return {
 
-name:s.name||"विषय",
-full:Number(s.full??50)
+name:
+s.name ||
+"विषय",
+
+full:
+Number(
+s.full ?? 50
+)
 
 };
 
@@ -4032,7 +4525,7 @@ full:Number(s.full??50)
 
 if(data.details){
 
-details=
+details =
 Object.assign(
 details,
 data.details
@@ -4045,7 +4538,8 @@ if(
 Array.isArray(data.students)
 ){
 
-students=data.students;
+students =
+data.students;
 
 }
 
@@ -4069,7 +4563,9 @@ i++
 students.push({
 
 roll:"",
+
 name:"",
+
 marks:
 new Array(subjects.length)
 .fill("")
@@ -4081,13 +4577,14 @@ new Array(subjects.length)
 }
 
 
-/*
-  Marks arrays fix
-*/
+/* MARKS ARRAY FIX */
 
-students.forEach(student=>{
+students.forEach(
+student=>{
 
-if(!Array.isArray(student.marks))
+if(
+!Array.isArray(student.marks)
+)
 student.marks=[];
 
 
@@ -4106,7 +4603,7 @@ student.marks.length>
 subjects.length
 ){
 
-student.marks=
+student.marks =
 student.marks.slice(
 0,
 subjects.length
@@ -4125,41 +4622,74 @@ renderPages();
 
 syncFormOptions();
 
-selectedStudent=0;
+selectedStudent = 0;
 
 selectStudent();
 
 
-/*
-  School form
-*/
+/* SCHOOL FORM */
 
-document.getElementById("formBoard").value=
-details.board||"SCERT";
+document.getElementById(
+"formBoard"
+).value =
+details.board ||
+"SCERT";
 
-document.getElementById("formCenter").value=
-details.center||"";
 
-document.getElementById("formDistrict").value=
-details.district||"";
+document.getElementById(
+"formCenter"
+).value =
+details.center ||
+"";
 
-document.getElementById("formSchool").value=
-details.school||"";
 
-document.getElementById("formUdise").value=
-details.udise||"";
+document.getElementById(
+"formDistrict"
+).value =
+details.district ||
+"";
 
-document.getElementById("formBlock").value=
-details.block||"";
 
-document.getElementById("formClass").value=
-details.className||"";
+document.getElementById(
+"formSchool"
+).value =
+details.school ||
+"";
 
-document.getElementById("formExam").value=
-details.exam||"त्रैमासिक परीक्षा";
 
-document.getElementById("formYear").value=
-details.year||"2026-27";
+document.getElementById(
+"formUdise"
+).value =
+details.udise ||
+"";
+
+
+document.getElementById(
+"formBlock"
+).value =
+details.block ||
+"";
+
+
+document.getElementById(
+"formClass"
+).value =
+details.className ||
+"";
+
+
+document.getElementById(
+"formExam"
+).value =
+details.exam ||
+"त्रैमासिक परीक्षा";
+
+
+document.getElementById(
+"formYear"
+).value =
+details.year ||
+"2026-27";
 
 }
 
@@ -4201,27 +4731,31 @@ location.reload();
 
 function sortRollNumbers(){
 
-const selected=
+const selected =
 students[selectedStudent];
 
 
-students.sort((a,b)=>{
+students.sort(
+(a,b)=>{
 
-const aRoll=
+const aRoll =
 parseInt(
 String(a.roll||"")
 .replace(/\D/g,"")
 );
 
 
-const bRoll=
+const bRoll =
 parseInt(
 String(b.roll||"")
 .replace(/\D/g,"")
 );
 
 
-if(isNaN(aRoll)&&isNaN(bRoll))
+if(
+isNaN(aRoll) &&
+isNaN(bRoll)
+)
 return 0;
 
 
@@ -4238,7 +4772,7 @@ return aRoll-bRoll;
 });
 
 
-selectedStudent=
+selectedStudent =
 students.indexOf(selected);
 
 
@@ -4268,27 +4802,40 @@ alert(
 
 function downloadExcelTemplate(){
 
-const headers=[
+const headers = [
+
 "वर्ग क्रमांक",
+
 "विद्यार्थी का नाम",
-...subjects.map(s=>s.name)
+
+...subjects.map(
+s=>s.name
+)
+
 ];
 
 
-const rows=[];
+const rows = [];
 
 
-for(let i=1;i<=30;i++){
+for(
+let i=1;
+i<=30;
+i++
+){
 
-const row={};
+const row = {};
 
 
-headers.forEach(h=>{
+headers.forEach(
+h=>{
 row[h]="";
-});
+}
+);
 
 
-row["वर्ग क्रमांक"]=i;
+row["वर्ग क्रमांक"] =
+i;
 
 
 rows.push(row);
@@ -4296,39 +4843,61 @@ rows.push(row);
 }
 
 
-const worksheet=
+const worksheet =
 XLSX.utils.json_to_sheet(
 rows,
-{header:headers}
+{
+header:headers
+}
 );
 
 
-worksheet["!cols"]=[
-{wch:15},
-{wch:30},
-...subjects.map(s=>({
-wch:Math.max(
+worksheet["!cols"] = [
+
+{
+wch:15
+},
+
+{
+wch:30
+},
+
+...subjects.map(
+s=>({
+
+wch:
+Math.max(
 12,
 String(s.name).length+3
 )
-}))
+
+})
+)
+
 ];
 
 
-const workbook=
+const workbook =
 XLSX.utils.book_new();
 
 
 XLSX.utils.book_append_sheet(
+
 workbook,
+
 worksheet,
+
 "Marks Folio"
+
 );
 
 
 XLSX.writeFile(
+
 workbook,
+
 "DEO_Office_Marks_Folio_Excel_Format.xlsx"
+
 );
 
 }
@@ -4340,7 +4909,7 @@ workbook,
 
 function importExcel(event){
 
-const file=
+const file =
 event.target.files[0];
 
 
@@ -4348,37 +4917,42 @@ if(!file)
 return;
 
 
-const reader=
+const reader =
 new FileReader();
 
 
-reader.onload=function(e){
+reader.onload =
+function(e){
 
 try{
 
-const data=
+const data =
 new Uint8Array(
 e.target.result
 );
 
 
-const workbook=
+const workbook =
 XLSX.read(
 data,
-{type:"array"}
+{
+type:"array"
+}
 );
 
 
-const sheet=
+const sheet =
 workbook.Sheets[
 workbook.SheetNames[0]
 ];
 
 
-const rows=
+const rows =
 XLSX.utils.sheet_to_json(
 sheet,
-{defval:""}
+{
+defval:""
+}
 );
 
 
@@ -4393,10 +4967,11 @@ return;
 }
 
 
-students=
-rows.map(row=>{
+students =
+rows.map(
+row=>{
 
-const student={
+const student = {
 
 roll:
 row["वर्ग क्रमांक"] ??
@@ -4415,9 +4990,10 @@ marks:[]
 };
 
 
-subjects.forEach(subject=>{
+subjects.forEach(
+subject=>{
 
-let value=
+let value =
 row[subject.name];
 
 
@@ -4486,9 +5062,11 @@ reader.readAsArrayBuffer(file);
    eSHIKSHAKOSH EXCEL IMPORT
 ========================================================= */
 
-function importEshikshakoshExcel(event){
+function importEshikshakoshExcel(
+event
+){
 
-const file=
+const file =
 event.target.files[0];
 
 
@@ -4496,21 +5074,22 @@ if(!file)
 return;
 
 
-const reader=
+const reader =
 new FileReader();
 
 
-reader.onload=function(e){
+reader.onload =
+function(e){
 
 try{
 
-const data=
+const data =
 new Uint8Array(
 e.target.result
 );
 
 
-const workbook=
+const workbook =
 XLSX.read(
 data,
 {
@@ -4520,7 +5099,7 @@ cellDates:false
 );
 
 
-const sheet=
+const sheet =
 workbook.Sheets[
 workbook.SheetNames[0]
 ];
@@ -4537,7 +5116,7 @@ return;
 }
 
 
-const rows=
+const rows =
 XLSX.utils.sheet_to_json(
 sheet,
 {
@@ -4548,14 +5127,14 @@ raw:false
 );
 
 
-const START_ROW=14;
+const START_ROW = 14;
 
-const NAME_COL=1;
+const NAME_COL = 1;
 
-const ROLL_COL=9;
+const ROLL_COL = 9;
 
 
-let importedStudents=[];
+let importedStudents = [];
 
 
 for(
@@ -4564,23 +5143,26 @@ r<rows.length;
 r++
 ){
 
-const row=
+const row =
 rows[r] || [];
 
 
-const name=
+const name =
 String(
 row[NAME_COL] ?? ""
 ).trim();
 
 
-const roll=
+const roll =
 String(
 row[ROLL_COL] ?? ""
 ).trim();
 
 
-if(!name && !roll){
+if(
+!name &&
+!roll
+){
 
 continue;
 
@@ -4594,15 +5176,18 @@ roll:roll,
 name:name,
 
 marks:
-new Array(subjects.length)
-.fill("")
+new Array(
+subjects.length
+).fill("")
 
 });
 
 }
 
 
-if(!importedStudents.length){
+if(
+!importedStudents.length
+){
 
 alert(
 "❌ eShikshakosh Excel में B15 से Student Name और J15 से Roll Number का डेटा नहीं मिला।"
@@ -4613,7 +5198,7 @@ return;
 }
 
 
-students=
+students =
 importedStudents;
 
 
@@ -4665,15 +5250,15 @@ reader.readAsArrayBuffer(file);
 
 async function downloadPDF(){
 
-const element=
+const element =
 document.getElementById(
 "pagesWrap"
 );
 
 
-const safeClass=
+const safeClass =
 String(
-details.className||
+details.className ||
 "Class"
 )
 .replace(
@@ -4682,9 +5267,9 @@ details.className||
 );
 
 
-const safeExam=
+const safeExam =
 String(
-details.exam||
+details.exam ||
 "Report"
 )
 .replace(
@@ -4693,21 +5278,23 @@ details.exam||
 );
 
 
-const filename=
+const filename =
 "Marks_Folio_"+
 safeExam+
 "_"+(
-details.year||
+details.year ||
 "2026-27"
 )+"_"+
 safeClass+
 ".pdf";
 
 
-element.classList.add("pdf-mode");
+element.classList.add(
+"pdf-mode"
+);
 
 
-const options={
+const options = {
 
 margin:0,
 
@@ -4767,7 +5354,9 @@ alert(
 }
 
 
-element.classList.remove("pdf-mode");
+element.classList.remove(
+"pdf-mode"
+);
 
 }
 
@@ -4808,25 +5397,36 @@ fetch(
 "https://api.counterapi.dev/v1/deo_marks_folio_bihar/views/up"
 )
 
-.then(res=>res.json())
+.then(
+res=>res.json()
+)
 
-.then(data=>{
+.then(
+data=>{
 
-if(data&&data.count){
+if(
+data &&
+data.count
+){
 
 document.getElementById(
 "viewCount"
-).textContent=
-Number(data.count)
-.toLocaleString("hi-IN");
+).textContent =
+Number(
+data.count
+)
+.toLocaleString(
+"hi-IN"
+);
 
 }
 
 })
 
-.catch(()=>{
+.catch(
+()=>{
 
-const views=
+const views =
 Number(
 localStorage.getItem(
 "deo_local_views"
@@ -4842,8 +5442,10 @@ views
 
 document.getElementById(
 "viewCount"
-).textContent=
-views.toLocaleString("hi-IN");
+).textContent =
+views.toLocaleString(
+"hi-IN"
+);
 
 });
 
