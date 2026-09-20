@@ -428,16 +428,16 @@ button:disabled{
   position:relative;
   text-align:center;
   margin-bottom:1.5mm;
-  min-height:18mm;
+  min-height:19mm;
   display:flex;
   flex-direction:column;
   justify-content:center;
-  padding:0 22mm;
+  padding:0 23mm;
 }
 
 .header-logo{
   position:absolute;
-  top:0;
+  top:0.5mm;
   width:18mm;
   height:18mm;
   object-fit:contain;
@@ -445,6 +445,7 @@ button:disabled{
 
 .header-logo.left-logo{
   left:0;
+  border-radius:50%;
 }
 
 .header-logo.right-logo{
@@ -1560,32 +1561,42 @@ Follow DEO Office
 <script>
 
 /* =========================================================
-   SETTINGS & EMBEDDED LOGOS
+   EXACT SAME TO SAME LOGOS (VECTOR DATA URLs)
 ========================================================= */
 
 const LOGO_LEFT = "data:image/svg+xml;utf8," + encodeURIComponent(`
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
-  <circle cx="100" cy="100" r="96" fill="#fff8b5" stroke="#1b7340" stroke-width="4"/>
-  <path d="M 38 68 C 42 42 62 30 75 32 C 60 48 56 65 52 75" fill="none" stroke="#2e7d32" stroke-width="3.5" stroke-linecap="round"/>
-  <ellipse cx="44" cy="52" rx="4" ry="9" transform="rotate(-30 44 52)" fill="#388e3c"/>
-  <ellipse cx="60" cy="40" rx="4" ry="9" transform="rotate(30 60 40)" fill="#388e3c"/>
-  <ellipse cx="72" cy="33" rx="4" ry="8" transform="rotate(45 72 33)" fill="#388e3c"/>
+  <circle cx="100" cy="100" r="97" fill="#fffbb2" stroke="#1f7a42" stroke-width="3"/>
+  <path d="M 36 68 C 40 42 60 28 75 30 C 58 48 54 65 50 75" fill="none" stroke="#257538" stroke-width="3.5" stroke-linecap="round"/>
+  <ellipse cx="43" cy="51" rx="4" ry="9" transform="rotate(-30 43 51)" fill="#2e7d32"/>
+  <ellipse cx="60" cy="39" rx="4" ry="9" transform="rotate(30 60 39)" fill="#2e7d32"/>
+  <ellipse cx="72" cy="32" rx="4" ry="8" transform="rotate(45 72 32)" fill="#2e7d32"/>
 
-  <path d="M 162 68 C 158 42 138 30 125 32 C 140 48 144 65 148 75" fill="none" stroke="#2e7d32" stroke-width="3.5" stroke-linecap="round"/>
-  <ellipse cx="156" cy="52" rx="4" ry="9" transform="rotate(30 156 52)" fill="#388e3c"/>
-  <ellipse cx="140" cy="40" rx="4" ry="9" transform="rotate(-30 140 40)" fill="#388e3c"/>
-  <ellipse cx="128" cy="33" rx="4" ry="8" transform="rotate(-45 128 33)" fill="#388e3c"/>
+  <path d="M 164 68 C 160 42 140 28 125 30 C 142 48 146 65 150 75" fill="none" stroke="#257538" stroke-width="3.5" stroke-linecap="round"/>
+  <ellipse cx="157" cy="51" rx="4" ry="9" transform="rotate(30 157 51)" fill="#2e7d32"/>
+  <ellipse cx="140" cy="39" rx="4" ry="9" transform="rotate(-30 140 39)" fill="#2e7d32"/>
+  <ellipse cx="128" cy="32" rx="4" ry="8" transform="rotate(-45 128 32)" fill="#2e7d32"/>
 
-  <g transform="translate(18, 75) rotate(-15)">
-    <rect x="0" y="0" width="11" height="38" rx="5.5" fill="#fbc02d"/>
+  <path d="M 38 132 C 40 158 60 172 75 170 C 58 152 54 135 50 125" fill="none" stroke="#257538" stroke-width="3.5" stroke-linecap="round"/>
+  <ellipse cx="43" cy="149" rx="4" ry="9" transform="rotate(30 43 149)" fill="#2e7d32"/>
+  <ellipse cx="60" cy="161" rx="4" ry="9" transform="rotate(-30 60 161)" fill="#2e7d32"/>
+  <ellipse cx="72" cy="168" rx="4" ry="8" transform="rotate(-45 72 168)" fill="#2e7d32"/>
+
+  <path d="M 162 132 C 160 158 140 172 125 170 C 142 152 146 135 150 125" fill="none" stroke="#257538" stroke-width="3.5" stroke-linecap="round"/>
+  <ellipse cx="157" cy="149" rx="4" ry="9" transform="rotate(-30 157 149)" fill="#2e7d32"/>
+  <ellipse cx="140" cy="161" rx="4" ry="9" transform="rotate(30 140 161)" fill="#2e7d32"/>
+  <ellipse cx="128" cy="168" rx="4" ry="8" transform="rotate(45 128 168)" fill="#2e7d32"/>
+
+  <g transform="translate(19, 74) rotate(-14)">
+    <rect x="0" y="0" width="11" height="38" rx="5.5" fill="#f5aa42"/>
     <path d="M 0 0 Q 5.5 -12 11 0 Z" fill="#e57373"/>
-    <rect x="0" y="27" width="11" height="11" rx="2" fill="#5d4037"/>
+    <rect x="0" y="27" width="11" height="11" rx="2" fill="#54382c"/>
   </g>
 
-  <g transform="translate(182, 75) rotate(15) scale(-1, 1)">
-    <rect x="0" y="0" width="11" height="38" rx="5.5" fill="#fbc02d"/>
+  <g transform="translate(181, 74) rotate(14) scale(-1, 1)">
+    <rect x="0" y="0" width="11" height="38" rx="5.5" fill="#f5aa42"/>
     <path d="M 0 0 Q 5.5 -12 11 0 Z" fill="#e57373"/>
-    <rect x="0" y="27" width="11" height="11" rx="2" fill="#5d4037"/>
+    <rect x="0" y="27" width="11" height="11" rx="2" fill="#54382c"/>
   </g>
 
   <g transform="translate(68, 35) scale(0.64)">
@@ -1604,12 +1615,12 @@ const LOGO_LEFT = "data:image/svg+xml;utf8," + encodeURIComponent(`
     <path d="M 78 48 h 10 v 10 h -10 v -6 h 5 v -4" fill="none" stroke="#111" stroke-width="2.5"/>
   </g>
 
-  <text x="100" y="132" font-family="'Nirmala UI', Mangal, sans-serif" font-weight="900" font-size="20" fill="#00693e" text-anchor="middle">शिक्षा विभाग</text>
-  <text x="100" y="148" font-family="'Nirmala UI', Mangal, sans-serif" font-weight="800" font-size="12" fill="#00693e" text-anchor="middle">बिहार सरकार</text>
+  <text x="100" y="130" font-family="'Nirmala UI', Mangal, sans-serif" font-weight="900" font-size="21" fill="#00693e" text-anchor="middle">शिक्षा विभाग</text>
+  <text x="100" y="147" font-family="'Nirmala UI', Mangal, sans-serif" font-weight="800" font-size="12.5" fill="#00693e" text-anchor="middle">बिहार सरकार</text>
 
-  <g transform="translate(68, 155) scale(0.65)">
-    <path d="M 50 8 C 30 0 5 8 0 10 L 0 38 C 15 32 35 32 50 38 C 65 32 85 32 100 38 L 100 10 C 95 8 70 0 50 8 Z" fill="#ffffff" stroke="#2e7d32" stroke-width="3"/>
-    <line x1="50" y1="8" x2="50" y2="38" stroke="#2e7d32" stroke-width="3"/>
+  <g transform="translate(68, 153) scale(0.65)">
+    <path d="M 50 8 C 30 0 5 8 0 10 L 0 38 C 15 32 35 32 50 38 C 65 32 85 32 100 38 L 100 10 C 95 8 70 0 50 8 Z" fill="#ffffff" stroke="#257538" stroke-width="3"/>
+    <line x1="50" y1="8" x2="50" y2="38" stroke="#257538" stroke-width="3"/>
     <line x1="10" y1="16" x2="45" y2="15" stroke="#757575" stroke-width="1.8"/>
     <line x1="10" y1="22" x2="45" y2="21" stroke="#757575" stroke-width="1.8"/>
     <line x1="10" y1="28" x2="45" y2="27" stroke="#757575" stroke-width="1.8"/>
@@ -1621,25 +1632,25 @@ const LOGO_LEFT = "data:image/svg+xml;utf8," + encodeURIComponent(`
 
 const LOGO_RIGHT = "data:image/svg+xml;utf8," + encodeURIComponent(`
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240">
-  <g fill="#111111" stroke="#111111">
+  <g fill="#000000" stroke="#000000">
     <rect x="58" y="185" width="84" height="42" fill="none" stroke-width="7"/>
     <rect x="68" y="195" width="64" height="22" fill="none" stroke-width="5"/>
     <path d="M 76 200 h 6 v 12 h 8 v -12 h 6 v 12" fill="none" stroke-width="3.5" stroke-linecap="square"/>
     <path d="M 104 200 h 6 v 12 h 12 v -12" fill="none" stroke-width="3.5" stroke-linecap="square"/>
 
-    <path d="M 96 185 L 96 82 Q 98 75 100 70 Q 102 75 104 82 L 104 185 Z" fill="#111111" stroke="none"/>
+    <path d="M 96 185 L 96 82 Q 98 75 100 70 Q 102 75 104 82 L 104 185 Z" fill="#000000" stroke="none"/>
 
-    <ellipse cx="100" cy="40" rx="10" ry="24" fill="#111111" stroke="none"/>
-    <ellipse cx="80" cy="52" rx="10" ry="22" transform="rotate(-30 80 52)" fill="#111111" stroke="none"/>
-    <ellipse cx="120" cy="52" rx="10" ry="22" transform="rotate(30 120 52)" fill="#111111" stroke="none"/>
-    <ellipse cx="64" cy="72" rx="9" ry="21" transform="rotate(-52 64 72)" fill="#111111" stroke="none"/>
-    <ellipse cx="136" cy="72" rx="9" ry="21" transform="rotate(52 136 72)" fill="#111111" stroke="none"/>
-    <ellipse cx="52" cy="98" rx="9" ry="21" transform="rotate(-72 52 98)" fill="#111111" stroke="none"/>
-    <ellipse cx="148" cy="98" rx="9" ry="21" transform="rotate(72 148 98)" fill="#111111" stroke="none"/>
-    <ellipse cx="44" cy="126" rx="9" ry="21" transform="rotate(-84 44 126)" fill="#111111" stroke="none"/>
-    <ellipse cx="156" cy="126" rx="9" ry="21" transform="rotate(84 156 126)" fill="#111111" stroke="none"/>
-    <ellipse cx="64" cy="148" rx="9" ry="20" transform="rotate(-62 64 148)" fill="#111111" stroke="none"/>
-    <ellipse cx="136" cy="148" rx="9" ry="20" transform="rotate(62 136 148)" fill="#111111" stroke="none"/>
+    <ellipse cx="100" cy="40" rx="10" ry="24" fill="#000000" stroke="none"/>
+    <ellipse cx="80" cy="52" rx="10" ry="22" transform="rotate(-30 80 52)" fill="#000000" stroke="none"/>
+    <ellipse cx="120" cy="52" rx="10" ry="22" transform="rotate(30 120 52)" fill="#000000" stroke="none"/>
+    <ellipse cx="64" cy="72" rx="9" ry="21" transform="rotate(-52 64 72)" fill="#000000" stroke="none"/>
+    <ellipse cx="136" cy="72" rx="9" ry="21" transform="rotate(52 136 72)" fill="#000000" stroke="none"/>
+    <ellipse cx="52" cy="98" rx="9" ry="21" transform="rotate(-72 52 98)" fill="#000000" stroke="none"/>
+    <ellipse cx="148" cy="98" rx="9" ry="21" transform="rotate(72 148 98)" fill="#000000" stroke="none"/>
+    <ellipse cx="44" cy="126" rx="9" ry="21" transform="rotate(-84 44 126)" fill="#000000" stroke="none"/>
+    <ellipse cx="156" cy="126" rx="9" ry="21" transform="rotate(84 156 126)" fill="#000000" stroke="none"/>
+    <ellipse cx="64" cy="148" rx="9" ry="20" transform="rotate(-62 64 148)" fill="#000000" stroke="none"/>
+    <ellipse cx="136" cy="148" rx="9" ry="20" transform="rotate(62 136 148)" fill="#000000" stroke="none"/>
 
     <g stroke="none">
       <path d="M 12 148 h 15 v 15 h -7 v -7 h -8 z M 27 163 v 15 h -15 v -7 h 7 v -8 z"/>
@@ -1652,6 +1663,10 @@ const LOGO_RIGHT = "data:image/svg+xml;utf8," + encodeURIComponent(`
   </g>
 </svg>`);
 
+/* =========================================================
+   SETTINGS
+========================================================= */
+
 const CHANNEL_LINK =
 "https://whatsapp.com/channel/0029VaIhMoY35fM4YK5xrz3P";
 
@@ -1660,7 +1675,7 @@ const ROWS_PER_PAGE = 30;
 const CLASS_SAVE_KEY =
 "deoMarksFolio_ClassWise_v1";
 
-const APP_VERSION = "1.4.4";
+const APP_VERSION = "1.4.5";
 
 const APP_VERSION_KEY =
 "deoMarksFolio_AppVersion_v1";
@@ -1756,7 +1771,7 @@ return String(s ?? "")
 
 
 /* =========================================================
-   STUDENT HAS DATA CHECK
+   STUDENT HAS DATA CHECK (Check if Student row is filled)
 ========================================================= */
 
 function studentHasData(student){
@@ -1813,7 +1828,7 @@ details.year || "2026-27";
 
 
 /* =========================================================
-   TOTAL FULL MARKS
+   TOTAL FULL MARKS (Excludes Optional Subjects)
 ========================================================= */
 
 function calculateMaxMarks(){
@@ -1911,7 +1926,7 @@ return "E";
 
 
 /* =========================================================
-   RESULT
+   RESULT (Excludes Optional Subjects)
 ========================================================= */
 
 function calculateResult(student){
@@ -2964,7 +2979,7 @@ return `
 
 
 /* =========================================================
-   RENDER PAGES (S.No. Conditionally Shown & Logos Added)
+   RENDER PAGES (S. No. Condition & Logos)
 ========================================================= */
 
 function renderPages(){
@@ -3500,7 +3515,7 @@ wrap.appendChild(pageDiv);
 
 
 /* =========================================================
-   CELL CHANGE & FORM INTERACTION
+   CELL & FORM HANDLERS
 ========================================================= */
 
 function cellChanged(studentIndex,subjectIndex,value){
@@ -3899,7 +3914,7 @@ behavior:"smooth"
 
 
 /* =========================================================
-   TRANSLITERATION & REVERT
+   NAME TRANSLITERATION
 ========================================================= */
 
 async function transliterateTextToHindi(text){
@@ -4003,7 +4018,7 @@ function revertToOriginalNames(){
 
 
 /* =========================================================
-   STORAGE & MANAGEMENT
+   AUTO SAVE & STORAGE
 ========================================================= */
 
 function autoSave(){
@@ -4632,7 +4647,6 @@ JSON.stringify(allClasses)
 
 openSavedClasses();
 
-
 }
 
 
@@ -4651,8 +4665,6 @@ if(!names.length){
 alert(
 "कोई Saved Class उपलब्ध नहीं है।"
 );
-
-return;
 
 }
 
