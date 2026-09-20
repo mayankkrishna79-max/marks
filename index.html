@@ -1041,12 +1041,12 @@ td input.absent-input{
 <div class="pwa-install-banner" id="pwaInstallBanner">
   <div class="pwa-icon">📲</div>
   <div class="pwa-text">
-    <strong>DEO Office Marks Folio</strong>
-    <span>Apne mobile me App ki tarah install karein bina internet ke chalane ke liye.</span>
+    <strong>डीईओ ऑफिस मार्क्स फोलियो</strong>
+    <span>बिना इंटरनेट उपयोग के लिए इसे अपने मोबाइल में ऐप की तरह इंस्टॉल करें।</span>
   </div>
   <div class="pwa-actions">
-    <button class="primary" onclick="triggerPwaInstall()">Install</button>
-    <button class="gray" onclick="dismissPwaBanner()">Baad Me</button>
+    <button class="primary" onclick="triggerPwaInstall()">इंस्टॉल करें</button>
+    <button class="gray" onclick="dismissPwaBanner()">बाद में</button>
   </div>
 </div>
 
@@ -1063,7 +1063,7 @@ td input.absent-input{
 </button>
 
 <button class="install-btn" id="installToolbarBtn" onclick="triggerPwaInstall()">
-📲 Install App
+📲 ऐप इंस्टॉल करें
 </button>
 
 <button class="excel-export-btn" onclick="exportToExcel()">
@@ -1730,7 +1730,7 @@ function triggerPwaInstall() {
       dismissPwaBanner();
     });
   } else {
-    alert("📲 Install karne ke liye browser menu (⋮) me jakar 'Install App' ya 'Add to Home screen' chunein.");
+    alert("📲 इंस्टॉल करने के लिए ब्राउज़र के मेन्यू (⋮) में जाएं और 'ऐप इंस्टॉल करें' (Install App) या 'होम स्क्रीन पर जोड़ें' (Add to Home screen) चुनें।");
   }
 }
 
@@ -3615,7 +3615,7 @@ if(
 
 students[studentIndex].marks=
 new Array(subjects.length)
-.fill("");
+.fill("")
 
 }
 
