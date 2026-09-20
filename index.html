@@ -1539,7 +1539,7 @@ const CLASS_SAVE_KEY =
   CHANGE THIS VERSION EVERY TIME
   YOU PUBLISH A NEW CODE UPDATE.
 */
-const APP_VERSION = "1.4.0";
+const APP_VERSION = "1.4.1";
 
 const APP_VERSION_KEY =
 "deoMarksFolio_AppVersion_v1";
@@ -2118,6 +2118,7 @@ grid.innerHTML="";
 
 subjects.forEach((subject,i)=>{
 
+const isLast = (i === subjects.length - 1);
 const box=
 document.createElement("div");
 
@@ -2162,8 +2163,10 @@ onchange="entryStatusChange(${i},this.value)">
 class="sub-marks"
 id="m${i}"
 inputmode="decimal"
+enterkeyhint="${isLast ? 'done' : 'next'}"
 placeholder="अंक"
-oninput="entryMarkChange(${i},this.value)">
+oninput="entryMarkChange(${i},this.value)"
+onkeydown="handleMarksKeyNav(event, ${i})">
 
 <div
 class="mark-help"
@@ -2183,6 +2186,34 @@ renderSubjectOrder();
 
 selectStudent();
 
+}
+
+
+/* =========================================================
+   MARKS INPUT NAVIGATION (Enter / Next Key)
+========================================================= */
+
+function handleMarksKeyNav(event, currentIndex){
+  if(event.key === "Enter"){
+    event.preventDefault();
+    
+    if(currentIndex < subjects.length - 1){
+      const nextInput = document.getElementById("m" + (currentIndex + 1));
+      if(nextInput){
+        nextInput.focus();
+        nextInput.select();
+      }
+    } else {
+      nextStudent();
+      setTimeout(()=>{
+        const firstInput = document.getElementById("m0");
+        if(firstInput){
+          firstInput.focus();
+          firstInput.select();
+        }
+      }, 50);
+    }
+  }
 }
 
 
@@ -3804,7 +3835,7 @@ behavior:"smooth"
 async function transliterateTextToHindi(text){
   const clean = text.trim();
   if(!clean) return "";
-  if(!/[a-zA-Z]/.test(clean)) return clean; // Already Hindi/Devanagari
+  if(!/[a-zA-Z]/.test(clean)) return clean;
 
   const words = clean.split(/\s+/);
   const convertedWords = await Promise.all(
@@ -4547,6 +4578,8 @@ alert(
 "कोई Saved Class उपलब्ध नहीं है।"
 );
 
+return;
+
 }
 
 
@@ -5148,6 +5181,8 @@ if(!sheet){
 alert(
 "Excel Sheet नहीं मिली।"
 );
+
+return;
 
 }
 
