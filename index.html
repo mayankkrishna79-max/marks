@@ -1058,14 +1058,14 @@ onclick="openSubjectModal()">
 </div>
 
 
-<!-- ================= SCHOOL DETAILS ================= -->
+<!-- ================= EXAM DETAILS (NEW COLLAPSIBLE) ================= -->
 
 <div
 class="collapse-head"
-id="schoolHead"
-onclick="toggleSchoolDetails()">
+id="examHead"
+onclick="toggleExamDetails()">
 
-<span>🏫 विद्यालय की जानकारी</span>
+<span>📋 परीक्षा की जानकारी</span>
 
 <span>▼</span>
 
@@ -1073,7 +1073,7 @@ onclick="toggleSchoolDetails()">
 
 <div
 class="collapse-content"
-id="schoolDetails">
+id="examDetails">
 
 <div class="entry-grid">
 
@@ -1097,6 +1097,66 @@ onchange="syncHeaderInputs('board',this.value)">
 
 </div>
 
+
+<div>
+
+<label>परीक्षा का नाम</label>
+
+<select
+id="formExam"
+onchange="syncHeaderInputs('exam',this.value)">
+
+<option value="त्रैमासिक परीक्षा">
+त्रैमासिक परीक्षा
+</option>
+
+<option value="अर्धवार्षिक परीक्षा">
+अर्धवार्षिक परीक्षा
+</option>
+
+<option value="वार्षिक परीक्षा">
+वार्षिक परीक्षा
+</option>
+
+</select>
+
+</div>
+
+
+<div>
+
+<label>शैक्षणिक वर्ष</label>
+
+<select
+id="formYear"
+onchange="syncHeaderInputs('year',this.value)">
+</select>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- ================= SCHOOL DETAILS ================= -->
+
+<div
+class="collapse-head"
+id="schoolHead"
+onclick="toggleSchoolDetails()">
+
+<span>🏫 विद्यालय की जानकारी</span>
+
+<span>▼</span>
+
+</div>
+
+<div
+class="collapse-content"
+id="schoolDetails">
+
+<div class="entry-grid">
 
 <div>
 
@@ -1161,43 +1221,6 @@ oninput="syncHeaderInputs('udise',this.value)">
 <input
 id="formClass"
 oninput="syncHeaderInputs('className',this.value)">
-
-</div>
-
-
-<div>
-
-<label>परीक्षा</label>
-
-<select
-id="formExam"
-onchange="syncHeaderInputs('exam',this.value)">
-
-<option value="त्रैमासिक परीक्षा">
-त्रैमासिक परीक्षा
-</option>
-
-<option value="अर्धवार्षिक परीक्षा">
-अर्धवार्षिक परीक्षा
-</option>
-
-<option value="वार्षिक परीक्षा">
-वार्षिक परीक्षा
-</option>
-
-</select>
-
-</div>
-
-
-<div>
-
-<label>शैक्षणिक वर्ष</label>
-
-<select
-id="formYear"
-onchange="syncHeaderInputs('year',this.value)">
-</select>
 
 </div>
 
@@ -1549,7 +1572,7 @@ const ROWS_PER_PAGE = 30;
 const CLASS_SAVE_KEY =
 "deoMarksFolio_ClassWise_v1";
 
-const APP_VERSION = "1.4.6";
+const APP_VERSION = "1.4.7";
 
 const APP_VERSION_KEY =
 "deoMarksFolio_AppVersion_v1";
@@ -1890,8 +1913,23 @@ hasEntry:true
 
 
 /* =========================================================
-   COLLAPSE DETAILS
+   COLLAPSE DETAILS (EXAM & SCHOOL)
 ========================================================= */
+
+function toggleExamDetails(){
+
+const box =
+document.getElementById("examDetails");
+
+const head =
+document.getElementById("examHead");
+
+box.classList.toggle("show");
+
+head.classList.toggle("open");
+
+}
+
 
 function toggleSchoolDetails(){
 
