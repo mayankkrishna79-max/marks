@@ -87,6 +87,7 @@ button:disabled{
 .info-btn{background:#0dcaf0;color:#000}
 .esikosh-btn{background:#198754;color:#fff}
 .hindi-btn{background:#d63384;color:#fff}
+.revert-btn{background:#6f42c1;color:#fff}
 .excel-export-btn{background:#107c41;color:#fff}
 
 .class-save-btn{
@@ -1328,6 +1329,14 @@ onclick="transliterateAllNames()">
 </button>
 
 <button
+class="revert-btn"
+id="revertBtn"
+style="display:none;"
+onclick="revertToOriginalNames()">
+↩ Revert to Original
+</button>
+
+<button
 class="warning"
 onclick="sortRollNumbers()">
 🔢 Roll Ascending
@@ -1550,7 +1559,7 @@ const CLASS_SAVE_KEY =
   CHANGE THIS VERSION EVERY TIME
   YOU PUBLISH A NEW CODE UPDATE.
 */
-const APP_VERSION = "1.4.2";
+const APP_VERSION = "1.4.3";
 
 const APP_VERSION_KEY =
 "deoMarksFolio_AppVersion_v1";
@@ -3818,7 +3827,7 @@ behavior:"smooth"
 
 
 /* =========================================================
-   TRANSLITERATE ENGLISH NAME TO HINDI
+   TRANSLITERATE ENGLISH NAME TO HINDI & REVERT
 ========================================================= */
 
 async function transliterateTextToHindi(text){
@@ -3849,7 +3858,9 @@ async function transliterateTextToHindi(text){
 
 async function transliterateAllNames(){
   const btn = document.getElementById("transliterateBtn");
+  const revertBtn = document.getElementById("revertBtn");
   const origText = btn ? btn.textContent : "";
+
   if(btn){
     btn.disabled = true;
     btn.textContent = "⏳ रूपांतरित हो रहा है...";
@@ -3859,6 +3870,9 @@ async function transliterateAllNames(){
   for(let i = 0; i < students.length; i++){
     const rawName = String(students[i].name || "");
     if(/[a-zA-Z]/.test(rawName)){
+      if(!students[i].origName){
+        students[i].origName = rawName;
+      }
       const hiName = await transliterateTextToHindi(rawName);
       if(hiName && hiName !== rawName){
         students[i].name = hiName;
@@ -3877,10 +3891,41 @@ async function transliterateAllNames(){
     btn.textContent = origText;
   }
 
+  if(revertBtn){
+    revertBtn.style.display = "inline-block";
+  }
+
   if(convertedCount > 0){
-    alert(`✓ ${convertedCount} विद्यार्थियों के नाम हिंदी में बदल दिए गए हैं।`);
+    alert(`✓ ${convertedCount} विद्यार्थियों के नाम हिंदी में बदल दिए गए हैं। आवश्यकता पड़ने पर आप 'Revert to Original' दबा सकते हैं।`);
   }else{
     alert("सभी नाम पहले से ही हिंदी में हैं अथवा अंग्रेजी नाम नहीं मिले।");
+  }
+}
+
+function revertToOriginalNames(){
+  let revertedCount = 0;
+  students.forEach(student => {
+    if(student.origName){
+      student.name = student.origName;
+      delete student.origName;
+      revertedCount++;
+    }
+  });
+
+  const revertBtn = document.getElementById("revertBtn");
+  if(revertBtn){
+    revertBtn.style.display = "none";
+  }
+
+  renderPages();
+  syncFormOptions();
+  selectStudent();
+  autoSave();
+
+  if(revertedCount > 0){
+    alert(`✓ ${revertedCount} विद्यार्थियों के नाम मूल अंग्रेजी में वापस रीस्टोर कर दिए गए हैं।`);
+  }else{
+    alert("कोई मूल नाम सुरक्षित नहीं मिला।");
   }
 }
 
@@ -4543,6 +4588,7 @@ JSON.stringify(allClasses)
 
 openSavedClasses();
 
+
 }
 
 
@@ -4565,8 +4611,6 @@ if(!names.length){
 alert(
 "कोई Saved Class उपलब्ध नहीं है।"
 );
-
-return;
 
 }
 
@@ -4724,10 +4768,6 @@ new Array(subjects.length)
 
 }
 
-
-/*
-  Marks arrays fix
-*/
 
 students.forEach(student=>{
 
