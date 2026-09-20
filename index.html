@@ -5006,68 +5006,71 @@ location.reload();
 
 
 /* =========================================================
-   ROLL SORTING
+   ROLL SORTING (With Auto Missing Roll Fill)
 ========================================================= */
 
 function sortRollNumbers(){
 
-const selected=
-students[selectedStudent];
+  const numericStudents = [];
+  const nonNumericStudents = [];
 
+  students.forEach(s => {
+    const rawRoll = String(s.roll || "").trim();
+    const rollNum = parseInt(rawRoll.replace(/\D/g, ""), 10);
+    if (!isNaN(rollNum) && rollNum > 0) {
+      numericStudents.push({ ...s, parsedRoll: rollNum });
+    } else if (studentHasData(s)) {
+      nonNumericStudents.push(s);
+    }
+  });
 
-students.sort((a,b)=>{
+  if (numericStudents.length === 0) {
+    alert("क्रमबद्ध करने के लिए कोई मान्य संख्यात्मक रोल नंबर नहीं मिला।");
+    return;
+  }
 
-const aRoll=
-parseInt(
-String(a.roll||"")
-.replace(/\D/g,"")
-);
+  const maxRoll = Math.max(...numericStudents.map(s => s.parsedRoll));
 
+  const rollMap = new Map();
+  numericStudents.forEach(s => {
+    if (!rollMap.has(s.parsedRoll)) {
+      rollMap.set(s.parsedRoll, s);
+    }
+  });
 
-const bRoll=
-parseInt(
-String(b.roll||"")
-.replace(/\D/g,"")
-);
+  let missingAddedCount = 0;
+  const newStudentList = [];
 
+  for (let r = 1; r <= maxRoll; r++) {
+    if (rollMap.has(r)) {
+      const existing = rollMap.get(r);
+      delete existing.parsedRoll;
+      newStudentList.push(existing);
+    } else {
+      newStudentList.push({
+        roll: String(r),
+        name: "",
+        marks: new Array(subjects.length).fill("")
+      });
+      missingAddedCount++;
+    }
+  }
 
-if(isNaN(aRoll)&&isNaN(bRoll))
-return 0;
+  nonNumericStudents.forEach(s => newStudentList.push(s));
 
+  students = newStudentList;
+  selectedStudent = 0;
 
-if(isNaN(aRoll))
-return 1;
+  renderPages();
+  syncFormOptions();
+  selectStudent();
+  autoSave();
 
-
-if(isNaN(bRoll))
-return -1;
-
-
-return aRoll-bRoll;
-
-});
-
-
-selectedStudent=
-students.indexOf(selected);
-
-
-if(selectedStudent<0)
-selectedStudent=0;
-
-
-renderPages();
-
-syncFormOptions();
-
-selectStudent();
-
-autoSave();
-
-
-alert(
-"✓ Roll Number ascending order में व्यवस्थित हो गया।"
-);
+  if (missingAddedCount > 0) {
+    alert(`✓ रोल नंबर 1 से ${maxRoll} तक व्यवस्थित कर दिए गए हैं।\n(बीच के ${missingAddedCount} छूटे हुए रोल नंबर खाली नाम के साथ जोड़ दिए गए हैं।)`);
+  } else {
+    alert(`✓ रोल नंबर 1 से ${maxRoll} तक पहले से पूर्ण हैं और ascending क्रम में व्यवस्थित हो गए हैं।`);
+  }
 
 }
 
