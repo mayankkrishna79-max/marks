@@ -4,8 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#0d6efd">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Marks Folio">
 
 <title>DEO Office - Marks Folio</title>
+
+<!-- PWA Manifest Link (Injected Dynamically via JS) -->
+<link id="manifestPlaceholder">
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -89,6 +95,7 @@ button:disabled{
 .hindi-btn{background:#d63384;color:#fff}
 .revert-btn{background:#6f42c1;color:#fff}
 .excel-export-btn{background:#107c41;color:#fff}
+.install-btn{background:#ff9800;color:#000;display:none;}
 
 .class-save-btn{
   background:#6610f2;
@@ -108,6 +115,61 @@ button:disabled{
   font-size:12px;
   font-weight:700;
   margin-left:auto;
+}
+
+/* ================= PWA INSTALL BANNER ================= */
+
+.pwa-install-banner{
+  position:fixed;
+  bottom:15px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#1e293b;
+  color:#fff;
+  padding:12px 16px;
+  border-radius:12px;
+  box-shadow:0 8px 24px rgba(0,0,0,0.35);
+  display:none;
+  align-items:center;
+  gap:12px;
+  z-index:99999;
+  width:92%;
+  max-width:440px;
+  border:1px solid #334155;
+  animation:slideUpBanner 0.3s ease;
+}
+
+@keyframes slideUpBanner{
+  from{transform:translate(-50%, 40px); opacity:0;}
+  to{transform:translate(-50%, 0); opacity:1;}
+}
+
+.pwa-install-banner .pwa-icon{
+  font-size:28px;
+}
+
+.pwa-install-banner .pwa-text{
+  flex:1;
+  font-size:12px;
+  line-height:1.4;
+}
+
+.pwa-install-banner .pwa-text strong{
+  font-size:13.5px;
+  display:block;
+  color:#38bdf8;
+}
+
+.pwa-install-banner .pwa-actions{
+  display:flex;
+  gap:6px;
+}
+
+.pwa-install-banner button{
+  min-height:30px;
+  padding:5px 10px;
+  font-size:11.5px;
+  border-radius:5px;
 }
 
 /* ================= PANELS ================= */
@@ -928,7 +990,8 @@ td input.absent-input{
   .entry-panel,
   .dialog-bg,
   .popup-bg,
-  #updatePopup{
+  #updatePopup,
+  #pwaInstallBanner{
     display:none !important;
   }
 
@@ -974,6 +1037,19 @@ td input.absent-input{
 
 <div class="app">
 
+<!-- ================= PWA INSTALL NOTIFICATION BANNER ================= -->
+<div class="pwa-install-banner" id="pwaInstallBanner">
+  <div class="pwa-icon">📲</div>
+  <div class="pwa-text">
+    <strong>DEO Office Marks Folio</strong>
+    <span>Apne mobile me App ki tarah install karein bina internet ke chalane ke liye.</span>
+  </div>
+  <div class="pwa-actions">
+    <button class="primary" onclick="triggerPwaInstall()">Install</button>
+    <button class="gray" onclick="dismissPwaBanner()">Baad Me</button>
+  </div>
+</div>
+
 <!-- ================= TOOLBAR ================= -->
 
 <div class="toolbar">
@@ -984,6 +1060,10 @@ td input.absent-input{
 
 <button class="danger" onclick="removeStudent()">
 − अंतिम
+</button>
+
+<button class="install-btn" id="installToolbarBtn" onclick="triggerPwaInstall()">
+📲 Install App
 </button>
 
 <button class="excel-export-btn" onclick="exportToExcel()">
@@ -1058,7 +1138,7 @@ onclick="openSubjectModal()">
 </div>
 
 
-<!-- ================= EXAM DETAILS (NEW COLLAPSIBLE) ================= -->
+<!-- ================= EXAM DETAILS ================= -->
 
 <div
 class="collapse-head"
@@ -1110,8 +1190,8 @@ onchange="syncHeaderInputs('exam',this.value)">
 त्रैमासिक परीक्षा
 </option>
 
-<option value="अर्द्धवार्षिक परीक्षा">
-अर्द्धवार्षिक परीक्षा
+<option value="अर्धवार्षिक परीक्षा">
+अर्धवार्षिक परीक्षा
 </option>
 
 <option value="वार्षिक परीक्षा">
@@ -1561,6 +1641,106 @@ Follow DEO Office
 <script>
 
 /* =========================================================
+   PWA & SERVICE WORKER INITIALIZATION
+========================================================= */
+
+const PWA_ICON_SVG = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="100" fill="%230d6efd"/><path d="M128 160h256M128 256h256M128 352h160" stroke="%23ffffff" stroke-width="36" stroke-linecap="round"/><circle cx="380" cy="352" r="30" fill="%2320c997"/></svg>`;
+
+const manifestJSON = {
+  name: "DEO Office - Marks Folio",
+  short_name: "Marks Folio",
+  description: "बिहार विद्यालय अंक पत्रक (Marks Folio) ऑनलाइन डेटा एंट्री व प्रिंट टूल",
+  start_url: window.location.href,
+  display: "standalone",
+  background_color: "#eef1f5",
+  theme_color: "#0d6efd",
+  orientation: "portrait",
+  icons: [
+    {
+      src: PWA_ICON_SVG,
+      sizes: "192x192 512x512",
+      type: "image/svg+xml",
+      purpose: "any maskable"
+    }
+  ]
+};
+
+const manifestBlob = new Blob([JSON.stringify(manifestJSON)], { type: "application/json" });
+const manifestURL = URL.createObjectURL(manifestBlob);
+document.getElementById("manifestPlaceholder").setAttribute("rel", "manifest");
+document.getElementById("manifestPlaceholder").setAttribute("href", manifestURL);
+
+// Service Worker Registration for Offline Caching
+if ("serviceWorker" in navigator) {
+  const swCode = `
+    const CACHE_NAME = 'deo-marks-folio-cache-v1';
+    self.addEventListener('install', (e) => {
+      self.skipWaiting();
+    });
+    self.addEventListener('activate', (e) => {
+      e.waitUntil(clients.claim());
+    });
+    self.addEventListener('fetch', (e) => {
+      e.respondWith(
+        fetch(e.request).catch(() => caches.match(e.request))
+      );
+    });
+  `;
+  const swBlob = new Blob([swCode], { type: "application/javascript" });
+  const swUrl = URL.createObjectURL(swBlob);
+  navigator.serviceWorker.register(swUrl).catch((err) => {
+    console.log("SW error", err);
+  });
+}
+
+// PWA Install Prompt Handler
+let deferredPrompt = null;
+
+window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  
+  // Show Banner if not previously dismissed
+  if (!localStorage.getItem("pwa_install_dismissed_v1")) {
+    const banner = document.getElementById("pwaInstallBanner");
+    if (banner) banner.style.display = "flex";
+  }
+
+  // Show toolbar install button
+  const toolbarBtn = document.getElementById("installToolbarBtn");
+  if (toolbarBtn) toolbarBtn.style.display = "inline-block";
+});
+
+window.addEventListener("appinstalled", () => {
+  deferredPrompt = null;
+  const banner = document.getElementById("pwaInstallBanner");
+  if (banner) banner.style.display = "none";
+  const toolbarBtn = document.getElementById("installToolbarBtn");
+  if (toolbarBtn) toolbarBtn.style.display = "none";
+});
+
+function triggerPwaInstall() {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then((choiceResult) => {
+      if (choiceResult.outcome === "accepted") {
+        console.log("User accepted the install prompt");
+      }
+      deferredPrompt = null;
+      dismissPwaBanner();
+    });
+  } else {
+    alert("📲 Install karne ke liye browser menu (⋮) me jakar 'Install App' ya 'Add to Home screen' chunein.");
+  }
+}
+
+function dismissPwaBanner() {
+  const banner = document.getElementById("pwaInstallBanner");
+  if (banner) banner.style.display = "none";
+  localStorage.setItem("pwa_install_dismissed_v1", "1");
+}
+
+/* =========================================================
    SETTINGS
 ========================================================= */
 
@@ -1572,7 +1752,7 @@ const ROWS_PER_PAGE = 30;
 const CLASS_SAVE_KEY =
 "deoMarksFolio_ClassWise_v1";
 
-const APP_VERSION = "1.4.7";
+const APP_VERSION = "1.5.0";
 
 const APP_VERSION_KEY =
 "deoMarksFolio_AppVersion_v1";
@@ -2891,7 +3071,7 @@ return `
 
 
 /* =========================================================
-   RENDER PAGES (Without Logo, Conditional S.No.)
+   RENDER PAGES (Header & Conditional S. No.)
 ========================================================= */
 
 function renderPages(){
