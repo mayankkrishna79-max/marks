@@ -87,6 +87,7 @@ button:disabled{
 .info-btn{background:#0dcaf0;color:#000}
 .esikosh-btn{background:#198754;color:#fff}
 .hindi-btn{background:#d63384;color:#fff}
+.excel-export-btn{background:#107c41;color:#fff}
 
 .class-save-btn{
   background:#6610f2;
@@ -990,6 +991,10 @@ td input.absent-input{
 − अंतिम
 </button>
 
+<button class="excel-export-btn" onclick="exportToExcel()">
+📊 Excel Export
+</button>
+
 <button class="warning" onclick="downloadPDF()">
 📥 PDF
 </button>
@@ -1283,6 +1288,12 @@ onclick="downloadExcelTemplate()">
 </button>
 
 <button
+class="excel-export-btn"
+onclick="exportToExcel()">
+📥 Excel Export
+</button>
+
+<button
 class="green"
 onclick="document.getElementById('excelFile').click()">
 📤 Excel Import
@@ -1539,7 +1550,7 @@ const CLASS_SAVE_KEY =
   CHANGE THIS VERSION EVERY TIME
   YOU PUBLISH A NEW CODE UPDATE.
 */
-const APP_VERSION = "1.4.1";
+const APP_VERSION = "1.4.2";
 
 const APP_VERSION_KEY =
 "deoMarksFolio_AppVersion_v1";
@@ -1806,7 +1817,6 @@ let hasAbsent=false;
 
 subjects.forEach((subject,i)=>{
 
-// Skip optional subjects in grading and total calculation
 if(subject.optional) return;
 
 let value =
@@ -2085,11 +2095,6 @@ popup.remove();
 
 function acceptAppUpdate(){
 
-/*
-  केवल version update होता है।
-  Actual Marks/Data को touch नहीं किया जाता।
-*/
-
 localStorage.setItem(
 APP_VERSION_KEY,
 APP_VERSION
@@ -2367,10 +2372,6 @@ return;
 
 }
 
-/*
-  Prevent marks above full marks.
-*/
-
 if(number>full){
 
 number=full;
@@ -2459,19 +2460,7 @@ Number(value);
 if(isNaN(n) || n<0)
 n=0;
 
-/*
-  Save Full Marks immediately.
-  Do NOT re-render the subject controls here.
-  This prevents the mobile keyboard from disappearing.
-*/
-
 subjects[index].full=n;
-
-
-/*
-  If existing marks are greater than
-  the new full marks, reduce them.
-*/
 
 students.forEach(student=>{
 
@@ -2639,7 +2628,7 @@ temp;
 
 
 /* =========================================================
-   ADD SUBJECT (Supports Optional Subject Choice)
+   ADD SUBJECT
 ========================================================= */
 
 function addSubject(){
@@ -4554,7 +4543,6 @@ JSON.stringify(allClasses)
 
 openSavedClasses();
 
-
 }
 
 
@@ -4921,7 +4909,7 @@ function downloadExcelTemplate(){
 const headers=[
 "वर्ग क्रमांक",
 "विद्यार्थी का नाम",
-...subjects.map(s=>s.name)
+...subjects.map(s=> s.name + (s.optional ? " (ऐच्छिक)" : ""))
 ];
 
 
@@ -4959,7 +4947,7 @@ worksheet["!cols"]=[
 ...subjects.map(s=>({
 wch:Math.max(
 12,
-String(s.name).length+3
+String(s.name).length+5
 )
 }))
 ];
@@ -4980,6 +4968,79 @@ XLSX.writeFile(
 workbook,
 "DEO_Office_Marks_Folio_Excel_Format.xlsx"
 );
+
+}
+
+
+/* =========================================================
+   EXCEL EXPORT (Full Marks Data Export)
+========================================================= */
+
+function exportToExcel(){
+
+if(!students || !students.length){
+  alert("एक्सपोर्ट करने के लिए कोई विद्यार्थी डेटा उपलब्ध नहीं है।");
+  return;
+}
+
+const subjectHeaders = subjects.map(s => s.name + (s.optional ? " *(ऐच्छिक)" : ""));
+
+const headers = [
+  "क्र० सं०",
+  "वर्ग क्रमांक",
+  "विद्यार्थी का नाम",
+  ...subjectHeaders,
+  "कुल प्राप्तांक",
+  "प्रतिशत (%)",
+  "ग्रेड"
+];
+
+const rows = students.map((student, idx) => {
+  const row = {};
+  row["क्र० सं०"] = idx + 1;
+  row["वर्ग क्रमांक"] = student.roll || "";
+  row["विद्यार्थी का नाम"] = student.name || "";
+
+  subjects.forEach((subject, sIdx) => {
+    const colName = subjectHeaders[sIdx];
+    const mark = (student.marks && student.marks[sIdx]) || "";
+    row[colName] = mark;
+  });
+
+  const res = calculateResult(student);
+  if(res.hasEntry){
+    row["कुल प्राप्तांक"] = res.total;
+    row["प्रतिशत (%)"] = Number(res.percentage.toFixed(1));
+    row["ग्रेड"] = res.grade;
+  } else {
+    row["कुल प्राप्तांक"] = "";
+    row["प्रतिशत (%)"] = "";
+    row["ग्रेड"] = "";
+  }
+
+  return row;
+});
+
+const worksheet = XLSX.utils.json_to_sheet(rows, { header: headers });
+
+worksheet["!cols"] = [
+  { wch: 8 },
+  { wch: 14 },
+  { wch: 28 },
+  ...subjects.map(s => ({ wch: Math.max(14, String(s.name).length + 8) })),
+  { wch: 14 },
+  { wch: 14 },
+  { wch: 10 }
+];
+
+const workbook = XLSX.utils.book_new();
+XLSX.utils.book_append_sheet(workbook, worksheet, "Marks Folio Data");
+
+const safeClass = String(details.className || "Class").replace(/[\\/:*?"<>|]/g, "_");
+const safeExam = String(details.exam || "Report").replace(/[\\/:*?"<>|]/g, "_");
+const filename = "Marks_Folio_" + safeExam + "_" + (details.year || "2026-27") + "_" + safeClass + ".xlsx";
+
+XLSX.writeFile(workbook, filename);
 
 }
 
@@ -5068,7 +5129,9 @@ marks:[]
 subjects.forEach((subject,index)=>{
 
 let value=
-row[subject.name];
+row[subject.name] ??
+row[subject.name + " (ऐच्छिक)"] ??
+row[subject.name + " *(ऐच्छिक)"];
 
 
 if(
