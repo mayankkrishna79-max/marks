@@ -86,6 +86,7 @@ button:disabled{
 .share-btn{background:#6f42c1;color:#fff}
 .info-btn{background:#0dcaf0;color:#000}
 .esikosh-btn{background:#198754;color:#fff}
+.hindi-btn{background:#d63384;color:#fff}
 
 .class-save-btn{
   background:#6610f2;
@@ -192,7 +193,7 @@ button:disabled{
 
 .subject-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(105px,1fr));
+  grid-template-columns:repeat(auto-fit,minmax(115px,1fr));
   gap:5px;
   margin-top:8px;
 }
@@ -202,6 +203,11 @@ button:disabled{
   border-radius:6px;
   padding:4px;
   background:#fafafa;
+}
+
+.subject-box.is-opt{
+  background:#fff8e6;
+  border-color:#ffc107;
 }
 
 .subject-box input.sub-name{
@@ -229,9 +235,9 @@ button:disabled{
   width:100%;
   border:1px solid #bbb;
   border-radius:4px;
-  padding:5px;
+  padding:4px;
   margin-top:3px;
-  font-size:12px;
+  font-size:11.5px;
   background:#fff;
 }
 
@@ -1304,6 +1310,13 @@ style="display:none"
 onchange="importEshikshakoshExcel(event)">
 
 <button
+class="hindi-btn"
+id="transliterateBtn"
+onclick="transliterateAllNames()">
+🔤 Name English ➔ Hindi
+</button>
+
+<button
 class="warning"
 onclick="sortRollNumbers()">
 🔢 Roll Ascending
@@ -1478,8 +1491,7 @@ onclick="deleteSelectedClass()">
 
 <!-- ================= FOLLOW ================= -->
 
-<div
-class="popup-bg"
+<div class="popup-bg"
 id="followPopup">
 
 <div class="popup">
@@ -1527,7 +1539,7 @@ const CLASS_SAVE_KEY =
   CHANGE THIS VERSION EVERY TIME
   YOU PUBLISH A NEW CODE UPDATE.
 */
-const APP_VERSION = "1.3.0";
+const APP_VERSION = "1.4.0";
 
 const APP_VERSION_KEY =
 "deoMarksFolio_AppVersion_v1";
@@ -1544,32 +1556,38 @@ let subjects = [
 
 {
 name:"हिन्दी/राष्ट्र भाषा",
-full:50
+full:50,
+optional:false
 },
 
 {
 name:"गणित",
-full:50
+full:50,
+optional:false
 },
 
 {
 name:"अंग्रेजी",
-full:50
+full:50,
+optional:false
 },
 
 {
 name:"संस्कृत/उर्दू",
-full:50
+full:50,
+optional:false
 },
 
 {
 name:"सा० विज्ञान",
-full:50
+full:50,
+optional:false
 },
 
 {
 name:"विज्ञान",
-full:50
+full:50,
+optional:false
 }
 
 ];
@@ -1659,13 +1677,13 @@ details.year || "2026-27";
 
 
 /* =========================================================
-   TOTAL FULL MARKS
+   TOTAL FULL MARKS (Excludes Optional Subjects)
 ========================================================= */
 
 function calculateMaxMarks(){
 
 return subjects.reduce(
-(sum,s)=>sum+Number(s.full||0),
+(sum,s)=> s.optional ? sum : sum + Number(s.full||0),
 0
 );
 
@@ -1757,7 +1775,7 @@ return "E";
 
 
 /* =========================================================
-   RESULT
+   RESULT (Excludes Optional Subjects from Calculation)
 ========================================================= */
 
 function calculateResult(student){
@@ -1787,6 +1805,9 @@ let hasAbsent=false;
 
 
 subjects.forEach((subject,i)=>{
+
+// Skip optional subjects in grading and total calculation
+if(subject.optional) return;
 
 let value =
 String(
@@ -2100,13 +2121,14 @@ subjects.forEach((subject,i)=>{
 const box=
 document.createElement("div");
 
-box.className="subject-box";
+box.className = "subject-box" + (subject.optional ? " is-opt" : "");
 
 box.innerHTML=`
 
 <input
 class="sub-name"
 value="${esc(subject.name)}"
+title="${subject.optional ? 'ऐच्छिक विषय (नंबर नहीं जुड़ेगा)' : 'अनिवार्य विषय'}"
 oninput="updateSubjectName(${i},this.value)">
 
 <input
@@ -2118,6 +2140,14 @@ value="${Number(subject.full||0)}"
 title="पूर्णांक"
 oninput="updateSubjectFull(${i},this.value)"
 onchange="updateSubjectFull(${i},this.value)">
+
+<select
+title="विषय प्रकार"
+style="font-weight:700;color:${subject.optional ? '#d63384' : '#0d6efd'}"
+onchange="toggleSubjectOptional(${i},this.value)">
+<option value="compulsory" ${!subject.optional ? 'selected' : ''}>अनिवार्य</option>
+<option value="optional" ${subject.optional ? 'selected' : ''}>ऐच्छिक (No Grade)</option>
+</select>
 
 <select
 id="entryStatus${i}"
@@ -2153,6 +2183,18 @@ renderSubjectOrder();
 
 selectStudent();
 
+}
+
+
+/* =========================================================
+   TOGGLE OPTIONAL SUBJECT
+========================================================= */
+
+function toggleSubjectOptional(index, value){
+  subjects[index].optional = (value === "optional");
+  renderSubjectControls();
+  renderPages();
+  autoSave();
 }
 
 
@@ -2461,7 +2503,7 @@ item.innerHTML=`
 
 <div class="subject-order-name">
 
-${index+1}. ${esc(subject.name)}
+${index+1}. ${esc(subject.name)} ${subject.optional ? '<span style="color:#d63384;font-size:10.5px">*(ऐच्छिक)</span>' : ''}
 
 <span style="font-size:10px;color:#777">
 (${subject.full})
@@ -2566,7 +2608,7 @@ temp;
 
 
 /* =========================================================
-   ADD SUBJECT
+   ADD SUBJECT (Supports Optional Subject Choice)
 ========================================================= */
 
 function addSubject(){
@@ -2599,12 +2641,17 @@ fullMarks=50;
 
 }
 
+const isOpt = confirm(
+`क्या "${name.trim()}" एक ऐच्छिक (Optional) विषय है?\n\n[OK = हाँ, इसका नंबर कुल योग और ग्रेड में नहीं जुड़ेगा]\n[Cancel = नहीं, यह अनिवार्य विषय रहेगा]`
+);
 
 subjects.push({
 
 name:name.trim(),
 
-full:fullMarks
+full:fullMarks,
+
+optional: isOpt
 
 });
 
@@ -2657,7 +2704,7 @@ select.innerHTML=
 subjects.map(
 (s,i)=>
 `<option value="${i}">
-${i+1}. ${esc(s.name)}
+${i+1}. ${esc(s.name)} ${s.optional ? '(ऐच्छिक)' : ''}
 </option>`
 ).join("");
 
@@ -3246,7 +3293,7 @@ ${
 subjects.map(
 s=>
 `<th class="col-sub">
-${esc(s.name)}<br>
+${esc(s.name)}${s.optional ? '<br><span style="font-size:8px;color:#d63384">*(ऐच्छिक)</span>' : ''}<br>
 <span style="font-size:8.5px">
 (${s.full})
 </span>
@@ -3751,6 +3798,74 @@ behavior:"smooth"
 
 
 /* =========================================================
+   TRANSLITERATE ENGLISH NAME TO HINDI
+========================================================= */
+
+async function transliterateTextToHindi(text){
+  const clean = text.trim();
+  if(!clean) return "";
+  if(!/[a-zA-Z]/.test(clean)) return clean; // Already Hindi/Devanagari
+
+  const words = clean.split(/\s+/);
+  const convertedWords = await Promise.all(
+    words.map(async (word)=>{
+      if(!/[a-zA-Z]/.test(word)) return word;
+      try{
+        const url = `https://inputtools.google.com/request?text=${encodeURIComponent(word)}&itc=hi-t-i0-und&num=1`;
+        const res = await fetch(url);
+        const data = await res.json();
+        if(data && data[0] === "SUCCESS" && data[1] && data[1][0] && data[1][0][1] && data[1][0][1][0]){
+          return data[1][0][1][0];
+        }
+        return word;
+      }catch(err){
+        return word;
+      }
+    })
+  );
+
+  return convertedWords.join(" ");
+}
+
+async function transliterateAllNames(){
+  const btn = document.getElementById("transliterateBtn");
+  const origText = btn ? btn.textContent : "";
+  if(btn){
+    btn.disabled = true;
+    btn.textContent = "⏳ रूपांतरित हो रहा है...";
+  }
+
+  let convertedCount = 0;
+  for(let i = 0; i < students.length; i++){
+    const rawName = String(students[i].name || "");
+    if(/[a-zA-Z]/.test(rawName)){
+      const hiName = await transliterateTextToHindi(rawName);
+      if(hiName && hiName !== rawName){
+        students[i].name = hiName;
+        convertedCount++;
+      }
+    }
+  }
+
+  renderPages();
+  syncFormOptions();
+  selectStudent();
+  autoSave();
+
+  if(btn){
+    btn.disabled = false;
+    btn.textContent = origText;
+  }
+
+  if(convertedCount > 0){
+    alert(`✓ ${convertedCount} विद्यार्थियों के नाम हिंदी में बदल दिए गए हैं।`);
+  }else{
+    alert("सभी नाम पहले से ही हिंदी में हैं अथवा अंग्रेजी नाम नहीं मिले।");
+  }
+}
+
+
+/* =========================================================
    AUTO SAVE
 ========================================================= */
 
@@ -4180,7 +4295,9 @@ s.name || "विषय",
 full:
 Number(
 s.full ?? 50
-)
+),
+
+optional: Boolean(s.optional)
 
 }));
 
@@ -4430,8 +4547,6 @@ alert(
 "कोई Saved Class उपलब्ध नहीं है।"
 );
 
-return;
-
 }
 
 
@@ -4518,7 +4633,8 @@ if(typeof s==="string"){
 
 return{
 name:s,
-full:50
+full:50,
+optional:false
 };
 
 }
@@ -4527,7 +4643,8 @@ full:50
 return{
 
 name:s.name||"विषय",
-full:Number(s.full??50)
+full:Number(s.full??50),
+optional:Boolean(s.optional)
 
 };
 
@@ -5031,8 +5148,6 @@ if(!sheet){
 alert(
 "Excel Sheet नहीं मिली।"
 );
-
-return;
 
 }
 
