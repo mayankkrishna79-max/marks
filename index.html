@@ -257,15 +257,15 @@ button:disabled{
 
 .subject-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(115px,1fr));
-  gap:5px;
+  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  gap:6px;
   margin-top:8px;
 }
 
 .subject-box{
   border:1px solid #ddd;
   border-radius:6px;
-  padding:4px;
+  padding:5px;
   background:#fafafa;
 }
 
@@ -280,17 +280,22 @@ button:disabled{
   border-bottom:1px dashed #888;
   background:transparent;
   font-weight:700;
-  font-size:11px;
+  font-size:11.5px;
   text-align:center;
   padding:2px;
+}
+
+.subject-box .sub-full-wrap{
+  display:flex;
+  gap:3px;
+  margin-top:3px;
 }
 
 .subject-box input.sub-full{
   width:100%;
   border:1px solid #bbb;
   border-radius:4px;
-  padding:4px;
-  margin-top:3px;
+  padding:3px;
   text-align:center;
   font-size:11px;
 }
@@ -299,20 +304,25 @@ button:disabled{
   width:100%;
   border:1px solid #bbb;
   border-radius:4px;
-  padding:4px;
+  padding:3px;
   margin-top:3px;
-  font-size:11.5px;
+  font-size:11px;
   background:#fff;
+}
+
+.marks-inputs-pair{
+  display:flex;
+  gap:3px;
+  margin-top:3px;
 }
 
 .subject-box input.sub-marks{
   width:100%;
   border:1px solid #bbb;
   border-radius:4px;
-  padding:5px;
+  padding:5px 2px;
   text-align:center;
-  font-size:13px;
-  margin-top:3px;
+  font-size:12.5px;
 }
 
 .absent-input{
@@ -568,7 +578,7 @@ table{
   width:100%;
   border-collapse:collapse;
   table-layout:fixed;
-  font-size:10.2px;
+  font-size:10px;
 }
 
 th,
@@ -579,10 +589,19 @@ td{
 }
 
 thead th{
-  height:9mm;
   font-weight:700;
   vertical-align:middle;
   line-height:1.05;
+}
+
+thead th.th-main{
+  height:5.5mm;
+  padding:1px 0;
+}
+
+thead th.th-sub{
+  height:4mm;
+  font-size:8px;
 }
 
 tbody tr{
@@ -591,12 +610,12 @@ tbody tr{
 
 th.col-sr,
 td.col-sr{
-  width:8mm;
+  width:7mm;
 }
 
 th.col-roll,
 td.col-roll{
-  width:12mm;
+  width:11mm;
 }
 
 th.col-name,
@@ -606,17 +625,17 @@ td.col-name{
 
 th.col-sub,
 td.col-sub{
-  width:13mm;
+  width:12mm;
 }
 
 th.col-total,
 td.col-total{
-  width:14mm;
+  width:13mm;
 }
 
 th.col-result,
 td.col-result{
-  width:22mm;
+  width:20mm;
 }
 
 td input{
@@ -627,7 +646,7 @@ td input{
   background:transparent;
   text-align:center;
   font-family:inherit;
-  font-size:10.5px;
+  font-size:10px;
   padding:0;
 }
 
@@ -642,7 +661,7 @@ td.total{
 
 td.result{
   font-weight:700;
-  font-size:9.5px;
+  font-size:9px;
   white-space:nowrap;
   line-height:1.05;
 }
@@ -663,6 +682,7 @@ td input.absent-input{
 .absent-text{
   color:#dc3545 !important;
   font-weight:800 !important;
+  font-size:8.5px;
 }
 
 /* ================= PRINT VALUE ================= */
@@ -1752,13 +1772,13 @@ const ROWS_PER_PAGE = 30;
 const CLASS_SAVE_KEY =
 "deoMarksFolio_ClassWise_v1";
 
-const APP_VERSION = "1.5.0";
+const APP_VERSION = "1.6.0";
 
 const APP_VERSION_KEY =
 "deoMarksFolio_AppVersion_v1";
 
 const DATA_KEY =
-"deoMarksFolio_Final_v12";
+"deoMarksFolio_Final_v13";
 
 
 /* =========================================================
@@ -1770,36 +1790,54 @@ let subjects = [
 {
 name:"हिन्दी/राष्ट्र भाषा",
 full:50,
+hasPractical:false,
+thFull:50,
+prFull:0,
 optional:false
 },
 
 {
 name:"गणित",
 full:50,
+hasPractical:false,
+thFull:50,
+prFull:0,
 optional:false
 },
 
 {
 name:"अंग्रेजी",
 full:50,
+hasPractical:false,
+thFull:50,
+prFull:0,
 optional:false
 },
 
 {
 name:"संस्कृत/उर्दू",
 full:50,
+hasPractical:false,
+thFull:50,
+prFull:0,
 optional:false
 },
 
 {
 name:"सा० विज्ञान",
 full:50,
+hasPractical:false,
+thFull:50,
+prFull:0,
 optional:false
 },
 
 {
 name:"विज्ञान",
 full:50,
+hasPractical:false,
+thFull:50,
+prFull:0,
 optional:false
 }
 
@@ -1856,7 +1894,12 @@ function studentHasData(student){
   if(String(student.roll ?? "").trim() !== "") return true;
   if(String(student.name ?? "").trim() !== "") return true;
   if(Array.isArray(student.marks)){
-    return student.marks.some(m => String(m ?? "").trim() !== "");
+    return student.marks.some(m => {
+      if(typeof m === "object" && m !== null){
+        return String(m.th ?? "").trim() !== "" || String(m.pr ?? "").trim() !== "";
+      }
+      return String(m ?? "").trim() !== "";
+    });
   }
   return false;
 }
@@ -1922,43 +1965,32 @@ return subjects.reduce(
    MARK NORMALIZATION
 ========================================================= */
 
-function normalizeMark(value, subjectIndex){
-
-const subject=
-subjects[subjectIndex];
-
-const full=
-Number(subject?.full || 0);
-
-let valueText=
-String(value ?? "").trim();
-
-if(valueText==="")
-return "";
-
-if(
-valueText.toUpperCase()==="ABSENT" ||
-valueText.toUpperCase()==="AB"
-){
-
-return "ABSENT";
-
+function normalizeValue(val, maxFull){
+  let valueText = String(val ?? "").trim();
+  if(valueText === "") return "";
+  if(valueText.toUpperCase() === "ABSENT" || valueText.toUpperCase() === "AB"){
+    return "ABSENT";
+  }
+  let number = Number(valueText);
+  if(isNaN(number)) return "";
+  if(number < 0) number = 0;
+  if(number > maxFull) number = maxFull;
+  return String(number);
 }
 
-let number=
-Number(valueText);
-
-if(isNaN(number))
-return "";
-
-if(number<0)
-number=0;
-
-if(number>full)
-number=full;
-
-return String(number);
-
+function normalizeMark(value, subjectIndex){
+  const subject = subjects[subjectIndex];
+  if(subject.hasPractical){
+    let thVal = typeof value === "object" ? value.th : value;
+    let prVal = typeof value === "object" ? value.pr : "";
+    return {
+      th: normalizeValue(thVal, Number(subject.thFull || 0)),
+      pr: normalizeValue(prVal, Number(subject.prFull || 0))
+    };
+  } else {
+    let raw = typeof value === "object" ? (value.th || "") : value;
+    return normalizeValue(raw, Number(subject.full || 0));
+  }
 }
 
 
@@ -1972,12 +2004,10 @@ if(!student || !Array.isArray(student.marks))
 return false;
 
 return student.marks.some(value=>{
-
-const v=
-String(value ?? "").trim();
-
-return v!=="";
-
+  if(typeof value === "object" && value !== null){
+    return String(value.th ?? "").trim() !== "" || String(value.pr ?? "").trim() !== "";
+  }
+  return String(value ?? "").trim() !== "";
 });
 
 }
@@ -2009,84 +2039,62 @@ return "E";
 function calculateResult(student){
 
 if(!hasAnyMarksEntry(student)){
-
-return{
-
-total:"",
-
-percentage:"",
-
-grade:"",
-
-hasAbsent:false,
-
-hasEntry:false
-
-};
-
+  return{
+    total:"",
+    percentage:"",
+    grade:"",
+    hasAbsent:false,
+    hasEntry:false
+  };
 }
-
 
 let total=0;
-
 let hasAbsent=false;
 
-
 subjects.forEach((subject,i)=>{
+  if(subject.optional) return;
+  const raw = (student.marks && student.marks[i]);
 
-if(subject.optional) return;
+  if(subject.hasPractical){
+    const th = String(raw?.th ?? "").trim();
+    const pr = String(raw?.pr ?? "").trim();
 
-let value =
-String(
-(student.marks && student.marks[i]) || ""
-).trim();
+    if(th.toUpperCase()==="ABSENT" || pr.toUpperCase()==="ABSENT"){
+      hasAbsent = true;
+    }
 
-
-if(
-value.toUpperCase()==="ABSENT" ||
-value.toUpperCase()==="AB"
-){
-
-hasAbsent=true;
-
-return;
-
-}
-
-
-if(value){
-
-let n=Number(value);
-
-if(!isNaN(n) && n>=0){
-
-const max=
-Number(subject.full||0);
-
-total+=Math.min(n,max);
-
-}
-
-}
-
+    if(th && th.toUpperCase()!=="ABSENT"){
+      let n = Number(th);
+      if(!isNaN(n) && n>=0) total += Math.min(n, Number(subject.thFull||0));
+    }
+    if(pr && pr.toUpperCase()!=="ABSENT"){
+      let n = Number(pr);
+      if(!isNaN(n) && n>=0) total += Math.min(n, Number(subject.prFull||0));
+    }
+  } else {
+    let value = String(typeof raw === "object" ? (raw?.th || "") : (raw || "")).trim();
+    if(value.toUpperCase()==="ABSENT" || value.toUpperCase()==="AB"){
+      hasAbsent=true;
+      return;
+    }
+    if(value){
+      let n=Number(value);
+      if(!isNaN(n) && n>=0){
+        total+=Math.min(n, Number(subject.full||0));
+      }
+    }
+  }
 });
 
-
-let max=calculateMaxMarks();
-
-let percentage=max
-?(total/max)*100
-:0;
-
+let max = calculateMaxMarks();
+let percentage = max ? (total/max)*100 : 0;
 
 return{
-
-total,
-percentage,
-grade:getGrade(percentage),
-hasAbsent,
-hasEntry:true
-
+  total,
+  percentage,
+  grade:getGrade(percentage),
+  hasAbsent,
+  hasEntry:true
 };
 
 }
@@ -2261,8 +2269,7 @@ popup.innerHTML=`
 </h3>
 
 <p>
-DEO Office Marks Folio में नया Update
-उपलब्ध है।
+DEO Office Marks Folio में नया Update उपलब्ध है।
 </p>
 
 <div class="update-info">
@@ -2271,11 +2278,11 @@ DEO Office Marks Folio में नया Update
 
 <br>
 
-आपका पहले से भरा हुआ Draft सुरक्षित रहेगा।
+अब आप किसी भी विषय में सैद्धांतिक (Theory) और प्रायोगिक (Practical) के अलग-अलग अंक दर्ज कर सकते हैं।
 
 <br>
 
-Marks और Class-wise Data delete नहीं होगा।
+आपका पुराना Data पूर्णतः सुरक्षित रहेगा।
 
 </div>
 
@@ -2348,67 +2355,65 @@ document.getElementById("subjectGrid");
 
 grid.innerHTML="";
 
-
 subjects.forEach((subject,i)=>{
 
 const isLast = (i === subjects.length - 1);
-const box=
-document.createElement("div");
-
+const box = document.createElement("div");
 box.className = "subject-box" + (subject.optional ? " is-opt" : "");
 
+let fullInputsHTML = "";
+if(subject.hasPractical){
+  fullInputsHTML = `
+  <div class="sub-full-wrap">
+    <input class="sub-full" type="number" min="0" step="1" value="${Number(subject.thFull||0)}" title="Theory पूर्णांक" placeholder="Th पूर्णांक" oninput="updateThFull(${i},this.value)">
+    <input class="sub-full" type="number" min="0" step="1" value="${Number(subject.prFull||0)}" title="Practical पूर्णांक" placeholder="Pr पूर्णांक" oninput="updatePrFull(${i},this.value)">
+  </div>
+  `;
+} else {
+  fullInputsHTML = `
+  <input class="sub-full" type="number" min="0" step="1" value="${Number(subject.full||0)}" title="पूर्णांक" placeholder="पूर्णांक" oninput="updateSubjectFull(${i},this.value)">
+  `;
+}
+
+let markInputsHTML = "";
+if(subject.hasPractical){
+  markInputsHTML = `
+  <div class="marks-inputs-pair">
+    <input class="sub-marks" id="m${i}_th" inputmode="decimal" placeholder="Th अंक" oninput="entryDualMarkChange(${i},'th',this.value)" onkeydown="handleMarksKeyNav(event, ${i}, 'th')">
+    <input class="sub-marks" id="m${i}_pr" inputmode="decimal" placeholder="Pr अंक" oninput="entryDualMarkChange(${i},'pr',this.value)" onkeydown="handleMarksKeyNav(event, ${i}, 'pr')">
+  </div>
+  `;
+} else {
+  markInputsHTML = `
+  <input class="sub-marks" id="m${i}" inputmode="decimal" enterkeyhint="${isLast ? 'done' : 'next'}" placeholder="अंक" oninput="entryMarkChange(${i},this.value)" onkeydown="handleMarksKeyNav(event, ${i}, 'single')">
+  `;
+}
+
 box.innerHTML=`
+<input class="sub-name" value="${esc(subject.name)}" title="${subject.optional ? 'ऐच्छिक विषय (नंबर नहीं जुड़ेगा)' : 'अनिवार्य विषय'}" oninput="updateSubjectName(${i},this.value)">
 
-<input
-class="sub-name"
-value="${esc(subject.name)}"
-title="${subject.optional ? 'ऐच्छिक विषय (नंबर नहीं जुड़ेगा)' : 'अनिवार्य विषय'}"
-oninput="updateSubjectName(${i},this.value)">
+${fullInputsHTML}
 
-<input
-class="sub-full"
-type="number"
-min="0"
-step="1"
-value="${Number(subject.full||0)}"
-title="पूर्णांक"
-oninput="updateSubjectFull(${i},this.value)"
-onchange="updateSubjectFull(${i},this.value)">
-
-<select
-title="विषय प्रकार"
-style="font-weight:700;color:${subject.optional ? '#d63384' : '#0d6efd'}"
-onchange="toggleSubjectOptional(${i},this.value)">
-<option value="compulsory" ${!subject.optional ? 'selected' : ''}>अनिवार्य</option>
-<option value="optional" ${subject.optional ? 'selected' : ''}>ऐच्छिक (No Grade)</option>
+<select title="प्रायोगिक/सैद्धांतिक विकल्प" style="font-weight:700;color:#6610f2" onchange="toggleSubjectPractical(${i},this.value)">
+  <option value="theory" ${!subject.hasPractical ? 'selected' : ''}>केवल थ्योरी</option>
+  <option value="both" ${subject.hasPractical ? 'selected' : ''}>Theory + Practical</option>
 </select>
 
-<select
-id="entryStatus${i}"
-onchange="entryStatusChange(${i},this.value)">
-
-<option value="PRESENT">Present</option>
-<option value="ABSENT">Absent</option>
-
+<select title="विषय प्रकार" style="font-weight:700;color:${subject.optional ? '#d63384' : '#0d6efd'}" onchange="toggleSubjectOptional(${i},this.value)">
+  <option value="compulsory" ${!subject.optional ? 'selected' : ''}>अनिवार्य</option>
+  <option value="optional" ${subject.optional ? 'selected' : ''}>ऐच्छिक (No Grade)</option>
 </select>
 
-<input
-class="sub-marks"
-id="m${i}"
-inputmode="decimal"
-enterkeyhint="${isLast ? 'done' : 'next'}"
-placeholder="अंक"
-oninput="entryMarkChange(${i},this.value)"
-onkeydown="handleMarksKeyNav(event, ${i})">
+<select id="entryStatus${i}" onchange="entryStatusChange(${i},this.value)">
+  <option value="PRESENT">Present</option>
+  <option value="ABSENT">Absent</option>
+</select>
 
-<div
-class="mark-help"
-id="markHelp${i}">
+${markInputsHTML}
 
-अधिकतम ${Number(subject.full||0)} अंक
-
+<div class="mark-help" id="markHelp${i}">
+  अधिकतम ${Number(subject.full||0)} अंक
 </div>
-
 `;
 
 grid.appendChild(box);
@@ -2416,7 +2421,6 @@ grid.appendChild(box);
 });
 
 renderSubjectOrder();
-
 selectStudent();
 
 }
@@ -2426,12 +2430,23 @@ selectStudent();
    MARKS NAVIGATION
 ========================================================= */
 
-function handleMarksKeyNav(event, currentIndex){
+function handleMarksKeyNav(event, currentIndex, type){
   if(event.key === "Enter"){
     event.preventDefault();
+
+    if(type === "th"){
+      const prInput = document.getElementById(`m${currentIndex}_pr`);
+      if(prInput){
+        prInput.focus();
+        prInput.select();
+        return;
+      }
+    }
     
     if(currentIndex < subjects.length - 1){
-      const nextInput = document.getElementById("m" + (currentIndex + 1));
+      const nextSub = subjects[currentIndex + 1];
+      const nextInputId = nextSub.hasPractical ? `m${currentIndex + 1}_th` : `m${currentIndex + 1}`;
+      const nextInput = document.getElementById(nextInputId);
       if(nextInput){
         nextInput.focus();
         nextInput.select();
@@ -2439,7 +2454,9 @@ function handleMarksKeyNav(event, currentIndex){
     } else {
       nextStudent();
       setTimeout(()=>{
-        const firstInput = document.getElementById("m0");
+        const firstSub = subjects[0];
+        const firstInputId = firstSub.hasPractical ? `m0_th` : `m0`;
+        const firstInput = document.getElementById(firstInputId);
         if(firstInput){
           firstInput.focus();
           firstInput.select();
@@ -2451,12 +2468,56 @@ function handleMarksKeyNav(event, currentIndex){
 
 
 /* =========================================================
-   TOGGLE OPTIONAL
+   TOGGLE OPTIONAL & PRACTICAL
 ========================================================= */
 
 function toggleSubjectOptional(index, value){
   subjects[index].optional = (value === "optional");
   renderSubjectControls();
+  renderPages();
+  autoSave();
+}
+
+function toggleSubjectPractical(index, value){
+  const hasPr = (value === "both");
+  subjects[index].hasPractical = hasPr;
+
+  if(hasPr){
+    if(!subjects[index].thFull && !subjects[index].prFull){
+      const currentFull = Number(subjects[index].full || 50);
+      const pr = Math.round(currentFull * 0.3);
+      subjects[index].thFull = currentFull - pr;
+      subjects[index].prFull = pr;
+    }
+    subjects[index].full = Number(subjects[index].thFull || 0) + Number(subjects[index].prFull || 0);
+  } else {
+    subjects[index].full = Number(subjects[index].thFull || subjects[index].full || 50);
+  }
+
+  students.forEach(s => {
+    if(!Array.isArray(s.marks)) s.marks = [];
+    s.marks[index] = normalizeMark(s.marks[index], index);
+  });
+
+  renderSubjectControls();
+  renderPages();
+  autoSave();
+}
+
+function updateThFull(index, val){
+  let n = Number(val);
+  if(isNaN(n) || n<0) n = 0;
+  subjects[index].thFull = n;
+  subjects[index].full = n + Number(subjects[index].prFull || 0);
+  renderPages();
+  autoSave();
+}
+
+function updatePrFull(index, val){
+  let n = Number(val);
+  if(isNaN(n) || n<0) n = 0;
+  subjects[index].prFull = n;
+  subjects[index].full = Number(subjects[index].thFull || 0) + n;
   renderPages();
   autoSave();
 }
@@ -2474,51 +2535,37 @@ students[selectedStudent];
 if(!student)
 return;
 
+const subject = subjects[index];
+const isAbsent = (value === "ABSENT");
 
-const input=
-document.getElementById("m"+index);
+if(subject.hasPractical){
+  const inTh = document.getElementById(`m${index}_th`);
+  const inPr = document.getElementById(`m${index}_pr`);
+  if(!student.marks[index] || typeof student.marks[index] !== "object"){
+    student.marks[index] = { th:"", pr:"" };
+  }
 
-const help=
-document.getElementById("markHelp"+index);
-
-
-if(value==="ABSENT"){
-
-student.marks[index]="ABSENT";
-
-if(input){
-
-input.value="ABSENT";
-
-input.classList.add("absent-input");
-input.classList.remove("mark-error");
-
+  if(isAbsent){
+    student.marks[index] = { th:"ABSENT", pr:"ABSENT" };
+    if(inTh){ inTh.value="ABSENT"; inTh.classList.add("absent-input"); }
+    if(inPr){ inPr.value="ABSENT"; inPr.classList.add("absent-input"); }
+  } else {
+    student.marks[index] = { th:"", pr:"" };
+    if(inTh){ inTh.value=""; inTh.classList.remove("absent-input"); }
+    if(inPr){ inPr.value=""; inPr.classList.remove("absent-input"); }
+  }
+} else {
+  const input= document.getElementById("m"+index);
+  if(isAbsent){
+    student.marks[index]="ABSENT";
+    if(input){ input.value="ABSENT"; input.classList.add("absent-input"); }
+  } else {
+    student.marks[index]="";
+    if(input){ input.value=""; input.classList.remove("absent-input"); }
+  }
 }
-
-if(help)
-help.classList.remove("show");
-
-}else{
-
-student.marks[index]="";
-
-if(input){
-
-input.value="";
-
-input.classList.remove("absent-input");
-input.classList.remove("mark-error");
-
-}
-
-if(help)
-help.classList.remove("show");
-
-}
-
 
 renderPages();
-
 autoSave();
 
 }
@@ -2536,7 +2583,6 @@ students[selectedStudent];
 if(!student)
 return;
 
-
 const input=
 document.getElementById("m"+index);
 
@@ -2552,109 +2598,81 @@ Number(subject?.full || 0);
 const upper=
 String(value).trim().toUpperCase();
 
-
-if(
-upper==="ABSENT" ||
-upper==="AB"
-){
-
-student.marks[index]="ABSENT";
-
-if(input){
-
-input.classList.add("absent-input");
-input.classList.remove("mark-error");
-
+if(upper==="ABSENT" || upper==="AB"){
+  student.marks[index]="ABSENT";
+  if(input){ input.classList.add("absent-input"); input.classList.remove("mark-error"); }
+  if(help) help.classList.remove("show");
+} else if(value===""){
+  student.marks[index]="";
+  if(input) input.classList.remove("absent-input","mark-error");
+  if(help) help.classList.remove("show");
+} else {
+  let number= Number(value);
+  if(isNaN(number)){
+    student.marks[index]="";
+    return;
+  }
+  if(number>full){
+    number=full;
+    student.marks[index]=String(full);
+    if(input){ input.value=String(full); input.classList.add("mark-error"); }
+    if(help){ help.textContent=`अधिकतम ${full} अंक`; help.classList.add("show"); }
+    setTimeout(()=>{
+      if(input) input.classList.remove("mark-error");
+      if(help) help.classList.remove("show");
+    },1200);
+  }else{
+    student.marks[index]=String(number);
+    if(input) input.classList.remove("mark-error");
+    if(help) help.classList.remove("show");
+  }
+  if(input) input.classList.remove("absent-input");
 }
-
-if(help)
-help.classList.remove("show");
-
-}
-
-else if(value===""){
-
-student.marks[index]="";
-
-if(input)
-input.classList.remove(
-"absent-input",
-"mark-error"
-);
-
-if(help)
-help.classList.remove("show");
-
-}
-
-else{
-
-let number=
-Number(value);
-
-if(isNaN(number)){
-
-student.marks[index]="";
-
-return;
-
-}
-
-if(number>full){
-
-number=full;
-
-student.marks[index]=String(full);
-
-if(input){
-
-input.value=String(full);
-
-input.classList.add("mark-error");
-
-}
-
-if(help){
-
-help.textContent=
-`अधिकतम ${full} अंक`;
-
-help.classList.add("show");
-
-}
-
-setTimeout(()=>{
-
-if(input)
-input.classList.remove("mark-error");
-
-if(help)
-help.classList.remove("show");
-
-},1200);
-
-}else{
-
-student.marks[index]=String(number);
-
-if(input)
-input.classList.remove("mark-error");
-
-if(help)
-help.classList.remove("show");
-
-}
-
-if(input)
-input.classList.remove("absent-input");
-
-}
-
 
 renderPages();
-
 autoSave();
 
+}
+
+function entryDualMarkChange(index, type, value){
+  const student = students[selectedStudent];
+  if(!student) return;
+
+  if(!student.marks[index] || typeof student.marks[index] !== "object"){
+    student.marks[index] = { th:"", pr:"" };
+  }
+
+  const subject = subjects[index];
+  const max = Number(type === "th" ? subject.thFull : subject.prFull) || 0;
+  const input = document.getElementById(`m${index}_${type}`);
+  const upper = String(value).trim().toUpperCase();
+
+  if(upper === "ABSENT" || upper === "AB"){
+    student.marks[index][type] = "ABSENT";
+    if(input){ input.classList.add("absent-input"); input.classList.remove("mark-error"); }
+  } else if(value === ""){
+    student.marks[index][type] = "";
+    if(input) input.classList.remove("absent-input", "mark-error");
+  } else {
+    let num = Number(value);
+    if(isNaN(num)){
+      student.marks[index][type] = "";
+      return;
+    }
+    if(num > max){
+      num = max;
+      student.marks[index][type] = String(max);
+      if(input){ input.value = String(max); input.classList.add("mark-error"); }
+      setTimeout(()=>{ if(input) input.classList.remove("mark-error"); }, 1200);
+    } else {
+      student.marks[index][type] = String(num);
+      if(input) input.classList.remove("mark-error");
+    }
+    if(input) input.classList.remove("absent-input");
+  }
+
+  renderPages();
+  autoSave();
 }
 
 
@@ -2685,6 +2703,7 @@ if(isNaN(n) || n<0)
 n=0;
 
 subjects[index].full=n;
+subjects[index].thFull=n;
 
 students.forEach(student=>{
 
@@ -2747,7 +2766,7 @@ item.innerHTML=`
 
 <div class="subject-order-name">
 
-${index+1}. ${esc(subject.name)} ${subject.optional ? '<span style="color:#d63384;font-size:10.5px">*(ऐच्छिक)</span>' : ''}
+${index+1}. ${esc(subject.name)} ${subject.optional ? '<span style="color:#d63384;font-size:10.5px">*(ऐच्छिक)</span>' : ''} ${subject.hasPractical ? '<span style="color:#6610f2;font-size:10px">[Th+Pr]</span>' : ''}
 
 <span style="font-size:10px;color:#777">
 (${subject.full})
@@ -2858,23 +2877,22 @@ prompt(
 if(!name || !name.trim())
 return;
 
+const hasPr = confirm(`क्या "${name.trim()}" में Practical (प्रायोगिक) परीक्षा है?\n\n[OK = हाँ, Theory + Practical]\n[Cancel = नहीं, केवल Theory]`);
 
-const full=
-prompt(
-"इस विषय का पूर्णांक:",
-"50"
-);
+let fullMarks = 50;
+let thFull = 50;
+let prFull = 0;
 
-let fullMarks=
-Number(full);
-
-if(
-isNaN(fullMarks) ||
-fullMarks<0
-){
-
-fullMarks=50;
-
+if(hasPr){
+  const thInput = prompt("सैद्धांतिक (Theory) का पूर्णांक:", "70");
+  const prInput = prompt("प्रायोगिक (Practical) का पूर्णांक:", "30");
+  thFull = Number(thInput) || 70;
+  prFull = Number(prInput) || 30;
+  fullMarks = thFull + prFull;
+} else {
+  const full = prompt("इस विषय का पूर्णांक:", "50");
+  fullMarks = Number(full) || 50;
+  thFull = fullMarks;
 }
 
 const isOpt = confirm(
@@ -2882,32 +2900,22 @@ const isOpt = confirm(
 );
 
 subjects.push({
-
-name:name.trim(),
-
-full:fullMarks,
-
-optional: isOpt
-
+  name: name.trim(),
+  full: fullMarks,
+  hasPractical: hasPr,
+  thFull: thFull,
+  prFull: prFull,
+  optional: isOpt
 });
-
 
 students.forEach(student=>{
-
-if(!Array.isArray(student.marks))
-student.marks=[];
-
-student.marks.push("");
-
+  if(!Array.isArray(student.marks)) student.marks=[];
+  student.marks.push(hasPr ? { th:"", pr:"" } : "");
 });
 
-
 renderSubjectControls();
-
 renderPages();
-
 selectStudent();
-
 autoSave();
 
 }
@@ -2936,7 +2944,7 @@ select.innerHTML=
 subjects.map(
 (s,i)=>
 `<option value="${i}">
-${i+1}. ${esc(s.name)} ${s.optional ? '(ऐच्छिक)' : ''}
+${i+1}. ${esc(s.name)} ${s.optional ? '(ऐच्छिक)' : ''} ${s.hasPractical ? '(Th+Pr)' : ''}
 </option>`
 ).join("");
 
@@ -3071,7 +3079,7 @@ return `
 
 
 /* =========================================================
-   RENDER PAGES (Header & Conditional S. No.)
+   RENDER PAGES (Header & Dual-Header for Practical)
 ========================================================= */
 
 function renderPages(){
@@ -3094,12 +3102,12 @@ ROWS_PER_PAGE
 )
 );
 
+const hasAnyPractical = subjects.some(s => s.hasPractical);
 
-const totalCols=
-3+
-subjects.length+
-2;
-
+let totalCols = 3 + 2;
+subjects.forEach(s => {
+  totalCols += (s.hasPractical ? 2 : 1);
+});
 
 for(
 let page=0;
@@ -3139,57 +3147,45 @@ const srNoText = isFilled ? (i + 1) : "";
 
 let subCells="";
 
-
 subjects.forEach((subject,s)=>{
+  const raw = (student.marks && student.marks[s]);
 
-const mark=
-(student.marks &&
-student.marks[s]) || "";
+  if(subject.hasPractical){
+    const thMark = String(raw?.th ?? "");
+    const prMark = String(raw?.pr ?? "");
+    const isThAb = (thMark.toUpperCase()==="ABSENT" || thMark.toUpperCase()==="AB");
+    const isPrAb = (prMark.toUpperCase()==="ABSENT" || prMark.toUpperCase()==="AB");
 
+    subCells += `
+    <td class="col-sub ${isThAb ? 'absent-cell' : ''}" style="width:10mm">
+      <input class="${isThAb ? 'absent-input' : ''}" value="${isThAb ? 'AB' : esc(thMark)}" oninput="cellDualChanged(${i},${s},'th',this.value)">
+      <span class="print-only ${isThAb ? 'absent-text' : ''}">${isThAb ? 'AB' : (thMark || '-')}</span>
+    </td>
+    <td class="col-sub ${isPrAb ? 'absent-cell' : ''}" style="width:10mm">
+      <input class="${isPrAb ? 'absent-input' : ''}" value="${isPrAb ? 'AB' : esc(prMark)}" oninput="cellDualChanged(${i},${s},'pr',this.value)">
+      <span class="print-only ${isPrAb ? 'absent-text' : ''}">${isPrAb ? 'AB' : (prMark || '-')}</span>
+    </td>
+    `;
+  } else {
+    const mark = typeof raw === "object" ? (raw?.th || "") : (raw || "");
+    const isAbsent= String(mark).toUpperCase()==="ABSENT" || String(mark).toUpperCase()==="AB";
 
-const isAbsent=
-String(mark).toUpperCase()==="ABSENT" ||
-String(mark).toUpperCase()==="AB";
-
-
-if(isAbsent){
-
-subCells+=`
-
-<td class="col-sub absent-cell">
-
-<input
-class="absent-input"
-value="ABSENT"
-oninput="cellChanged(${i},${s},this.value)">
-
-<span class="print-only absent-text">
-ABSENT
-</span>
-
-</td>
-
-`;
-
-}else{
-
-subCells+=`
-
-<td class="col-sub">
-
-<input
-value="${esc(mark)}"
-oninput="cellChanged(${i},${s},this.value)">
-
-<span class="print-only">
-${mark ? esc(mark) : "-"}
-</span>
-
-</td>
-
-`;
-
-}
+    if(isAbsent){
+      subCells+=`
+      <td class="col-sub absent-cell">
+        <input class="absent-input" value="ABSENT" oninput="cellChanged(${i},${s},this.value)">
+        <span class="print-only absent-text">ABSENT</span>
+      </td>
+      `;
+    }else{
+      subCells+=`
+      <td class="col-sub">
+        <input value="${esc(mark)}" oninput="cellChanged(${i},${s},this.value)">
+        <span class="print-only">${mark ? esc(mark) : "-"}</span>
+      </td>
+      `;
+    }
+  }
 
 });
 
@@ -3304,6 +3300,15 @@ ${resultHTML}
 
 }else{
 
+let blankSubCells = "";
+subjects.forEach(s => {
+  if(s.hasPractical){
+    blankSubCells += `<td class="col-sub"><span class="print-only">-</span></td><td class="col-sub"><span class="print-only">-</span></td>`;
+  } else {
+    blankSubCells += `<td class="col-sub"><span class="print-only">-</span></td>`;
+  }
+});
+
 rows+=`
 
 <tr>
@@ -3322,17 +3327,7 @@ rows+=`
 
 </td>
 
-${subjects.map(
-()=>`
-
-<td class="col-sub">
-
-<span class="print-only">-</span>
-
-</td>
-
-`
-).join("")}
+${blankSubCells}
 
 <td class="col-total">
 
@@ -3360,6 +3355,66 @@ details.board==="BSEB"
 ?"बिहार विद्यालय परीक्षा समिति, पटना"
 :"राज्य शिक्षा शोध एवं प्रशिक्षण परिषद, बिहार, पटना";
 
+let tableHeaderHTML = "";
+if(hasAnyPractical){
+  let topRowHTML = `
+    <th class="col-sr" rowspan="2">क्र०<br>सं०</th>
+    <th class="col-roll" rowspan="2">वर्ग<br>क्रमांक</th>
+    <th class="col-name" rowspan="2">विद्यार्थी का नाम</th>
+  `;
+  let bottomRowHTML = "";
+
+  subjects.forEach(s => {
+    if(s.hasPractical){
+      topRowHTML += `
+      <th class="col-sub th-main" colspan="2">
+        ${esc(s.name)}${s.optional ? '<br><span style="font-size:7.5px;color:#d63384">*(ऐच्छिक)</span>' : ''} (${s.full})
+      </th>
+      `;
+      bottomRowHTML += `
+      <th class="th-sub">Th(${s.thFull})</th>
+      <th class="th-sub">Pr(${s.prFull})</th>
+      `;
+    } else {
+      topRowHTML += `
+      <th class="col-sub th-main" rowspan="2">
+        ${esc(s.name)}${s.optional ? '<br><span style="font-size:7.5px;color:#d63384">*(ऐच्छिक)</span>' : ''}<br>
+        <span style="font-size:8px">(${s.full})</span>
+      </th>
+      `;
+    }
+  });
+
+  topRowHTML += `
+    <th class="col-total" rowspan="2">कुल</th>
+    <th class="col-result" rowspan="2">ग्रेड / %</th>
+  `;
+
+  tableHeaderHTML = `
+  <thead>
+    <tr>${topRowHTML}</tr>
+    <tr>${bottomRowHTML}</tr>
+  </thead>
+  `;
+} else {
+  tableHeaderHTML = `
+  <thead>
+    <tr>
+      <th class="col-sr">क्र०<br>सं०</th>
+      <th class="col-roll">वर्ग<br>क्रमांक</th>
+      <th class="col-name">विद्यार्थी का नाम</th>
+      ${subjects.map(s=>`
+        <th class="col-sub">
+          ${esc(s.name)}${s.optional ? '<br><span style="font-size:8px;color:#d63384">*(ऐच्छिक)</span>' : ''}<br>
+          <span style="font-size:8.5px">(${s.full})</span>
+        </th>
+      `).join("")}
+      <th class="col-total">कुल</th>
+      <th class="col-result">ग्रेड / प्रतिशत</th>
+    </tr>
+  </thead>
+  `;
+}
 
 pageDiv.innerHTML=`
 
@@ -3505,48 +3560,7 @@ ${calculateMaxMarks()}
 
 <table>
 
-<thead>
-
-<tr>
-
-<th class="col-sr">
-क्र०<br>सं०
-</th>
-
-<th class="col-roll">
-वर्ग<br>क्रमांक
-</th>
-
-<th class="col-name">
-विद्यार्थी का नाम
-</th>
-
-
-${
-subjects.map(
-s=>
-`<th class="col-sub">
-${esc(s.name)}${s.optional ? '<br><span style="font-size:8px;color:#d63384">*(ऐच्छिक)</span>' : ''}<br>
-<span style="font-size:8.5px">
-(${s.full})
-</span>
-</th>`
-).join("")
-}
-
-
-<th class="col-total">
-कुल
-</th>
-
-<th class="col-result">
-ग्रेड / प्रतिशत
-</th>
-
-</tr>
-
-</thead>
-
+${tableHeaderHTML}
 
 <tbody>
 
@@ -3609,82 +3623,56 @@ wrap.appendChild(pageDiv);
 
 function cellChanged(studentIndex,subjectIndex,value){
 
-if(
-!students[studentIndex].marks
-){
-
-students[studentIndex].marks=
-new Array(subjects.length)
-.fill("")
-
+if(!students[studentIndex].marks){
+  students[studentIndex].marks = new Array(subjects.length).fill("");
 }
 
+const normalized = normalizeValue(value, Number(subjects[subjectIndex].full||0));
+students[studentIndex].marks[subjectIndex] = normalized;
 
-const normalized=
-normalizeMark(
-value,
-subjectIndex
-);
+if(studentIndex===selectedStudent){
+  const input= document.getElementById("m"+subjectIndex);
+  const status= document.getElementById("entryStatus"+subjectIndex);
 
-
-students[studentIndex]
-.marks[subjectIndex]=
-normalized;
-
-
-if(
-studentIndex===selectedStudent
-){
-
-const input=
-document.getElementById(
-"m"+subjectIndex
-);
-
-const status=
-document.getElementById(
-"entryStatus"+subjectIndex
-);
-
-
-if(input){
-
-input.value=normalized;
-
-if(
-normalized==="ABSENT"
-){
-
-input.classList.add(
-"absent-input"
-);
-
-}else{
-
-input.classList.remove(
-"absent-input"
-);
-
+  if(input){
+    input.value=normalized;
+    if(normalized==="ABSENT") input.classList.add("absent-input");
+    else input.classList.remove("absent-input");
+  }
+  if(status) status.value = (normalized==="ABSENT" ? "ABSENT" : "PRESENT");
 }
-
-}
-
-if(status){
-
-status.value=
-normalized==="ABSENT"
-?"ABSENT"
-:"PRESENT";
-
-}
-
-}
-
 
 renderPages();
-
 autoSave();
 
+}
+
+function cellDualChanged(studentIndex, subjectIndex, type, value){
+  if(!students[studentIndex].marks){
+    students[studentIndex].marks = new Array(subjects.length).fill("");
+  }
+
+  if(!students[studentIndex].marks[subjectIndex] || typeof students[studentIndex].marks[subjectIndex] !== "object"){
+    students[studentIndex].marks[subjectIndex] = { th:"", pr:"" };
+  }
+
+  const subject = subjects[subjectIndex];
+  const max = Number(type === "th" ? subject.thFull : subject.prFull) || 0;
+  const normalized = normalizeValue(value, max);
+
+  students[studentIndex].marks[subjectIndex][type] = normalized;
+
+  if(studentIndex === selectedStudent){
+    const input = document.getElementById(`m${subjectIndex}_${type}`);
+    if(input){
+      input.value = normalized;
+      if(normalized === "ABSENT") input.classList.add("absent-input");
+      else input.classList.remove("absent-input");
+    }
+  }
+
+  renderPages();
+  autoSave();
 }
 
 
@@ -3777,48 +3765,44 @@ student.name||"";
 
 
 subjects.forEach((subject,i)=>{
+  const status = document.getElementById("entryStatus"+i);
+  const raw = (student.marks && student.marks[i]);
 
-const input=
-document.getElementById("m"+i);
+  if(subject.hasPractical){
+    const inTh = document.getElementById(`m${i}_th`);
+    const inPr = document.getElementById(`m${i}_pr`);
+    const thVal = raw?.th || "";
+    const prVal = raw?.pr || "";
 
+    if(inTh){
+      inTh.value = thVal;
+      if(String(thVal).toUpperCase()==="ABSENT") inTh.classList.add("absent-input");
+      else inTh.classList.remove("absent-input");
+    }
 
-const status=
-document.getElementById(
-"entryStatus"+i
-);
+    if(inPr){
+      inPr.value = prVal;
+      if(String(prVal).toUpperCase()==="ABSENT") inPr.classList.add("absent-input");
+      else inPr.classList.remove("absent-input");
+    }
 
+    if(status){
+      status.value = (String(thVal).toUpperCase()==="ABSENT" && String(prVal).toUpperCase()==="ABSENT") ? "ABSENT" : "PRESENT";
+    }
+  } else {
+    const input = document.getElementById("m"+i);
+    const value = typeof raw === "object" ? (raw?.th || "") : (raw || "");
 
-const value=
-(student.marks &&
-student.marks[i])||"";
+    if(input){
+      input.value = value;
+      if(String(value).toUpperCase()==="ABSENT") input.classList.add("absent-input");
+      else input.classList.remove("absent-input");
+    }
 
-
-if(input){
-
-input.value=value;
-
-
-if(
-String(value).toUpperCase()==="ABSENT"
-){
-
-input.classList.add("absent-input");
-
-}else{
-
-input.classList.remove("absent-input");
-
-}
-
-}
-
-
-if(status)
-status.value=
-String(value).toUpperCase()==="ABSENT"
-?"ABSENT"
-:"PRESENT";
-
+    if(status){
+      status.value = String(value).toUpperCase()==="ABSENT" ? "ABSENT" : "PRESENT";
+    }
+  }
 });
 
 }
@@ -3829,66 +3813,43 @@ function formChanged(){
 const student=
 students[selectedStudent];
 
-
 if(!student)
 return;
 
-
 student.roll=
-document.getElementById(
-"formRoll"
-).value;
-
+document.getElementById("formRoll").value;
 
 student.name=
-document.getElementById(
-"formName"
-).value;
-
+document.getElementById("formName").value;
 
 subjects.forEach((s,i)=>{
+  const status= document.getElementById("entryStatus"+i);
 
-const input=
-document.getElementById("m"+i);
-
-
-const status=
-document.getElementById(
-"entryStatus"+i
-);
-
-
-if(
-status &&
-status.value==="ABSENT"
-){
-
-student.marks[i]="ABSENT";
-
-}else{
-
-student.marks[i]=
-normalizeMark(
-input?input.value:"",
-i
-);
-
-}
-
+  if(s.hasPractical){
+    const inTh = document.getElementById(`m${i}_th`);
+    const inPr = document.getElementById(`m${i}_pr`);
+    if(status && status.value==="ABSENT"){
+      student.marks[i] = { th:"ABSENT", pr:"ABSENT" };
+    } else {
+      student.marks[i] = {
+        th: normalizeValue(inTh ? inTh.value : "", Number(s.thFull||0)),
+        pr: normalizeValue(inPr ? inPr.value : "", Number(s.prFull||0))
+      };
+    }
+  } else {
+    const input= document.getElementById("m"+i);
+    if(status && status.value==="ABSENT"){
+      student.marks[i]="ABSENT";
+    }else{
+      student.marks[i]= normalizeValue(input ? input.value : "", Number(s.full||0));
+    }
+  }
 });
 
-
 renderPages();
-
 syncFormOptions();
 
-
-document.getElementById(
-"studentSelect"
-).value=
-selectedStudent;
-
-
+document.getElementById("studentSelect").value= selectedStudent;
 autoSave();
 
 }
@@ -3897,26 +3858,17 @@ autoSave();
 function addStudent(){
 
 students.push({
-
-roll:"",
-name:"",
-marks:
-new Array(subjects.length)
-.fill("")
-
+  roll:"",
+  name:"",
+  marks: subjects.map(s => s.hasPractical ? { th:"", pr:"" } : "")
 });
-
 
 selectedStudent=
 students.length-1;
 
-
 renderPages();
-
 syncFormOptions();
-
 selectStudent();
-
 autoSave();
 
 }
@@ -4505,17 +4457,12 @@ data.subjects.length
 
 subjects=
 data.subjects.map(s=>({
-
-name:
-s.name || "विषय",
-
-full:
-Number(
-s.full ?? 50
-),
-
-optional: Boolean(s.optional)
-
+  name: s.name || "विषय",
+  full: Number(s.full ?? 50),
+  hasPractical: Boolean(s.hasPractical),
+  thFull: Number(s.thFull ?? (s.hasPractical ? 35 : s.full ?? 50)),
+  prFull: Number(s.prFull ?? (s.hasPractical ? 15 : 0)),
+  optional: Boolean(s.optional)
 }));
 
 }
@@ -4546,50 +4493,23 @@ data.students;
 if(!students.length){
 
 students=[{
-
-roll:"",
-name:"",
-marks:
-new Array(subjects.length)
-.fill("")
-
+  roll:"",
+  name:"",
+  marks: subjects.map(s => s.hasPractical ? { th:"", pr:"" } : "")
 }];
 
 }
 
 
 students.forEach(student=>{
-
-if(!Array.isArray(student.marks)){
-
-student.marks=[];
-
-}
-
-
-while(
-student.marks.length<
-subjects.length
-){
-
-student.marks.push("");
-
-}
-
-
-if(
-student.marks.length>
-subjects.length
-){
-
-student.marks=
-student.marks.slice(
-0,
-subjects.length
-);
-
-}
-
+  if(!Array.isArray(student.marks)) student.marks=[];
+  while(student.marks.length < subjects.length){
+    const s = subjects[student.marks.length];
+    student.marks.push(s.hasPractical ? { th:"", pr:"" } : "");
+  }
+  if(student.marks.length > subjects.length){
+    student.marks = student.marks.slice(0, subjects.length);
+  }
 });
 
 
@@ -4807,10 +4727,10 @@ function loadData(){
 const raw=
 localStorage.getItem(DATA_KEY) ||
 localStorage.getItem(
-"deoMarksFolio_Final_v11"
+"deoMarksFolio_Final_v12"
 ) ||
 localStorage.getItem(
-"deoMarksFolio_Final_v10"
+"deoMarksFolio_Final_v11"
 );
 
 
@@ -4835,6 +4755,9 @@ if(typeof s==="string"){
 return{
 name:s,
 full:50,
+hasPractical:false,
+thFull:50,
+prFull:0,
 optional:false
 };
 
@@ -4842,11 +4765,12 @@ optional:false
 
 
 return{
-
-name:s.name||"विषय",
-full:Number(s.full??50),
-optional:Boolean(s.optional)
-
+  name:s.name||"विषय",
+  full:Number(s.full??50),
+  hasPractical:Boolean(s.hasPractical),
+  thFull:Number(s.thFull ?? (s.hasPractical ? 35 : s.full ?? 50)),
+  prFull:Number(s.prFull ?? (s.hasPractical ? 15 : 0)),
+  optional:Boolean(s.optional)
 };
 
 });
@@ -4891,13 +4815,9 @@ i++
 ){
 
 students.push({
-
-roll:"",
-name:"",
-marks:
-new Array(subjects.length)
-.fill("")
-
+  roll:"",
+  name:"",
+  marks: subjects.map(s => s.hasPractical ? { th:"", pr:"" } : "")
 });
 
 }
@@ -4906,34 +4826,14 @@ new Array(subjects.length)
 
 
 students.forEach(student=>{
-
-if(!Array.isArray(student.marks))
-student.marks=[];
-
-
-while(
-student.marks.length<
-subjects.length
-){
-
-student.marks.push("");
-
-}
-
-
-if(
-student.marks.length>
-subjects.length
-){
-
-student.marks=
-student.marks.slice(
-0,
-subjects.length
-);
-
-}
-
+  if(!Array.isArray(student.marks)) student.marks=[];
+  while(student.marks.length < subjects.length){
+    const s = subjects[student.marks.length];
+    student.marks.push(s.hasPractical ? { th:"", pr:"" } : "");
+  }
+  if(student.marks.length > subjects.length){
+    student.marks = student.marks.slice(0, subjects.length);
+  }
 });
 
 
@@ -4989,15 +4889,6 @@ confirm(
 ){
 
 localStorage.removeItem(DATA_KEY);
-
-localStorage.removeItem(
-"deoMarksFolio_Final_v11"
-);
-
-localStorage.removeItem(
-"deoMarksFolio_Final_v10"
-);
-
 location.reload();
 
 }
@@ -5050,7 +4941,7 @@ function sortRollNumbers(){
       newStudentList.push({
         roll: String(r),
         name: "",
-        marks: new Array(subjects.length).fill("")
+        marks: subjects.map(s => s.hasPractical ? { th:"", pr:"" } : "")
       });
       missingAddedCount++;
     }
@@ -5081,68 +4972,36 @@ function sortRollNumbers(){
 
 function downloadExcelTemplate(){
 
-const headers=[
-"वर्ग क्रमांक",
-"विद्यार्थी का नाम",
-...subjects.map(s=> s.name + (s.optional ? " (ऐच्छिक)" : ""))
-];
-
-
-const rows=[];
-
-
-for(let i=1;i<=30;i++){
-
-const row={};
-
-
-headers.forEach(h=>{
-row[h]="";
+const headers = ["वर्ग क्रमांक", "विद्यार्थी का नाम"];
+subjects.forEach(s => {
+  const optSuffix = s.optional ? " (ऐच्छिक)" : "";
+  if(s.hasPractical){
+    headers.push(`${s.name} [Theory]${optSuffix}`);
+    headers.push(`${s.name} [Practical]${optSuffix}`);
+  } else {
+    headers.push(`${s.name}${optSuffix}`);
+  }
 });
 
-
-row["वर्ग क्रमांक"]=i;
-
-
-rows.push(row);
-
+const rows = [];
+for(let i=1; i<=30; i++){
+  const row = {};
+  headers.forEach(h => { row[h] = ""; });
+  row["वर्ग क्रमांक"] = i;
+  rows.push(row);
 }
 
+const worksheet = XLSX.utils.json_to_sheet(rows, { header: headers });
 
-const worksheet=
-XLSX.utils.json_to_sheet(
-rows,
-{header:headers}
-);
-
-
-worksheet["!cols"]=[
-{wch:15},
-{wch:30},
-...subjects.map(s=>({
-wch:Math.max(
-12,
-String(s.name).length+5
-)
-}))
+worksheet["!cols"] = [
+  { wch: 15 },
+  { wch: 30 },
+  ...headers.slice(2).map(h => ({ wch: Math.max(14, h.length + 4) }))
 ];
 
-
-const workbook=
-XLSX.utils.book_new();
-
-
-XLSX.utils.book_append_sheet(
-workbook,
-worksheet,
-"Marks Folio"
-);
-
-
-XLSX.writeFile(
-workbook,
-"DEO_Office_Marks_Folio_Excel_Format.xlsx"
-);
+const workbook = XLSX.utils.book_new();
+XLSX.utils.book_append_sheet(workbook, worksheet, "Marks Folio");
+XLSX.writeFile(workbook, "DEO_Office_Marks_Folio_Excel_Format.xlsx");
 
 }
 
@@ -5154,20 +5013,28 @@ if(!students || !students.length){
   return;
 }
 
-const subjectHeaders = subjects.map(s => s.name + (s.optional ? " *(ऐच्छिक)" : ""));
+const headers = ["क्र० सं०", "वर्ग क्रमांक", "विद्यार्थी का नाम"];
+const colMappings = [];
 
-const headers = [
-  "क्र० सं०",
-  "वर्ग क्रमांक",
-  "विद्यार्थी का नाम",
-  ...subjectHeaders,
-  "कुल प्राप्तांक",
-  "प्रतिशत (%)",
-  "ग्रेड"
-];
+subjects.forEach((s, sIdx) => {
+  const optSuffix = s.optional ? " *(ऐच्छिक)" : "";
+  if(s.hasPractical){
+    const thHeader = `${s.name} [Th]${optSuffix}`;
+    const prHeader = `${s.name} [Pr]${optSuffix}`;
+    headers.push(thHeader, prHeader);
+    colMappings.push({ sIdx, isPr: false, header: thHeader });
+    colMappings.push({ sIdx, isPr: true, header: prHeader });
+  } else {
+    const header = `${s.name}${optSuffix}`;
+    headers.push(header);
+    colMappings.push({ sIdx, isPr: false, isSingle: true, header });
+  }
+});
+
+headers.push("कुल प्राप्तांक", "प्रतिशत (%)", "ग्रेड");
 
 let exportCount = 0;
-const rows = students.map((student, idx) => {
+const rows = students.map((student) => {
   const row = {};
   const isFilled = studentHasData(student);
   
@@ -5181,10 +5048,15 @@ const rows = students.map((student, idx) => {
   row["वर्ग क्रमांक"] = student.roll || "";
   row["विद्यार्थी का नाम"] = student.name || "";
 
-  subjects.forEach((subject, sIdx) => {
-    const colName = subjectHeaders[sIdx];
-    const mark = (student.marks && student.marks[sIdx]) || "";
-    row[colName] = mark;
+  colMappings.forEach(mapping => {
+    const raw = (student.marks && student.marks[mapping.sIdx]);
+    if(mapping.isSingle){
+      row[mapping.header] = typeof raw === "object" ? (raw?.th || "") : (raw || "");
+    } else if(mapping.isPr){
+      row[mapping.header] = raw?.pr || "";
+    } else {
+      row[mapping.header] = raw?.th || "";
+    }
   });
 
   const res = calculateResult(student);
@@ -5207,7 +5079,7 @@ worksheet["!cols"] = [
   { wch: 8 },
   { wch: 14 },
   { wch: 28 },
-  ...subjects.map(s => ({ wch: Math.max(14, String(s.name).length + 8) })),
+  ...colMappings.map(m => ({ wch: Math.max(14, m.header.length + 5) })),
   { wch: 14 },
   { wch: 14 },
   { wch: 10 }
@@ -5234,14 +5106,11 @@ function importExcel(event){
 const file=
 event.target.files[0];
 
-
 if(!file)
 return;
 
-
 const reader=
 new FileReader();
-
 
 reader.onload=function(e){
 
@@ -5252,19 +5121,16 @@ new Uint8Array(
 e.target.result
 );
 
-
 const workbook=
 XLSX.read(
 data,
 {type:"array"}
 );
 
-
 const sheet=
 workbook.Sheets[
 workbook.SheetNames[0]
 ];
-
 
 const rows=
 XLSX.utils.sheet_to_json(
@@ -5272,103 +5138,56 @@ sheet,
 {defval:""}
 );
 
-
 if(!rows.length){
-
-alert(
-"Excel में विद्यार्थी डेटा नहीं मिला।"
-);
-
-return;
-
+  alert("Excel में विद्यार्थी डेटा नहीं मिला।");
+  return;
 }
-
 
 students=
 rows.map(row=>{
 
 const student={
-
-roll:
-row["वर्ग क्रमांक"] ??
-row["Roll Number"] ??
-row["Roll No"] ??
-"",
-
-name:
-row["विद्यार्थी का नाम"] ??
-row["Student Name"] ??
-row["Name"] ??
-"",
-
-marks:[]
-
+  roll: row["वर्ग क्रमांक"] ?? row["Roll Number"] ?? row["Roll No"] ?? "",
+  name: row["विद्यार्थी का नाम"] ?? row["Student Name"] ?? row["Name"] ?? "",
+  marks:[]
 };
 
-
 subjects.forEach((subject,index)=>{
-
-let value=
-row[subject.name] ??
-row[subject.name + " (ऐच्छिक)"] ??
-row[subject.name + " *(ऐच्छिक)"];
-
-
-if(
-value===undefined ||
-value===null
-){
-
-value="";
-
-}
-
-
-student.marks.push(
-normalizeMark(value,index)
-);
-
+  if(subject.hasPractical){
+    const thKey = `${subject.name} [Theory]` in row ? `${subject.name} [Theory]` : `${subject.name} [Th]`;
+    const prKey = `${subject.name} [Practical]` in row ? `${subject.name} [Practical]` : `${subject.name} [Pr]`;
+    
+    student.marks.push({
+      th: normalizeValue(row[thKey] ?? row[subject.name] ?? "", Number(subject.thFull||0)),
+      pr: normalizeValue(row[prKey] ?? "", Number(subject.prFull||0))
+    });
+  } else {
+    let value = row[subject.name] ?? row[subject.name + " (ऐच्छिक)"] ?? row[subject.name + " *(ऐच्छिक)"] ?? "";
+    student.marks.push(normalizeValue(value, Number(subject.full||0)));
+  }
 });
-
 
 return student;
 
 });
 
-
 selectedStudent=0;
 
-
 renderPages();
-
 syncFormOptions();
-
 selectStudent();
-
 autoSave();
 
-
-alert(
-`✓ ${students.length} विद्यार्थियों का डेटा Import हो गया।`
-);
-
+alert(`✓ ${students.length} विद्यार्थियों का डेटा Import हो गया।`);
 
 }catch(error){
-
-console.error(error);
-
-
-alert(
-"Excel Import में समस्या आई। कृपया Download किए गए Excel Format का उपयोग करें।"
-);
-
+  console.error(error);
+  alert("Excel Import में समस्या आई। कृपया Download किए गए Excel Format का उपयोग करें।");
 }
-
 
 event.target.value="";
 
 };
-
 
 reader.readAsArrayBuffer(file);
 
@@ -5380,14 +5199,11 @@ function importEshikshakoshExcel(event){
 const file=
 event.target.files[0];
 
-
 if(!file)
 return;
 
-
 const reader=
 new FileReader();
-
 
 reader.onload=function(e){
 
@@ -5398,7 +5214,6 @@ new Uint8Array(
 e.target.result
 );
 
-
 const workbook=
 XLSX.read(
 data,
@@ -5408,21 +5223,14 @@ cellDates:false
 }
 );
 
-
 const sheet=
 workbook.Sheets[
 workbook.SheetNames[0]
 ];
 
-
 if(!sheet){
-
-alert(
-"Excel Sheet नहीं मिली।"
-);
-
+  alert("Excel Sheet नहीं मिली।");
 }
-
 
 const rows=
 XLSX.utils.sheet_to_json(
@@ -5434,16 +5242,11 @@ raw:false
 }
 );
 
-
 const START_ROW=14;
-
 const NAME_COL=1;
-
 const ROLL_COL=9;
 
-
 let importedStudents=[];
-
 
 for(
 let r=START_ROW;
@@ -5454,92 +5257,55 @@ r++
 const row=
 rows[r] || [];
 
-
 const name=
 String(
 row[NAME_COL] ?? ""
 ).trim();
-
 
 const roll=
 String(
 row[ROLL_COL] ?? ""
 ).trim();
 
-
 if(!name && !roll){
-
-continue;
-
+  continue;
 }
 
-
 importedStudents.push({
-
-roll:roll,
-
-name:name,
-
-marks:
-new Array(subjects.length)
-.fill("")
-
+  roll: roll,
+  name: name,
+  marks: subjects.map(s => s.hasPractical ? { th:"", pr:"" } : "")
 });
 
 }
 
-
 if(!importedStudents.length){
-
-alert(
-"❌ eShikshakosh Excel में B15 से Student Name और J15 से Roll Number का डेटा नहीं मिला।"
-);
-
-return;
-
+  alert("❌ eShikshakosh Excel में B15 से Student Name और J15 से Roll Number का डेटा नहीं मिला।");
+  return;
 }
-
 
 students=
 importedStudents;
 
-
 selectedStudent=0;
 
-
 renderPages();
-
 syncFormOptions();
-
 selectStudent();
-
 autoSave();
-
 
 alert(
 `✓ eShikshakosh से ${students.length} विद्यार्थियों का Name और Roll Number Import हो गया।`
 );
 
-
 }catch(error){
-
-console.error(
-"eShikshakosh Import Error:",
-error
-);
-
-
-alert(
-"❌ eShikshakosh Excel Import में समस्या आई। कृपया सही eShikshakosh Excel फाइल चुनें।"
-);
-
+  console.error("eShikshakosh Import Error:", error);
+  alert("❌ eShikshakosh Excel Import में समस्या आई। कृपया सही eShikshakosh Excel फाइल चुनें।");
 }
-
 
 event.target.value="";
 
 };
-
 
 reader.readAsArrayBuffer(file);
 
@@ -5557,7 +5323,6 @@ document.getElementById(
 "pagesWrap"
 );
 
-
 const safeClass=
 String(
 details.className||
@@ -5567,7 +5332,6 @@ details.className||
 /[\\/:*?"<>|]/g,
 "_"
 );
-
 
 const safeExam=
 String(
@@ -5579,7 +5343,6 @@ details.exam||
 "_"
 );
 
-
 const filename=
 "Marks_Folio_"+
 safeExam+
@@ -5590,69 +5353,23 @@ details.year||
 safeClass+
 ".pdf";
 
-
 element.classList.add("pdf-mode");
 
-
 const options={
-
-margin:0,
-
-filename,
-
-image:{
-type:"jpeg",
-quality:.98
-},
-
-html2canvas:{
-
-scale:2,
-
-useCORS:true,
-
-scrollY:0,
-
-backgroundColor:"#ffffff"
-
-},
-
-jsPDF:{
-
-unit:"mm",
-
-format:"a4",
-
-orientation:"portrait"
-
-},
-
-pagebreak:{
-
-mode:["css","legacy"]
-
-}
-
+  margin:0,
+  filename,
+  image:{ type:"jpeg", quality:.98 },
+  html2canvas:{ scale:2, useCORS:true, scrollY:0, backgroundColor:"#ffffff" },
+  jsPDF:{ unit:"mm", format:"a4", orientation:"portrait" },
+  pagebreak:{ mode:["css","legacy"] }
 };
 
-
 try{
-
-await html2pdf()
-.set(options)
-.from(element)
-.save();
-
+  await html2pdf().set(options).from(element).save();
 }catch(error){
-
-console.error(error);
-
-alert(
-"PDF बनाने में समस्या आई।"
-);
-
+  console.error(error);
+  alert("PDF बनाने में समस्या आई।");
 }
-
 
 element.classList.remove("pdf-mode");
 
