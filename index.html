@@ -600,7 +600,7 @@ thead th.th-main{
 }
 
 thead th.th-sub{
-  height:4mm;
+  height:4.8mm;
   font-size:8px;
 }
 
@@ -1772,7 +1772,7 @@ const ROWS_PER_PAGE = 30;
 const CLASS_SAVE_KEY =
 "deoMarksFolio_ClassWise_v1";
 
-const APP_VERSION = "1.6.0";
+const APP_VERSION = "1.6.1";
 
 const APP_VERSION_KEY =
 "deoMarksFolio_AppVersion_v1";
@@ -2278,11 +2278,11 @@ DEO Office Marks Folio में नया Update उपलब्ध है।
 
 <br>
 
-अब आप किसी भी विषय में सैद्धांतिक (Theory) और प्रायोगिक (Practical) के अलग-अलग अंक दर्ज कर सकते हैं।
+Th और Pr के अंक व पूर्णांक अब अलग-अलग पंक्तियों में स्पष्ट दिखेंगे।
 
 <br>
 
-आपका पुराना Data पूर्णतः सुरक्षित रहेगा।
+आपका ड्राफ्ट व Class-wise Data सुरक्षित रहेगा।
 
 </div>
 
@@ -3372,8 +3372,8 @@ if(hasAnyPractical){
       </th>
       `;
       bottomRowHTML += `
-      <th class="th-sub">Th(${s.thFull})</th>
-      <th class="th-sub">Pr(${s.prFull})</th>
+      <th class="th-sub" style="line-height:1.1;padding:2px 0;">Th<br><span style="font-size:7.5px;">(${s.thFull})</span></th>
+      <th class="th-sub" style="line-height:1.1;padding:2px 0;">Pr<br><span style="font-size:7.5px;">(${s.prFull})</span></th>
       `;
     } else {
       topRowHTML += `
