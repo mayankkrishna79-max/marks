@@ -96,6 +96,7 @@ button:disabled{
 .revert-btn{background:#6f42c1;color:#fff}
 .excel-export-btn{background:#107c41;color:#fff}
 .install-btn{background:#ff9800;color:#000;display:none;}
+.default-btn{background:#0d9488;color:#fff;}
 
 .class-save-btn{
   background:#6610f2;
@@ -456,6 +457,22 @@ button:disabled{
 
 .class-save-info strong{
   color:#6610f2;
+}
+
+/* ================= DEFAULT INFO BOX ================= */
+
+.default-info-box{
+  margin-top:7px;
+  background:#e6fffa;
+  border:1px solid #2dd4bf;
+  border-radius:6px;
+  padding:8px;
+  font-size:11px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:6px;
 }
 
 /* ================= PAPER ================= */
@@ -1114,6 +1131,10 @@ td input.absent-input{
 📂 Saved Classes
 </button>
 
+<button class="default-btn" onclick="setAsDefaultSettings()">
+📌 Set as Default
+</button>
+
 <button class="gray" onclick="loadData()">
 ↻ Reload
 </button>
@@ -1324,8 +1345,34 @@ oninput="syncHeaderInputs('className',this.value)">
 
 </div>
 
+<div>
+
+<label>कस्टम कुल पूर्णांक (वैकल्पिक)</label>
+
+<input
+id="formCustomMaxMarks"
+type="number"
+placeholder="स्वतः योग (खाली रखें)"
+title="खाली रखने पर विषयों का योग स्वतः जुड़ेगा"
+oninput="updateCustomMaxMarks(this.value)">
+
 </div>
 
+</div>
+
+</div>
+
+
+<!-- ================= DEFAULT CONTROLS BOX ================= -->
+<div class="default-info-box">
+  <div>
+    <strong>📌 डिफ़ॉल्ट सेटिंग्स:</strong> विद्यालय, परीक्षा और विषय प्रारूप को सेट करें ताकि बार-बार भरना न पड़े।
+  </div>
+  <div style="display:flex;gap:5px;">
+    <button class="default-btn" style="min-height:28px;padding:4px 8px;font-size:11.5px;" onclick="setAsDefaultSettings()">📌 Set as Default</button>
+    <button class="gray" style="min-height:28px;padding:4px 8px;font-size:11.5px;" onclick="loadDefaultSettings(true)">↺ Load Default</button>
+    <button class="danger" style="min-height:28px;padding:4px 8px;font-size:11.5px;" onclick="clearDefaultSettings()">🗑 Clear</button>
+  </div>
 </div>
 
 
@@ -1772,7 +1819,10 @@ const ROWS_PER_PAGE = 30;
 const CLASS_SAVE_KEY =
 "deoMarksFolio_ClassWise_v1";
 
-const APP_VERSION = "1.6.1";
+const DEFAULT_SETTINGS_KEY =
+"deoMarksFolio_DefaultSettings_v1";
+
+const APP_VERSION = "1.7.1";
 
 const APP_VERSION_KEY =
 "deoMarksFolio_AppVersion_v1";
@@ -1863,7 +1913,9 @@ className:"",
 
 exam:"अर्द्धवार्षिक परीक्षा",
 
-year:"2026-27"
+year:"2026-27",
+
+customMaxMarks:""
 
 };
 
@@ -1948,16 +2000,31 @@ details.year || "2026-27";
 
 
 /* =========================================================
-   TOTAL FULL MARKS (Excludes Optional Subjects)
+   TOTAL FULL MARKS (Custom or Subject Sum)
 ========================================================= */
 
 function calculateMaxMarks(){
+  const customVal = Number(details.customMaxMarks);
+  if(!isNaN(customVal) && customVal > 0){
+    return customVal;
+  }
 
-return subjects.reduce(
-(sum,s)=> s.optional ? sum : sum + Number(s.full||0),
-0
-);
+  return subjects.reduce(
+    (sum,s)=> s.optional ? sum : sum + Number(s.full||0),
+    0
+  );
+}
 
+function updateCustomMaxMarks(val){
+  const clean = String(val).trim();
+  if(clean === ""){
+    details.customMaxMarks = "";
+  } else {
+    const num = Number(clean);
+    details.customMaxMarks = (!isNaN(num) && num >= 0) ? num : "";
+  }
+  renderPages();
+  autoSave();
 }
 
 
@@ -2101,6 +2168,102 @@ return{
 
 
 /* =========================================================
+   SET AS DEFAULT FEATURE
+========================================================= */
+
+function setAsDefaultSettings(){
+  const defaultPackage = {
+    details: {
+      board: details.board || "SCERT",
+      center: details.center || "",
+      district: details.district || "",
+      school: details.school || "",
+      udise: details.udise || "",
+      block: details.block || "",
+      className: details.className || "",
+      exam: details.exam || "त्रैमासिक परीक्षा",
+      year: details.year || "2026-27",
+      customMaxMarks: details.customMaxMarks || ""
+    },
+    subjects: JSON.parse(JSON.stringify(subjects))
+  };
+
+  localStorage.setItem(DEFAULT_SETTINGS_KEY, JSON.stringify(defaultPackage));
+  updateSaveStatus("✓ विद्यालय, परीक्षा व विषय Default के रूप में सुरक्षित!");
+  alert("✓ वर्तमान विद्यालय, परीक्षा एवं विषय विवरण डिफ़ॉल्ट (Default) के रूप में सुरक्षित कर दिए गए हैं!\n\nअब जब भी आप नया फॉर्म या रीलोड करेंगे, यह विवरण स्वतः उपलब्ध रहेगा।");
+}
+
+function loadDefaultSettings(showAlert = false){
+  const raw = localStorage.getItem(DEFAULT_SETTINGS_KEY);
+  if(!raw){
+    if(showAlert) alert("कोई Default सेटिंग्स सुरक्षित नहीं मिली। पहले 'Set as Default' दबाएँ।");
+    return false;
+  }
+
+  try{
+    const parsed = JSON.parse(raw);
+    if(parsed.details){
+      details = Object.assign({}, details, parsed.details);
+    }
+    if(Array.isArray(parsed.subjects) && parsed.subjects.length){
+      subjects = parsed.subjects.map(s=>({
+        name: s.name || "विषय",
+        full: Number(s.full ?? 50),
+        hasPractical: Boolean(s.hasPractical),
+        thFull: Number(s.thFull ?? (s.hasPractical ? 35 : s.full ?? 50)),
+        prFull: Number(s.prFull ?? (s.hasPractical ? 15 : 0)),
+        optional: Boolean(s.optional)
+      }));
+    }
+
+    students.forEach(student => {
+      if(!Array.isArray(student.marks)) student.marks = [];
+      while(student.marks.length < subjects.length){
+        const s = subjects[student.marks.length];
+        student.marks.push(s.hasPractical ? { th:"", pr:"" } : "");
+      }
+      if(student.marks.length > subjects.length){
+        student.marks = student.marks.slice(0, subjects.length);
+      }
+    });
+
+    populateYears();
+    document.getElementById("formBoard").value = details.board || "SCERT";
+    document.getElementById("formCenter").value = details.center || "";
+    document.getElementById("formDistrict").value = details.district || "";
+    document.getElementById("formSchool").value = details.school || "";
+    document.getElementById("formUdise").value = details.udise || "";
+    document.getElementById("formBlock").value = details.block || "";
+    document.getElementById("formClass").value = details.className || "";
+    document.getElementById("formExam").value = details.exam || "त्रैमासिक परीक्षा";
+    document.getElementById("formYear").value = details.year || "2026-27";
+    document.getElementById("formCustomMaxMarks").value = details.customMaxMarks || "";
+
+    renderSubjectControls();
+    renderPages();
+    syncFormOptions();
+    selectStudent();
+    autoSave();
+
+    if(showAlert){
+      alert("✓ डिफ़ॉल्ट विद्यालय, परीक्षा एवं विषय सेटिंग्स सफलतापूर्वक लोड हो गईं।");
+    }
+    return true;
+  } catch(e){
+    console.error(e);
+    return false;
+  }
+}
+
+function clearDefaultSettings(){
+  if(confirm("क्या आप सुरक्षित डिफ़ॉल्ट सेटिंग्स को हटाना चाहते हैं?")){
+    localStorage.removeItem(DEFAULT_SETTINGS_KEY);
+    alert("✓ डिफ़ॉल्ट सेटिंग्स हटा दी गई हैं।");
+  }
+}
+
+
+/* =========================================================
    COLLAPSE DETAILS (EXAM & SCHOOL)
 ========================================================= */
 
@@ -2184,7 +2347,7 @@ function checkMandatoryPopup(){
 if(
 localStorage.getItem(
 "deoFollowCompleted_v3"
-)!=="1"
+)!== "1"
 ){
 
 document
@@ -2278,11 +2441,11 @@ DEO Office Marks Folio में नया Update उपलब्ध है।
 
 <br>
 
-Th और Pr के अंक व पूर्णांक अब अलग-अलग पंक्तियों में स्पष्ट दिखेंगे।
-
+✓ कस्टम कुल पूर्णांक (Custom Full Marks) का विकल्प उपलब्ध।
 <br>
-
-आपका ड्राफ्ट व Class-wise Data सुरक्षित रहेगा।
+✓ विद्यालय, परीक्षा व विषय विवरण को "Set as Default" करने की सुविधा।
+<br>
+✓ PDF प्रिव्यू में टाइप करते समय कीपैड बंद होने की समस्या का स्थायी समाधान।
 
 </div>
 
@@ -3618,7 +3781,7 @@ wrap.appendChild(pageDiv);
 
 
 /* =========================================================
-   CELL & FORM HANDLERS
+   CELL & FORM HANDLERS (KEYPAD BLUR/DISMISS FIX)
 ========================================================= */
 
 function cellChanged(studentIndex,subjectIndex,value){
@@ -3630,6 +3793,7 @@ if(!students[studentIndex].marks){
 const normalized = normalizeValue(value, Number(subjects[subjectIndex].full||0));
 students[studentIndex].marks[subjectIndex] = normalized;
 
+// अगर यही छात्र ऊपर इनपुट पैनल में खुला हुआ है, तो उसका बॉक्स अपडेट करें
 if(studentIndex===selectedStudent){
   const input= document.getElementById("m"+subjectIndex);
   const status= document.getElementById("entryStatus"+subjectIndex);
@@ -3642,7 +3806,8 @@ if(studentIndex===selectedStudent){
   if(status) status.value = (normalized==="ABSENT" ? "ABSENT" : "PRESENT");
 }
 
-renderPages();
+// बिना पूरा पेज री-रेंडर किए केवल इस पंक्ति का कुल योग और रिजल्ट अपडेट करें
+updateSingleRowSummary(studentIndex);
 autoSave();
 
 }
@@ -3671,7 +3836,7 @@ function cellDualChanged(studentIndex, subjectIndex, type, value){
     }
   }
 
-  renderPages();
+  updateSingleRowSummary(studentIndex);
   autoSave();
 }
 
@@ -3680,24 +3845,52 @@ function cellInfoChanged(index,key,value){
 
 students[index][key]=value;
 
-
 if(index===selectedStudent){
+  if(key==="name")
+  document.getElementById("formName").value=value;
 
-if(key==="name")
-document.getElementById("formName").value=value;
-
-if(key==="roll")
-document.getElementById("formRoll").value=value;
-
+  if(key==="roll")
+  document.getElementById("formRoll").value=value;
 }
 
-
-syncFormOptions();
-
-renderPages();
+// सेलेक्ट ड्रॉपडाउन को बिना री-रेंडर किए इन-प्लेस अपडेट करें
+const select = document.getElementById("studentSelect");
+if(select && select.options[index] && key === "name"){
+  select.options[index].textContent = `${index + 1}. ${value || "नया विद्यार्थी"}`;
+}
 
 autoSave();
 
+}
+
+/* पंक्ति-वार योग एवं ग्रेड अपडेटर - DOM री-क्रिएट से बचाता है */
+function updateSingleRowSummary(studentIndex){
+  const res = calculateResult(students[studentIndex]);
+  const pageIdx = Math.floor(studentIndex / ROWS_PER_PAGE);
+  const rowInPage = studentIndex % ROWS_PER_PAGE;
+
+  const pages = document.querySelectorAll(".paper");
+  if(!pages[pageIdx]) return;
+
+  const rows = pages[pageIdx].querySelectorAll("tbody tr");
+  if(!rows[rowInPage]) return;
+
+  const tr = rows[rowInPage];
+  const tdTotal = tr.querySelector("td.col-total");
+  const tdResult = tr.querySelector("td.col-result");
+
+  if(tdTotal && tdResult){
+    if(res.hasEntry){
+      tdTotal.innerHTML = `<span class="screen-value">${res.total}</span><span class="print-only">${res.total}</span>`;
+      tdResult.innerHTML = `
+        <span class="screen-value">${res.grade}<br>${res.percentage.toFixed(1)}%</span>
+        <span class="print-only">${res.grade}<br>${res.percentage.toFixed(1)}%</span>
+      `;
+    } else {
+      tdTotal.innerHTML = `<span class="screen-value"></span><span class="print-only">-</span>`;
+      tdResult.innerHTML = `<span class="screen-value"></span><span class="print-only">-</span>`;
+    }
+  }
 }
 
 
@@ -4574,6 +4767,11 @@ document.getElementById(
 details.year||
 "2026-27";
 
+document.getElementById(
+"formCustomMaxMarks"
+).value=
+details.customMaxMarks || "";
+
 
 renderSubjectControls();
 
@@ -4723,6 +4921,20 @@ message;
 
 
 function loadData(){
+
+let defaultLoaded = false;
+const rawDefault = localStorage.getItem(DEFAULT_SETTINGS_KEY);
+
+if(rawDefault){
+  try{
+    const d = JSON.parse(rawDefault);
+    if(d.details) details = Object.assign(details, d.details);
+    if(Array.isArray(d.subjects) && d.subjects.length){
+      subjects = d.subjects;
+    }
+    defaultLoaded = true;
+  }catch(e){}
+}
 
 const raw=
 localStorage.getItem(DATA_KEY) ||
@@ -4876,6 +5088,9 @@ details.exam||"त्रैमासिक परीक्षा";
 
 document.getElementById("formYear").value=
 details.year||"2026-27";
+
+document.getElementById("formCustomMaxMarks").value=
+details.customMaxMarks || "";
 
 }
 
